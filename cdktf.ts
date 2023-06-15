@@ -125,8 +125,8 @@ class MyStack extends TerraformStack {
 
         // Terraform Outputs
         new TerraformOutput(this, 'eks_provider_key', {
-            value: eks_provider.clientKey,
             description: 'The EKS provider key',
+            value: eks_provider.host,
         });
         // new TerraformOutput(this, 'aks_provider_key', {
         //     value: aks_provider.clientKey,
