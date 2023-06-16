@@ -32,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Generate bindings for providers and modules
-        run: cdktf get
+#      - name: Generate bindings for providers and modules
+#        run: cdktf get
 
       - name: Run Tests
         run: npm test
