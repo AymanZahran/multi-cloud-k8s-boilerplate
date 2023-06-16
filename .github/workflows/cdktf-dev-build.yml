@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: "14"
 
-      - run: npx projen build
+      - run: yarn install
 
       - name: plan
         run: cdktf plan ${{ env.stack }}
