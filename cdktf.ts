@@ -5,6 +5,9 @@ import {Construct} from 'constructs';
 // AWS
 import {AwsProvider} from '@cdktf/provider-aws/lib/provider';
 import {EksCluster} from '@cdktf/provider-aws/lib/eks-cluster';
+import {EksNodeGroup} from '@cdktf/provider-aws/lib/eks-node-group';
+import {Vpc} from '@cdktf/provider-aws/lib/vpc';
+import {Subnet} from '@cdktf/provider-aws/lib/subnet';
 
 // // Azure
 // import {AzurermProvider} from '@cdktf/provider-azurerm/lib/provider';
@@ -59,7 +62,9 @@ class MyStack extends TerraformStack {
 
         // Define Cloud Providers
         new AwsProvider(this, 'AWS', {
-            profile: process.env.AWS_PROFILE || '',
+            // profile: process.env.AWS_PROFILE || '',
+            accessKey: process.env.AWS_ACCESS_KEY_ID || '',
+            secretKey: process.env.AWS_SECRET_ACCESS_KEY || '',
             region: aws_region,
         });
         // new AzurermProvider(this, 'AZURE', {
@@ -75,17 +80,45 @@ class MyStack extends TerraformStack {
         //     zone: process.env.GOOGLE_ZONE || '',
         // });
 
+        const vpc = new Vpc(this, 'vpc', {
+            cidrBlock: '10.0.0.0/16',
+            enableDnsHostnames: true,
+        });
+
+        // Create array to store IDs
+        const subnet = [];
+        for (let i = 0; i < 3; i++) {
+            subnet[i] = new Subnet(this, `subnet-${i}`, {
+                vpcId: vpc.id,
+                cidrBlock: `10.0.${i}.0/24`,
+            }).id;
+        }
+
         // Create an EKS cluster
         const eks_cluster = new EksCluster(this, 'eks_cluster', {
             name: eksClusterName.value,
             version: '1.24',
             roleArn: 'arn:aws:iam::123456789012:role/eks-cluster-role',
             vpcConfig: {
-                subnetIds: ['subnet-abcde012', 'subnet-bcde012a', 'subnet-fghi345a'],
+                subnetIds: subnet,
             },
             tags: {
                 environment: config.environment,
             },
+        });
+
+        // Create an EKS Node Group
+        new EksNodeGroup(this, 'eks_node_group', {
+            nodeGroupName: 'eks-node-group',
+            version: '1.24',
+            clusterName: eks_cluster.name,
+            subnetIds: subnet,
+            scalingConfig: {
+                desiredSize: 2,
+                minSize: 2,
+                maxSize: 2,
+            },
+            nodeRoleArn: 'arn:aws:iam::123456789012:role/eks-node-role',
         });
 
         const eks_provider = new KubernetesProvider(this, 'EKS_KUBERNETES', {
@@ -144,33 +177,22 @@ class MyStack extends TerraformStack {
 }
 
 const app = new App();
-//const stack = new MyStack(app, 'multi-cloud-cdktf');
 
-const devStack = new MyStack(app, "dev", {
-    environment: "dev",
-    aws_region: "us-east-2",
-    // azure_region: "eastus2",
-    // gcp_region: "us-central1",
-});
-const stagingStack =new MyStack(app, "staging", {
-    environment: "staging",
-    aws_region: "us-east-2",
-    // azure_region: "eastus2",
-    // gcp_region: "us-central1",
-});
-const prodStack =new MyStack(app, "prod", {
-    environment: "prod",
-    aws_region: "us-east-2",
-    // azure_region: "eastus2",
-    // gcp_region: "us-central1",
-});
+const environments = ["dev", "staging", "prod"];
+const aws_region = "us-east-2";
 
-for (const stack of [devStack, stagingStack, prodStack]) {
+for (const env of environments) {
+    const stack = new MyStack(app, `${env}`, {
+        environment: env,
+        aws_region: aws_region,
+        // azure_region: "eastus2",
+        // gcp_region: "us-central1",
+    });
     new RemoteBackend(stack, {
         hostname: "app.terraform.io",
-        organization: "Ayman-Organization",
+        organization: "multi-cloud-pipelines",
         workspaces: {
-            name: "multi-cloud",
+            name: env
         }
     })
 }
