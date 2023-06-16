@@ -10,10 +10,11 @@ env:
 
 jobs:
   deploy:
+    name: "Terraform CDK Deploy"
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
