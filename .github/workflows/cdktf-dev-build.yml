@@ -33,13 +33,17 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: plan
-        run: cdktf plan ${{ env.stack }}
-        env:
-          TERRAFORM_CLOUD_TOKEN: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        continue-on-error: true # We want to see the plan output even if the plan fails
+      - name: Run Terraform CDK
+        uses: hashicorp/terraform-cdk-action@v0.1.0
+        with:
+          terraformVersion: 1.5.3
+          cdktfVersion: 0.17.0
+          stackName: dev
+          mode: plan-only
+          terraformCloudToken: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          commentOnPr: true
+          updateComment: true
 
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
