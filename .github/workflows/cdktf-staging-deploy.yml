@@ -9,7 +9,7 @@ env:
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  stack: dev
+  stack: staging
 
 jobs:
   build:
@@ -47,24 +47,5 @@ jobs:
             }
           }' > ~/.terraform.d/credentials.tfrc.json
 
-      - name: plan
-        run: cdktf plan ${{ env.stack }}
-
-      - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}" # CDKTF gets the output from the last step
-        with:
-          github-token: ${{ secrets.GH_COMMENT_TOKEN }} # Create a secret with a GitHub token that can comment on PRs
-          script: |
-            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            <details><summary>Show Plan</summary>
-            \`\`\`${process.env.PLAN}\`\`\`
-            </details>
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+#      - name: deploy
+#        run: cdktf deploy ${{ env.stack }} --auto-approve

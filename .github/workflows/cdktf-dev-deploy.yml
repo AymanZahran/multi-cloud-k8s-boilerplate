@@ -1,44 +1,51 @@
-name: CDKTF Deployment
+name: CDKTF Diff
 
 on:
-  push:
+  pull_request:
     branches:
       - master
 
 env:
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   stack: dev
 
 jobs:
-  deploy:
-    name: "Terraform CDK Deploy"
+  build:
+    name: "Terraform CDK plan"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js 16.x
+      - name: Use Node.js 19.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 19.x
           cache: "npm"
 
-      - name: Install CDKTF CLI
-        run: npm install -g cdktf-cli
+      - name: Install CDKTF CLI v0.17.0
+        run: npm install -g cdktf-cli@0.17.0
 
-      - name: Install Terraform
+      - name: Install Terraform v1.5.3
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.2.0
+          terraform_version: 1.5.3
 
       - name: Install dependencies
         run: yarn install
 
-#      - name: Generate bindings for providers and modules
-#        run: cdktf get
+      - name: Set Terraform Token
+        run: |
+          mkdir -p ~/.terraform.d
+          echo '{
+            "credentials": {
+              "app.terraform.io": {
+                "token": "${{ secrets.TF_API_TOKEN }}"
+              }
+            }
+          }' > ~/.terraform.d/credentials.tfrc.json
 
-      - name: Run Tests
-        run: npm test
-#      - name: Deploy
-#        run: cdktf deploy ${{ env.stack }} --auto-approve '*' # Deploys all stacks
-#        env:
-#          TERRAFORM_CLOUD_TOKEN: ${{ secrets.TF_API_TOKEN }}
+#      - name: deploy
+#        run: cdktf deploy ${{ env.stack }} --auto-approve
