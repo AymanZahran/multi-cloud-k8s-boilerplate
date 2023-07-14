@@ -1,18 +1,18 @@
-import {App} from 'cdk8s';
-import {KubeStateMetrics} from './cdk8s/kubeStateMetrics';
-import {MetricsServer} from "./cdk8s/metricsServer";
-import {Prometheus} from './cdk8s/prometheus';
-import {Consul} from './cdk8s/consul';
-import {Vault} from './cdk8s/vault';
+import { App } from 'cdk8s';
+import { ArgoCd } from './cdk8s/argoCd';
+import { ArgoImageUpdater } from './cdk8s/argoImageUpdater';
+import { ArgoNotifications } from './cdk8s/argoNotifications';
+import { ArgoRollouts } from './cdk8s/argoRollouts';
+import { ArgoWorkflows } from './cdk8s/argoWorkflows';
+import { ClusterAutoscaler } from './cdk8s/clusterAutoscaler';
+import { Consul } from './cdk8s/consul';
+import { KubeStateMetrics } from './cdk8s/kubeStateMetrics';
+import { MetricsServer } from './cdk8s/metricsServer';
+import { Prometheus } from './cdk8s/prometheus';
 // import {CertManager} from './cdk8s/certManager';
-import {ClusterAutoscaler} from "./cdk8s/clusterAutoscaler";
-import {SecretStoreDriver} from "./cdk8s/secretStoreDriver";
-import {Tekton} from "./cdk8s/tekton";
-import {ArgoCd} from "./cdk8s/argoCd";
-import {ArgoNotifications} from "./cdk8s/argoNotifications";
-import {ArgoRollouts} from "./cdk8s/argoRollouts";
-import {ArgoWorkflows} from "./cdk8s/argoWorkflows";
-import {ArgoImageUpdater} from "./cdk8s/argoImageUpdater";
+import { SecretStoreDriver } from './cdk8s/secretStoreDriver';
+import { Tekton } from './cdk8s/tekton';
+import { Vault } from './cdk8s/vault';
 
 
 const app = new App();

@@ -11,7 +11,7 @@ const project = new typescript.TypeScriptAppProject({
   buildWorkflow: true,
 
   githubOptions: {
-    mergify: true,
+    mergify: false,
     mergifyOptions: {},
     pullRequestLint: true,
     pullRequestLintOptions: {},
