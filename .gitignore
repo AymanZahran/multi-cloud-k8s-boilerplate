@@ -36,7 +36,6 @@ jspm_packages/
 .vscode
 *.d.ts
 *.js,
-cdktf.out
 cdktf.log
 *terraform.*.tfstate*
 .gen
@@ -44,7 +43,6 @@ cdktf.log
 tsconfig.tsbuildinfo
 !jest.config.js
 !setup.js
-dist
 !/cdk8s.yaml
 !/.projenrc.js
 /test-reports/
@@ -60,5 +58,4 @@ junit.xml
 !/tsconfig.dev.json
 !/src/
 /lib
-/dist/
 !/.eslintrc.json

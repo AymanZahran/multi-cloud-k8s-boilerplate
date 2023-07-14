@@ -1,9 +1,33 @@
-import { App } from 'cdk8s';
-import { Nginx } from './cdk8s/nginx';
-import { Tekton } from './cdk8s/tekton';
+import {App} from 'cdk8s';
+import {KubeStateMetrics} from './cdk8s/kubeStateMetrics';
+import {MetricsServer} from "./cdk8s/metricsServer";
+import {Prometheus} from './cdk8s/prometheus';
+import {Consul} from './cdk8s/consul';
+import {Vault} from './cdk8s/vault';
+// import {CertManager} from './cdk8s/certManager';
+import {ClusterAutoscaler} from "./cdk8s/clusterAutoscaler";
+import {SecretStoreDriver} from "./cdk8s/secretStoreDriver";
+import {Tekton} from "./cdk8s/tekton";
+import {ArgoCd} from "./cdk8s/argoCd";
+import {ArgoNotifications} from "./cdk8s/argoNotifications";
+import {ArgoRollouts} from "./cdk8s/argoRollouts";
+import {ArgoWorkflows} from "./cdk8s/argoWorkflows";
+import {ArgoImageUpdater} from "./cdk8s/argoImageUpdater";
 
 
 const app = new App();
-new Nginx(app, 'nginx');
+new MetricsServer(app, 'metrics-server');
+new KubeStateMetrics(app, 'kube-state-metrics');
+new Prometheus(app, 'prometheus');
+new Consul(app, 'consul');
+new Vault(app, 'vault');
+// new CertManager(app, 'cert-manager');
+new ClusterAutoscaler(app, 'cluster-autoscaler');
+new SecretStoreDriver(app, 'secret-store-driver');
 new Tekton(app, 'tekton');
+new ArgoCd(app, 'argo-cd');
+new ArgoNotifications(app, 'argo-notifications');
+new ArgoRollouts(app, 'argo-rollouts');
+new ArgoWorkflows(app, 'argo-workflows');
+new ArgoImageUpdater(app, 'argo-image-updater');
 app.synth();
