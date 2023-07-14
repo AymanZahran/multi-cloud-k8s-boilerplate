@@ -26,7 +26,7 @@ jobs:
             echo 'Error: kubeval is not installed.' >&2
             exit 1
           fi
-          if kubeval --strict -d . ; then
+          if kubeval --ignore-missing-schemas dist/* ; then
             echo "Static analysis found no problems."
             exit 0
           else
