@@ -1,0 +1,29 @@
+{
+  "version": "0.17.0",
+  "stacks": {
+    "dev": {
+      "name": "dev",
+      "constructPath": "dev",
+      "workingDirectory": "stacks/dev",
+      "synthesizedStackPath": "stacks/dev/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    },
+    "staging": {
+      "name": "staging",
+      "constructPath": "staging",
+      "workingDirectory": "stacks/staging",
+      "synthesizedStackPath": "stacks/staging/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    },
+    "prod": {
+      "name": "prod",
+      "constructPath": "prod",
+      "workingDirectory": "stacks/prod",
+      "synthesizedStackPath": "stacks/prod/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    }
+  }
+}

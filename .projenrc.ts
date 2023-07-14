@@ -39,7 +39,6 @@ const project = new typescript.TypeScriptAppProject({
     '.vscode',
     '*.d.ts',
     '*.js,',
-    'cdktf.out',
     'cdktf.log',
     '*terraform.*.tfstate*',
     '.gen',
@@ -47,7 +46,7 @@ const project = new typescript.TypeScriptAppProject({
     'tsconfig.tsbuildinfo',
     '!jest.config.js',
     '!setup.js',
-    'dist',
+    '!/dist/',
     '!/cdk8s.yaml',
   ],
 
