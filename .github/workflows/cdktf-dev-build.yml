@@ -6,6 +6,7 @@ on:
       - master
 
 env:
+  cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
   TERRAFORM_CLOUD_TOKEN: ${{ secrets.TF_API_TOKEN }}
   stack: dev
 
