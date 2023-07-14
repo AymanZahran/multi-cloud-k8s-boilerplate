@@ -1,4 +1,4 @@
-name: CDKTF Prod Deploy
+name: CDKTF Prod Build
 
 on:
   pull_request:
