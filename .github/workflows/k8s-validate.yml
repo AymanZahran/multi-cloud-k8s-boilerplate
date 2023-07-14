@@ -1,0 +1,35 @@
+name: Validate K8s Manifests
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: "Validate K8s Manifests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Kubeval
+        run: |
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          cp kubeval /usr/local/bin
+
+      - name: Validate K8s Manifests
+        run: |
+          echo "Running kubeval validations..."
+          if ! [ -x "$(command -v kubeval)" ]; then
+            echo 'Error: kubeval is not installed.' >&2
+            exit 1
+          fi
+          if kubeval --ignore-missing-schemas dist/* ; then
+            echo "Static analysis found no problems."
+            exit 0
+          else
+            echo 1>&2 "Static analysis found violations that need to be fixed."
+            exit 1
+          fi
