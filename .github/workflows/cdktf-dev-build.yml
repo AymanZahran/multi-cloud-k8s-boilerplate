@@ -33,6 +33,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Test the synth
+        uses: hashicorp/terraform-cdk-action@v0.1.0
+        with:
+          terraformVersion: 1.5.3
+          cdktfVersion: 0.17.0
+          stackName: dev
+          mode: synth-only
+
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.0
         with:
