@@ -8,7 +8,6 @@
     ".github/workflows/upgrade.yml",
     ".gitignore",
     ".gitpod.yml",
-    ".mergify.yml",
     ".npmignore",
     ".npmrc",
     ".projen/deps.json",

@@ -8,6 +8,8 @@ on:
 env:
   cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
   TERRAFORM_CLOUD_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   stack: dev
 
 jobs:
