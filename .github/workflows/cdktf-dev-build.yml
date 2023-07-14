@@ -16,19 +16,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js 16.x
+      - name: Use Node.js 19.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 19.x
           cache: "npm"
 
-      - name: Install CDKTF CLI
-        run: npm install -g cdktf-cli
+      - name: Install CDKTF CLI v0.17.0
+        run: npm install -g cdktf-cli@0.17.0
 
-      - name: Install Terraform
+      - name: Install Terraform v1.5.3
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.2.0
+          terraform_version: 1.5.3
 
       - name: Install dependencies
         run: yarn install
