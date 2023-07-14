@@ -18,6 +18,11 @@ const project = new typescript.TypeScriptAppProject({
     workflows: true,
   },
 
+  eslintOptions: {
+    prettier: true,
+    dirs: ["src"],
+  },
+
   deps: [
     "constructs@^10.2.52",
     "cdktf@^0.17.0",
@@ -62,11 +67,6 @@ const project = new typescript.TypeScriptAppProject({
     "cdk8s import": "cdk8s import",
     "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
     "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
-  },
-
-  eslintOptions: {
-    prettier: true,
-    dirs: ["src"],
   },
 });
 
