@@ -9,6 +9,7 @@ const project = new typescript.TypeScriptAppProject({
   gitpod: true,
   vscode: true,
   buildWorkflow: true,
+  mutableBuild: false /* Automatically update files modified by build() */,
 
   githubOptions: {
     mergify: false,
