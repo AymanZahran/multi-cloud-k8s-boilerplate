@@ -1,7 +1,7 @@
 name: CDKTF Prod Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
