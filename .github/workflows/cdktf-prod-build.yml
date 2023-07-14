@@ -1,4 +1,4 @@
-name: CDKTF Diff
+name: CDKTF Prod Deploy
 
 on:
   pull_request:
