@@ -19,6 +19,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: check if terraform plan is needed, in case there is changes under cdktf.out folder then we need to run plan
+        id: plan
+        run: |
+          if [[ -z $(git diff --name-only HEAD~1 HEAD | grep cdktf.out) ]]; then
+            echo "No changes detected in cdktf.out folder, skipping plan"
+            gh run cancel ${{ github.run_id }}
+
       - name: Use Node.js 19.x
         uses: actions/setup-node@v3
         with:
