@@ -71,4 +71,3 @@ const project = new typescript.TypeScriptAppProject({
 });
 
 project.synth();
-
