@@ -172,9 +172,6 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "yarn install --check-files --frozen-lockfile"
-        },
-        {
           "exec": "npx projen cdktf-get && npx projen cdktf-synth"
         },
         {
