@@ -175,7 +175,7 @@
           "exec": "yarn install --check-files --frozen-lockfile"
         },
         {
-          "exec": "npx projen cdktf-synth"
+          "exec": "npx projen cdktf-get && npx projen cdktf-synth"
         },
         {
           "exec": "npx projen cdk8s-synth"
