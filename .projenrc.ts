@@ -109,6 +109,8 @@ for (const [key, value] of Object.entries(scripts)) {
 }
 
 project.compileTask.exec("npx projen cdktf-get && npx projen cdktf-synth");
-project.compileTask.exec("./scripts/add_helm_repos.sh && npx projen cdk8s-synth");
+project.compileTask.exec(
+  "./scripts/add_helm_repos.sh && npx projen cdk8s-synth",
+);
 
 project.synth();
