@@ -172,12 +172,6 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "npx projen cdktf-cli-install"
-        },
-        {
-          "exec": "npx projen cdk8s-cli-install"
-        },
-        {
           "exec": "yarn install --check-files --frozen-lockfile"
         },
         {
@@ -285,19 +279,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='cdk8s-plus'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='cdk8s-cli,cdk8s-plus,cdktf-cli'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='cdk8s-plus'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='cdk8s-cli,cdk8s-plus,cdktf-cli'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='cdk8s-plus'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='cdk8s-cli,cdk8s-plus,cdktf-cli'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='cdk8s-plus'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='cdk8s-cli,cdk8s-plus,cdktf-cli'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='cdk8s-plus'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='cdk8s-cli,cdk8s-plus,cdktf-cli'"
         },
         {
           "exec": "yarn install --check-files"

@@ -53,10 +53,12 @@ const project = new typescript.TypeScriptAppProject({
   deps: [
     "constructs@^10.2.52",
     "cdktf@^0.17.0",
+    "cdktf-cli@0.17.0",
     "@cdktf/provider-aws@^15.0.0",
     "@cdktf/provider-azurerm@^8.0.0",
     "@cdktf/provider-google@^7.0.11",
     "@cdktf/provider-kubernetes@^7.0.0",
+    "cdk8s-cli@2.2.110",
     "cdk8s@^2.7.77",
     "cdk8s-plus@0.33.0",
     "dotenv@^16.1.4",
@@ -99,7 +101,6 @@ const scripts = {
   "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
   "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
 };
-
 for (const [key, value] of Object.entries(scripts)) {
   project.addTask(key, {
     exec: value,
@@ -107,8 +108,6 @@ for (const [key, value] of Object.entries(scripts)) {
   });
 }
 
-project.compileTask.exec("npx projen cdktf-cli-install");
-project.compileTask.exec("npx projen cdk8s-cli-install");
 project.compileTask.exec("yarn install --check-files --frozen-lockfile");
 project.compileTask.exec("npx projen cdktf-synth");
 project.compileTask.exec("npx projen cdk8s-synth");
