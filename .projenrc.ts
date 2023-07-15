@@ -8,8 +8,10 @@ const project = new typescript.TypeScriptAppProject({
   authorEmail: "ayman@aymanzahran.com",
   gitpod: true,
   vscode: true,
-  buildWorkflow: true,
-  mutableBuild: false /* Automatically update files modified by build() */,
+  depsUpgrade: true,
+  autoApproveUpgrades: false, // Set false to manually approve upgrades
+  buildWorkflow: true, // Enable build workflow
+  mutableBuild: false, // Automatically update files modified by build()
   pullRequestTemplate: true,
   pullRequestTemplateContents: [
     "---",
@@ -33,9 +35,14 @@ const project = new typescript.TypeScriptAppProject({
   githubOptions: {
     mergify: false,
     mergifyOptions: {},
-    pullRequestLint: true,
-    pullRequestLintOptions: {},
     workflows: true,
+    pullRequestLint: true,
+    pullRequestLintOptions: {
+      semanticTitle: true,
+      semanticTitleOptions: {
+        types: ["feat", "fix", "chore"],
+      },
+    },
   },
 
   eslintOptions: {
@@ -46,10 +53,12 @@ const project = new typescript.TypeScriptAppProject({
   deps: [
     "constructs@^10.2.52",
     "cdktf@^0.17.0",
+    "cdktf-cli@0.17.0",
     "@cdktf/provider-aws@^15.0.0",
     "@cdktf/provider-azurerm@^8.0.0",
     "@cdktf/provider-google@^7.0.11",
     "@cdktf/provider-kubernetes@^7.0.0",
+    "cdk8s-cli@2.2.110",
     "cdk8s@^2.7.77",
     "cdk8s-plus@0.33.0",
     "dotenv@^16.1.4",
@@ -74,20 +83,34 @@ const project = new typescript.TypeScriptAppProject({
     "!/dist/",
     "!/cdk8s.yaml",
   ],
-
-  scripts: {
-    "cdktf get": "cdktf get",
-    "cdktf synth": "cdktf synth",
-    "cdktf deploy": "cdktf deploy",
-    "cdktf upgrade": "npm i cdktf@latest cdktf-cli@latest",
-    "cdktf upgrade:next": "npm i cdktf@next cdktf-cli@next",
-
-    "cdk8s synth": "cdk8s synth",
-    "cdk8s diff": "cdk8s diff",
-    "cdk8s import": "cdk8s import",
-    "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
-    "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
-  },
 });
+
+// Add scripts for cdktf and cdk8s
+const scripts = {
+  "cdktf-cli-install": "npm i -g cdktf-cli --force",
+  "cdktf-get": "cdktf get",
+  "cdktf-synth": "cdktf synth",
+  "cdktf-deploy": "cdktf deploy",
+  "cdktf-upgrade": "npm i cdktf@latest cdktf-cli@latest",
+  "cdktf-upgrade:next": "npm i cdktf@next cdktf-cli@next",
+
+  "cdk8s-cli-install": "npm i -g cdk8s-cli --force",
+  "cdk8s-synth": "cdk8s synth",
+  "cdk8s-diff": "cdk8s diff",
+  "cdk8s-import": "cdk8s import",
+  "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
+  "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
+};
+for (const [key, value] of Object.entries(scripts)) {
+  project.addTask(key, {
+    exec: value,
+    description: key,
+  });
+}
+
+project.compileTask.exec("npx projen cdktf-get && npx projen cdktf-synth");
+project.compileTask.exec(
+  "./scripts/add_helm_repos.sh && npx projen cdk8s-synth",
+);
 
 project.synth();
