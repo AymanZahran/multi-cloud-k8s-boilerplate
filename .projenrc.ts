@@ -7,6 +7,8 @@ const project = new typescript.TypeScriptAppProject({
   authorName: "Ayman Zahran",
   authorEmail: "ayman@aymanzahran.com",
   gitpod: true,
+  release: true,
+  releaseToNpm: true,
   vscode: true,
   depsUpgrade: true,
   autoApproveUpgrades: false, // Set false to manually approve upgrades
