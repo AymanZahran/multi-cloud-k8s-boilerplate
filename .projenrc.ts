@@ -110,6 +110,6 @@ for (const [key, value] of Object.entries(scripts)) {
 
 project.compileTask.exec("yarn install --check-files --frozen-lockfile");
 project.compileTask.exec("npx projen cdktf-get && npx projen cdktf-synth");
-project.compileTask.exec("./cdk8s.sh && npx projen cdk8s-synth");
+project.compileTask.exec("./add_helm_repos.sh && npx projen cdk8s-synth");
 
 project.synth();

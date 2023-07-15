@@ -178,7 +178,7 @@
           "exec": "npx projen cdktf-get && npx projen cdktf-synth"
         },
         {
-          "exec": "./cdk8s.sh && npx projen cdk8s-synth"
+          "exec": "./add_helm_repos.sh && npx projen cdk8s-synth"
         }
       ]
     },
