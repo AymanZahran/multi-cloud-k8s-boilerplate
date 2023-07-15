@@ -85,18 +85,21 @@ const project = new typescript.TypeScriptAppProject({
 
 // Add scripts for cdktf and cdk8s
 const scripts = {
-  "cdktf get": "cdktf get",
-  "cdktf synth": "cdktf synth",
-  "cdktf deploy": "cdktf deploy",
-  "cdktf upgrade": "npm i cdktf@latest cdktf-cli@latest",
-  "cdktf upgrade:next": "npm i cdktf@next cdktf-cli@next",
+  "cdktf-cli-install": "npm i -g cdktf-cli --force",
+  "cdktf-get": "cdktf get",
+  "cdktf-synth": "cdktf synth",
+  "cdktf-deploy": "cdktf deploy",
+  "cdktf-upgrade": "npm i cdktf@latest cdktf-cli@latest",
+  "cdktf-upgrade:next": "npm i cdktf@next cdktf-cli@next",
 
-  "cdk8s synth": "cdk8s synth",
-  "cdk8s diff": "cdk8s diff",
-  "cdk8s import": "cdk8s import",
-  "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
-  "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
+  "cdk8s-cli-install": "npm i -g cdk8s-cli --force",
+  "cdk8s-synth": "cdk8s synth",
+  "cdk8s-diff": "cdk8s diff",
+  "cdk8s-import": "cdk8s import",
+  "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
+  "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
 };
+
 for (const [key, value] of Object.entries(scripts)) {
   project.addTask(key, {
     exec: value,
@@ -104,8 +107,10 @@ for (const [key, value] of Object.entries(scripts)) {
   });
 }
 
-// Add a task to run cdktf synth and cdk8s synth
-project.compileTask.exec("cdktf synth");
-project.compileTask.exec("cdk8s synth");
+project.compileTask.exec("npx projen cdktf-cli-install");
+project.compileTask.exec("npx projen cdk8s-cli-install");
+project.compileTask.exec("yarn install --check-files --frozen-lockfile");
+project.compileTask.exec("npx projen cdktf-synth");
+project.compileTask.exec("npx projen cdk8s-synth");
 
 project.synth();

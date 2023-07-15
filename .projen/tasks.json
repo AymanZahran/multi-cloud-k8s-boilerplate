@@ -24,90 +24,108 @@
         }
       ]
     },
-    "cdk8s diff": {
-      "name": "cdk8s diff",
-      "description": "cdk8s diff",
+    "cdk8s-cli-install": {
+      "name": "cdk8s-cli-install",
+      "description": "cdk8s-cli-install",
+      "steps": [
+        {
+          "exec": "npm i -g cdk8s-cli --force"
+        }
+      ]
+    },
+    "cdk8s-diff": {
+      "name": "cdk8s-diff",
+      "description": "cdk8s-diff",
       "steps": [
         {
           "exec": "cdk8s diff"
         }
       ]
     },
-    "cdk8s import": {
-      "name": "cdk8s import",
-      "description": "cdk8s import",
+    "cdk8s-import": {
+      "name": "cdk8s-import",
+      "description": "cdk8s-import",
       "steps": [
         {
           "exec": "cdk8s import"
         }
       ]
     },
-    "cdk8s synth": {
-      "name": "cdk8s synth",
-      "description": "cdk8s synth",
+    "cdk8s-synth": {
+      "name": "cdk8s-synth",
+      "description": "cdk8s-synth",
       "steps": [
         {
           "exec": "cdk8s synth"
         }
       ]
     },
-    "cdk8s upgrade": {
-      "name": "cdk8s upgrade",
-      "description": "cdk8s upgrade",
+    "cdk8s-upgrade": {
+      "name": "cdk8s-upgrade",
+      "description": "cdk8s-upgrade",
       "steps": [
         {
           "exec": "npm i cdk8s@latest cdk8s-cli@latest"
         }
       ]
     },
-    "cdk8s upgrade:next": {
-      "name": "cdk8s upgrade:next",
-      "description": "cdk8s upgrade:next",
+    "cdk8s-upgrade:next": {
+      "name": "cdk8s-upgrade:next",
+      "description": "cdk8s-upgrade:next",
       "steps": [
         {
           "exec": "npm i cdk8s@next cdk8s-cli@next"
         }
       ]
     },
-    "cdktf deploy": {
-      "name": "cdktf deploy",
-      "description": "cdktf deploy",
+    "cdktf-cli-install": {
+      "name": "cdktf-cli-install",
+      "description": "cdktf-cli-install",
+      "steps": [
+        {
+          "exec": "npm i -g cdktf-cli --force"
+        }
+      ]
+    },
+    "cdktf-deploy": {
+      "name": "cdktf-deploy",
+      "description": "cdktf-deploy",
       "steps": [
         {
           "exec": "cdktf deploy"
         }
       ]
     },
-    "cdktf get": {
-      "name": "cdktf get",
-      "description": "cdktf get",
+    "cdktf-get": {
+      "name": "cdktf-get",
+      "description": "cdktf-get",
       "steps": [
         {
           "exec": "cdktf get"
         }
       ]
     },
-    "cdktf synth": {
-      "name": "cdktf synth",
-      "description": "cdktf synth",
+    "cdktf-synth": {
+      "name": "cdktf-synth",
+      "description": "cdktf-synth",
       "steps": [
         {
           "exec": "cdktf synth"
         }
       ]
     },
-    "cdktf upgrade": {
-      "name": "cdktf upgrade",
-      "description": "cdktf upgrade",
+    "cdktf-upgrade": {
+      "name": "cdktf-upgrade",
+      "description": "cdktf-upgrade",
       "steps": [
         {
           "exec": "npm i cdktf@latest cdktf-cli@latest"
         }
       ]
     },
-    "cdktf upgrade:next": {
-      "name": "cdktf upgrade:next",
-      "description": "cdktf upgrade:next",
+    "cdktf-upgrade:next": {
+      "name": "cdktf-upgrade:next",
+      "description": "cdktf-upgrade:next",
       "steps": [
         {
           "exec": "npm i cdktf@next cdktf-cli@next"
@@ -154,10 +172,19 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "cdktf synth"
+          "exec": "npx projen cdktf-cli-install"
         },
         {
-          "exec": "cdk8s synth"
+          "exec": "npx projen cdk8s-cli-install"
+        },
+        {
+          "exec": "yarn install --check-files --frozen-lockfile"
+        },
+        {
+          "exec": "npx projen cdktf-synth"
+        },
+        {
+          "exec": "npx projen cdk8s-synth"
         }
       ]
     },
