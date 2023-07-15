@@ -152,6 +152,12 @@
       "steps": [
         {
           "exec": "tsc --build"
+        },
+        {
+          "exec": "cdktf synth"
+        },
+        {
+          "exec": "cdk8s synth"
         }
       ]
     },

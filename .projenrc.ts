@@ -83,6 +83,7 @@ const project = new typescript.TypeScriptAppProject({
   ],
 });
 
+// Add scripts for cdktf and cdk8s
 const scripts = {
   "cdktf get": "cdktf get",
   "cdktf synth": "cdktf synth",
@@ -96,13 +97,15 @@ const scripts = {
   "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
   "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
 };
-
-//// loop on it to create the corresponding tasks using the project.addTask() method
 for (const [key, value] of Object.entries(scripts)) {
   project.addTask(key, {
     exec: value,
     description: key,
   });
 }
+
+// Add a task to run cdktf synth and cdk8s synth
+project.compileTask.exec("cdktf synth");
+project.compileTask.exec("cdk8s synth");
 
 project.synth();
