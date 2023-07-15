@@ -8,8 +8,10 @@ const project = new typescript.TypeScriptAppProject({
   authorEmail: "ayman@aymanzahran.com",
   gitpod: true,
   vscode: true,
-  buildWorkflow: true,
-  mutableBuild: false /* Automatically update files modified by build() */,
+  depsUpgrade: true,
+  autoApproveUpgrades: false, // Set false to manually approve upgrades
+  buildWorkflow: true, // Enable build workflow
+  mutableBuild: false, // Automatically update files modified by build()
   pullRequestTemplate: true,
   pullRequestTemplateContents: [
     "---",
@@ -33,9 +35,14 @@ const project = new typescript.TypeScriptAppProject({
   githubOptions: {
     mergify: false,
     mergifyOptions: {},
-    pullRequestLint: true,
-    pullRequestLintOptions: {},
     workflows: true,
+    pullRequestLint: true,
+    pullRequestLintOptions: {
+      semanticTitle: true,
+      semanticTitleOptions: {
+        types: ["feat", "fix", "chore"],
+      },
+    },
   },
 
   eslintOptions: {
@@ -74,20 +81,28 @@ const project = new typescript.TypeScriptAppProject({
     "!/dist/",
     "!/cdk8s.yaml",
   ],
-
-  scripts: {
-    "cdktf get": "cdktf get",
-    "cdktf synth": "cdktf synth",
-    "cdktf deploy": "cdktf deploy",
-    "cdktf upgrade": "npm i cdktf@latest cdktf-cli@latest",
-    "cdktf upgrade:next": "npm i cdktf@next cdktf-cli@next",
-
-    "cdk8s synth": "cdk8s synth",
-    "cdk8s diff": "cdk8s diff",
-    "cdk8s import": "cdk8s import",
-    "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
-    "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
-  },
 });
+
+const scripts = {
+  "cdktf get": "cdktf get",
+  "cdktf synth": "cdktf synth",
+  "cdktf deploy": "cdktf deploy",
+  "cdktf upgrade": "npm i cdktf@latest cdktf-cli@latest",
+  "cdktf upgrade:next": "npm i cdktf@next cdktf-cli@next",
+
+  "cdk8s synth": "cdk8s synth",
+  "cdk8s diff": "cdk8s diff",
+  "cdk8s import": "cdk8s import",
+  "cdk8s upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
+  "cdk8s upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
+};
+
+//// loop on it to create the corresponding tasks using the project.addTask() method
+for (const [key, value] of Object.entries(scripts)) {
+  project.addTask(key, {
+    exec: value,
+    description: key,
+  });
+}
 
 project.synth();
