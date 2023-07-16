@@ -1,5 +1,5 @@
 import { typescript } from "projen";
-import { PackageVersions } from "./const";
+import { PackageVersions, Scripts } from "./const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -89,32 +89,40 @@ const project = new typescript.TypeScriptAppProject({
   ],
 });
 
-// Add scripts for cdktf and cdk8s
+// Add cdktf and cdk8s Tasks
 const scripts = {
-  "cdktf-cli-install": "npm i -g cdktf-cli --force",
-  "cdktf-get": "cdktf get",
-  "cdktf-synth": "cdktf synth",
-  "cdktf-deploy": "cdktf deploy",
-  "cdktf-upgrade": "npm i cdktf@latest cdktf-cli@latest",
-  "cdktf-upgrade:next": "npm i cdktf@next cdktf-cli@next",
-
-  "cdk8s-cli-install": "npm i -g cdk8s-cli --force",
-  "cdk8s-synth": "cdk8s synth",
-  "cdk8s-diff": "cdk8s diff",
-  "cdk8s-import": "cdk8s import",
-  "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
-  "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
+  "cdktf-cli-install": Scripts.cdktf_cli_install,
+  "cdktf-get": Scripts.cdktf_get,
+  "cdktf-synth": Scripts.cdktf_synth,
+  "cdktf-deploy": Scripts.cdktf_deploy,
+  "cdktf-upgrade": Scripts.cdktf_upgrade,
+  "cdktf-upgrade:next": Scripts.cdktf_upgrade_next,
+  "cdk8s-add-helm-repos": Scripts.cdk8s_add_helm_repos,
+  "cdk8s-cli-install": Scripts.cdk8s_cli_install,
+  "cdk8s-synth": Scripts.cdk8s_synth,
+  "cdk8s-diff": Scripts.cdk8s_diff,
+  "cdk8s-import": Scripts.cdk8s_import,
+  "cdk8s-upgrade": Scripts.cdk8s_upgrade,
+  "cdk8s-upgrade:next": Scripts.cdk8s_upgrade_next,
 };
+
+const tasks: any = {};
 for (const [key, value] of Object.entries(scripts)) {
-  project.addTask(key, {
+  tasks[key] = project.addTask(key, {
     exec: value,
     description: key,
   });
 }
 
-project.compileTask.exec("npx projen cdktf-get && npx projen cdktf-synth");
-project.compileTask.exec(
-  "./scripts/add_helm_repos.sh && npx projen cdk8s-synth",
-);
+project.compileTask.reset();
+const compile_tasks = [
+  tasks["cdktf-get"],
+  tasks["cdktf-synth"],
+  tasks["cdk8s-add-helm-repos"],
+  tasks["cdk8s-synth"],
+];
+for (const task of compile_tasks) project.compileTask.spawn(task);
+
+// Add cdktf and cdk8s Workflows
 
 project.synth();
