@@ -263,4 +263,64 @@ for (const context of ["build", "deploy"]) {
   }
 }
 
+// Create charts update workflow
+const update_charts = new GithubWorkflow(project.github!, "update-charts");
+update_charts.on({
+  schedule: [
+    {
+      cron: "0 0 * * *",
+    }
+  ]
+});
+update_charts.addJob("build", {
+  runsOn: ["ubuntu-latest"],
+  permissions: {
+    pullRequests: JobPermission.WRITE,
+    actions: JobPermission.WRITE,
+    contents: JobPermission.WRITE,
+  },
+  steps: [
+    {
+      name: "Checkout",
+      uses: "actions/checkout@v3",
+    },
+    {
+      name: "Add and update repos",
+      run: "./scripts/add_helm_repos.sh",
+    },
+    {
+      name: "Get latest chart versions",
+      run: "./scripts/update_helm_charts.sh",
+    }
+  ]
+});
+
+// Create package update workflow
+const update_packages = new GithubWorkflow(project.github!, "update-packages");
+update_packages.on({
+  schedule: [
+    {
+      cron: "0 0 * * *",
+    }
+  ]
+});
+update_packages.addJob("build", {
+  runsOn: ["ubuntu-latest"],
+  permissions: {
+    pullRequests: JobPermission.WRITE,
+    actions: JobPermission.WRITE,
+    contents: JobPermission.WRITE,
+  },
+  steps: [
+    {
+      name: "Checkout",
+      uses: "actions/checkout@v3",
+    },
+    {
+      name: "Get latest chart versions",
+      run: "./scripts/update_packages.sh",
+    }
+  ]
+});
+
 project.synth();
