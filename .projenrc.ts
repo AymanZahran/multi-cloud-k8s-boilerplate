@@ -269,8 +269,8 @@ update_charts.on({
   schedule: [
     {
       cron: "0 0 * * *",
-    }
-  ]
+    },
+  ],
 });
 update_charts.addJob("build", {
   runsOn: ["ubuntu-latest"],
@@ -291,8 +291,8 @@ update_charts.addJob("build", {
     {
       name: "Get latest chart versions",
       run: "./scripts/update_helm_charts.sh",
-    }
-  ]
+    },
+  ],
 });
 
 // Create package update workflow
@@ -301,8 +301,8 @@ update_packages.on({
   schedule: [
     {
       cron: "0 0 * * *",
-    }
-  ]
+    },
+  ],
 });
 update_packages.addJob("build", {
   runsOn: ["ubuntu-latest"],
@@ -319,8 +319,8 @@ update_packages.addJob("build", {
     {
       name: "Get latest chart versions",
       run: "./scripts/update_packages.sh",
-    }
-  ]
+    },
+  ],
 });
 
 project.synth();
