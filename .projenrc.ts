@@ -1,5 +1,7 @@
 import { typescript } from "projen";
-import { PackageVersions, Scripts } from "./const";
+import { GithubWorkflow } from "projen/lib/github";
+import { JobPermission } from "projen/lib/github/workflows-model";
+import { PackageVersions, Scripts, CI_Versions } from "./const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -15,7 +17,7 @@ const project = new typescript.TypeScriptAppProject({
   depsUpgrade: true,
   autoApproveUpgrades: false, // Set false to manually approve upgrades
   buildWorkflow: true, // Enable build workflow
-  mutableBuild: false, // Automatically update files modified by build()
+  mutableBuild: true, // Automatically update files modified by build
   pullRequestTemplate: true,
   pullRequestTemplateContents: [
     "---",
@@ -25,7 +27,7 @@ const project = new typescript.TypeScriptAppProject({
     "",
     "## How can this be tested?",
     "",
-    "## Related issues",
+    "## Related issues: ",
     "",
     "## Checklist",
     "- [ ] I have added tests to cover my changes.",
@@ -58,20 +60,19 @@ const project = new typescript.TypeScriptAppProject({
   deps: [
     "constructs@^" + PackageVersions.constructs,
     "cdktf@^" + PackageVersions.cdktf,
-    "cdktf-cli@^" + PackageVersions.cdktf_cli,
+    "cdktf-cli@^" + CI_Versions.cdktf_cli,
     "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
     "@cdktf/provider-google@^" + PackageVersions.provider_google,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
     "cdk8s@^" + PackageVersions.cdk8s,
-    "cdk8s-cli@^" + PackageVersions.cdk8s_cli,
+    "cdk8s-cli@^" + CI_Versions.cdk8s_cli,
     "cdk8s-plus@^" + PackageVersions.cdk8s_plus,
     "dotenv@^" + PackageVersions.dotenv,
   ],
   description: "This is a multi-cloud project",
   devDeps: [] /* Build dependencies for this module. */,
   packageName: "multi-cloud" /* The "name" in package.json. */,
-
   gitignore: [
     ".DS_Store",
     ".idea",
@@ -124,6 +125,142 @@ const compile_tasks = [
 ];
 for (const task of compile_tasks) project.compileTask.spawn(task);
 
-// Add cdktf and cdk8s Workflows
+// Create K8s Validate Workflow
+const k8s_validate = new GithubWorkflow(project.github!, "k8s-validate");
+k8s_validate.on({
+  pullRequest: {
+    branches: ["master"],
+  },
+});
+k8s_validate.addJob("build", {
+  runsOn: ["ubuntu-latest"],
+  permissions: {
+    pullRequests: JobPermission.WRITE,
+    actions: JobPermission.WRITE,
+    contents: JobPermission.WRITE,
+  },
+  steps: [
+    {
+      name: "Checkout",
+      uses: "actions/checkout@v3",
+    },
+    {
+      name: "Install Kubeval",
+      run: "./scripts/install_kubeval.sh",
+    },
+    {
+      name: "Validate K8s Manifests",
+      run: "./scripts/validate_k8s_manifests.sh",
+    },
+  ],
+});
+
+// Create cdktf build and deploy for dev, staging and prod
+for (const context of ["build", "deploy"]) {
+  for (const env of ["dev", "staging", "prod"]) {
+    const cdktf_workflow = new GithubWorkflow(
+      project.github!,
+      "cdktf-" + env + "-" + context,
+    );
+    if (context === "build") {
+      cdktf_workflow.on({
+        pullRequest: {
+          branches: ["master"],
+        },
+      });
+    } else {
+      cdktf_workflow.on({
+        push: {
+          branches: ["master"],
+        },
+      });
+    }
+    cdktf_workflow.addJob("build", {
+      runsOn: ["ubuntu-latest"],
+      permissions: {
+        pullRequests: JobPermission.WRITE,
+        actions: JobPermission.WRITE,
+        contents: JobPermission.WRITE,
+      },
+      env: {
+        TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
+        AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}",
+        AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}",
+        stack: env,
+        context: context,
+      },
+      steps: [
+        {
+          name: "Checkout",
+          uses: "actions/checkout@v3",
+        },
+        {
+          name: "Use Node.js " + CI_Versions.node,
+          uses: "actions/setup-node@v3",
+          with: {
+            "node-version": CI_Versions.node,
+            cache: "npm",
+          },
+        },
+        {
+          name: "Install cdktf-cli v" + CI_Versions.cdktf_cli,
+          run: "npm install -g cdktf-cli@" + CI_Versions.cdktf_cli,
+        },
+        {
+          name: "Install Terraform v" + CI_Versions.terraform,
+          uses: "hashicorp/setup-terraform@v2",
+          with: {
+            terraform_version: CI_Versions.terraform,
+          },
+        },
+        {
+          name: "Install dependencies",
+          run: "yarn install",
+        },
+        {
+          name: "Set Terraform Token",
+          run:
+            "mkdir -p ~/.terraform.d\n" +
+            "echo '{\n" +
+            '  "credentials": {\n' +
+            '    "app.terraform.io": {\n' +
+            '      "token": "${{ secrets.TF_API_TOKEN }}"\n' +
+            "    }\n" +
+            "  }\n" +
+            "}' > ~/.terraform.d/credentials.tfrc.json",
+        },
+        {
+          name: "Terraform Plan",
+          run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi',
+          // Uncomment this line to deploy after merge to master
+          // run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+        },
+        {
+          name: "Comment on the PR",
+          uses: "actions/github-script@0.9.0",
+          if: "github.event_name == 'pull_request'",
+          env: {
+            PLAN: "terraform\\n${{ steps.plan.outputs.stdout }}",
+          },
+          with: {
+            "github-token": "${{ secrets.GH_COMMENT_TOKEN }}",
+            script:
+              "const output = `#### Terraform Plan 📖\\`${{ steps.plan.outcome }}\\`\n" +
+              "<details><summary>Show Plan</summary>\n" +
+              "\\`\\`\\`${process.env.PLAN}\\`\\`\\`\n" +
+              "</details>\n" +
+              "*Pusher: @${{ github.actor }}, Action: \\`${{ github.event_name }}\\`, Working Directory: \\`${{ env.tf_actions_working_dir }}\\`, Workflow: \\`${{ github.workflow }}\\`*`;\n" +
+              "github.issues.createComment({\n" +
+              "  issue_number: context.issue.number,\n" +
+              "  owner: context.repo.owner,\n" +
+              "  repo: context.repo.repo,\n" +
+              "  body: output\n" +
+              "})",
+          },
+        },
+      ],
+    });
+  }
+}
 
 project.synth();

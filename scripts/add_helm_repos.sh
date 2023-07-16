@@ -9,3 +9,4 @@ helm repo add cdf https://cdfoundation.github.io/tekton-helm-chart/
 helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update

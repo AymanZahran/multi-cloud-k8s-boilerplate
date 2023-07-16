@@ -5,7 +5,7 @@
 
 ## How can this be tested?
 
-## Related issues
+## Related issues: 
 
 ## Checklist
 - [ ] I have added tests to cover my changes.
