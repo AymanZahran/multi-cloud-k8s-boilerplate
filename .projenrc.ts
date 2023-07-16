@@ -227,7 +227,7 @@ for (const context of ["build", "deploy"]) {
         },
         {
           name: "Terraform Plan",
-          run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }} fi',
+          run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi',
           // Uncomment this line to deploy after merge to master
           // run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi',
         },
