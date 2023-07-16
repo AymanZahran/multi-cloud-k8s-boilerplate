@@ -146,11 +146,26 @@ k8s_validate.addJob("build", {
     },
     {
       name: "Install Kubeval",
-      run: "./scripts/install_kubeval.sh",
+      run:
+        "wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz\n" +
+        "tar xf kubeval-linux-amd64.tar.gz\n" +
+        "cp kubeval /usr/local/bin",
     },
     {
       name: "Validate K8s Manifests",
-      run: "./scripts/validate_k8s_manifests.sh",
+      run:
+        'echo "Running kubeval validations..."\n' +
+        'if ! [ -x "$(command -v kubeval)" ]; then\n' +
+        "  echo 'Error: kubeval is not installed.' >&2\n" +
+        "  exit 1\n" +
+        "fi\n" +
+        "if kubeval --ignore-missing-schemas dist/*; then\n" +
+        '  echo "Static analysis found no problems."\n' +
+        "  exit 0\n" +
+        "else\n" +
+        '  echo 1>&2 "Static analysis found violations that need to be fixed."\n' +
+        "  exit 1\n" +
+        "fi",
     },
   ],
 });
