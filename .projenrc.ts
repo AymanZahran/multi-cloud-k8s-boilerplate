@@ -155,5 +155,88 @@ k8s_validate.addJob('build', {
         }
     ],
 });
+// Loop to create dev, staging and prod
+for (const env of ['dev', 'staging', 'prod']) {
+    const cdktf_build = new GithubWorkflow(project.github!, 'cdktf-' + env + '-build');
+    cdktf_build.on({
+        pullRequest: {
+            branches: ['master'],
+        }
+    });
+    cdktf_build.addJob('build', {
+        runsOn: ['ubuntu-latest'],
+        permissions: {
+            pullRequests: JobPermission.WRITE,
+        },
+        env: {
+            'TF_API_TOKEN': '${{ secrets.TF_API_TOKEN }}',
+            'AWS_ACCESS_KEY_ID': '${{ secrets.AWS_ACCESS_KEY_ID }}',
+            'AWS_SECRET_ACCESS_KEY': '${{ secrets.AWS_SECRET_ACCESS_KEY }}',
+            'stack': env,
+        },
+        steps: [
+            {
+                name: 'Checkout',
+                uses: 'actions/checkout@v3',
+            },
+            {
+                name: 'Use Node.js 19.x',
+                uses: 'actions/setup-node@v3',
+                with: {
+                    'node-version': '19.x',
+                    'cache': '"npm"'
+                }
+            },
+            {
+                name: 'Install CDKTF CLI v0.17.0',
+                run: 'npm install -g cdktf-cli@0.17.0',
+            },
+            {
+                name: 'Install Terraform v1.5.3',
+                uses: 'hashicorp/setup-terraform@v2',
+                with: {
+                    'terraform_version': '1.5.3',
+                }
+            },
+            {
+                name: 'Install dependencies',
+                run: 'yarn install',
+            },
+            {
+                name: 'Set Terraform Token',
+                run: './scripts/set-terraform-token.sh',
+            },
+            {
+                name: 'Terraform Plan',
+                run: 'cdktf plan ${{ env.stack }}',
+            },
+            {
+                name: 'Comment on the PR',
+                uses: 'actions/github-script@0.9.0',
+                if: 'github.event_name == \'pull_request\'',
+                env: {
+                    'PLAN': '"terraform\\n${{ steps.plan.outputs.stdout }}"',
+                },
+                with: {
+                    'github-token': '${{ secrets.GH_COMMENT_TOKEN }}',
+                    script: [
+                        'const output = `#### Terraform Plan 📖\\`${{ steps.plan.outcome }}\\`\n' +
+                        '<details><summary>Show Plan</summary>\n' +
+                        '\\`\\`\\`${process.env.PLAN}\\`\\`\\`\n' +
+                        '</details>\n' +
+                        '*Pusher: @${{ github.actor }}, Action: \\`${{ github.event_name }}\\`, Working Directory: \\`${{ env.tf_actions_working_dir }}\\`, Workflow: \\`${{ github.workflow }}\\`*`;\n' +
+                        'github.issues.createComment({\n' +
+                        'issue_number: context.issue.number,\n' +
+                        'owner: context.repo.owner,\n' +
+                        'repo: context.repo.repo,\n' +
+                        'body: output\n' +
+                        '})'
+                    ]
+                },
+            }
+        ]
+    });
+}
+
 
 project.synth();
