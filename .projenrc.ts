@@ -17,7 +17,7 @@ const project = new typescript.TypeScriptAppProject({
   depsUpgrade: true,
   autoApproveUpgrades: false, // Set false to manually approve upgrades
   buildWorkflow: true, // Enable build workflow
-  mutableBuild: false, // Automatically update files modified by build()
+  mutableBuild: true, // Automatically update files modified by build
   pullRequestTemplate: true,
   pullRequestTemplateContents: [
     "---",
@@ -220,7 +220,7 @@ for (const context of ["build", "deploy"]) {
         },
         {
           name: "Set Terraform Token",
-          run: "./scripts/set-terraform-token.sh",
+          run: "./scripts/set_terraform_token.sh",
         },
         {
           name: "Terraform Plan",

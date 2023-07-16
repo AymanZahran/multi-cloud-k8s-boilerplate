@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Set Terraform Token
-        run: ./scripts/set-terraform-token.sh
+        run: ./scripts/set_terraform_token.sh
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }} fi
       - name: Comment on the PR
