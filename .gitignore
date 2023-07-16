@@ -66,3 +66,6 @@ junit.xml
 !/.github/workflows/cdktf-dev-build.yml
 !/.github/workflows/cdktf-staging-build.yml
 !/.github/workflows/cdktf-prod-build.yml
+!/.github/workflows/cdktf-dev-deploy.yml
+!/.github/workflows/cdktf-staging-deploy.yml
+!/.github/workflows/cdktf-prod-deploy.yml
