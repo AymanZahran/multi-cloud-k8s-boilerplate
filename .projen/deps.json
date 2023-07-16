@@ -120,12 +120,12 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.17.0",
+      "version": "^0.17.0",
       "type": "runtime"
     },
     {
       "name": "cdktf",
-      "version": "^1.1.0",
+      "version": "^0.17.0",
       "type": "runtime"
     },
     {

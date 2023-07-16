@@ -56,7 +56,7 @@ const project = new typescript.TypeScriptAppProject({
   deps: [
     "constructs@^" + PackageVersions.constructs,
     "cdktf@^" + PackageVersions.cdktf,
-    "cdktf-cli@" + PackageVersions.cdktf_cli,
+    "cdktf-cli@^" + PackageVersions.cdktf_cli,
     "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
     "@cdktf/provider-google@^" + PackageVersions.provider_google,
