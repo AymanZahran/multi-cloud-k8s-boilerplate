@@ -1,5 +1,6 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
+import { HelmChartVersions } from "../const";
 
 export class ClusterAutoscaler extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -7,7 +8,7 @@ export class ClusterAutoscaler extends Chart {
 
     new Helm(this, "cluster-autoscaler", {
       chart: "autoscaler/cluster-autoscaler",
-      version: "9.29.1",
+      version: HelmChartVersions.cluster_autoscaler,
       namespace: "cluster-autoscaler",
       releaseName: "cluster-autoscaler",
       values: {},

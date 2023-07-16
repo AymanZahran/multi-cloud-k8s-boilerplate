@@ -1,5 +1,6 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
+import { HelmChartVersions } from "../const";
 
 export class Tekton extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -7,7 +8,7 @@ export class Tekton extends Chart {
 
     new Helm(this, "tekton", {
       chart: "cdf/tekton-pipeline",
-      version: "0.6.4",
+      version: HelmChartVersions.tekton,
       namespace: "tekton-pipelines",
       releaseName: "tekton",
       values: {},
