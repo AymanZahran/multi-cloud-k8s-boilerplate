@@ -137,6 +137,8 @@ k8s_validate.addJob("build", {
   runsOn: ["ubuntu-latest"],
   permissions: {
     pullRequests: JobPermission.WRITE,
+    actions: JobPermission.WRITE,
+    contents: JobPermission.WRITE,
   },
   steps: [
     {
@@ -178,6 +180,8 @@ for (const context of ["build", "deploy"]) {
       runsOn: ["ubuntu-latest"],
       permissions: {
         pullRequests: JobPermission.WRITE,
+        actions: JobPermission.WRITE,
+        contents: JobPermission.WRITE,
       },
       env: {
         TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
