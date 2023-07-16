@@ -35,7 +35,7 @@ jobs:
       - name: Set Terraform Token
         run: ./scripts/set-terraform-token.sh
       - name: Terraform Plan
-        run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi
+        run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }} fi
       - name: Comment on the PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@0.9.0
