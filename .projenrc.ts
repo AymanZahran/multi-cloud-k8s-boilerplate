@@ -10,6 +10,7 @@ const project = new typescript.TypeScriptAppProject({
   gitpod: true,
   release: true,
   releaseToNpm: true,
+  npmRegistryUrl: "https://www.npmjs.com/~ayman.zahran",
   vscode: true,
   depsUpgrade: true,
   autoApproveUpgrades: false, // Set false to manually approve upgrades
