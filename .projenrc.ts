@@ -1,7 +1,7 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { PackageVersions, Scripts } from "./const";
+import { PackageVersions, Scripts, CI_Versions } from "./const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -60,13 +60,13 @@ const project = new typescript.TypeScriptAppProject({
   deps: [
     "constructs@^" + PackageVersions.constructs,
     "cdktf@^" + PackageVersions.cdktf,
-    "cdktf-cli@^" + PackageVersions.cdktf_cli,
+    "cdktf-cli@^" + CI_Versions.cdktf_cli,
     "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
     "@cdktf/provider-google@^" + PackageVersions.provider_google,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
     "cdk8s@^" + PackageVersions.cdk8s,
-    "cdk8s-cli@^" + PackageVersions.cdk8s_cli,
+    "cdk8s-cli@^" + CI_Versions.cdk8s_cli,
     "cdk8s-plus@^" + PackageVersions.cdk8s_plus,
     "dotenv@^" + PackageVersions.dotenv,
   ],
@@ -192,22 +192,22 @@ for (const context of ["build", "deploy"]) {
           uses: "actions/checkout@v3",
         },
         {
-          name: "Use Node.js 19.x",
+          name: "Use Node.js " + CI_Versions.node,
           uses: "actions/setup-node@v3",
           with: {
-            "node-version": "19.x",
+            "node-version": CI_Versions.node,
             cache: "npm",
           },
         },
         {
-          name: "Install CDKTF CLI v0.17.0",
-          run: "npm install -g cdktf-cli@0.17.0",
+          name: "Install cdktf-cli v" + CI_Versions.cdktf_cli,
+          run: "npm install -g cdktf-cli@" + CI_Versions.cdktf_cli,
         },
         {
-          name: "Install Terraform v1.5.3",
+          name: "Install Terraform v" + CI_Versions.terraform,
           uses: "hashicorp/setup-terraform@v2",
           with: {
-            terraform_version: "1.5.3",
+            terraform_version: CI_Versions.terraform,
           },
         },
         {
@@ -233,19 +233,18 @@ for (const context of ["build", "deploy"]) {
           },
           with: {
             "github-token": "${{ secrets.GH_COMMENT_TOKEN }}",
-            script: [
+            script:
               "const output = `#### Terraform Plan 📖\\`${{ steps.plan.outcome }}\\`\n" +
-                "<details><summary>Show Plan</summary>\n" +
-                "\\`\\`\\`${process.env.PLAN}\\`\\`\\`\n" +
-                "</details>\n" +
-                "*Pusher: @${{ github.actor }}, Action: \\`${{ github.event_name }}\\`, Working Directory: \\`${{ env.tf_actions_working_dir }}\\`, Workflow: \\`${{ github.workflow }}\\`*`;\n" +
-                "github.issues.createComment({\n" +
-                "issue_number: context.issue.number,\n" +
-                "owner: context.repo.owner,\n" +
-                "repo: context.repo.repo,\n" +
-                "body: output\n" +
-                "})",
-            ],
+              "<details><summary>Show Plan</summary>\n" +
+              "\\`\\`\\`${process.env.PLAN}\\`\\`\\`\n" +
+              "</details>\n" +
+              "*Pusher: @${{ github.actor }}, Action: \\`${{ github.event_name }}\\`, Working Directory: \\`${{ env.tf_actions_working_dir }}\\`, Workflow: \\`${{ github.workflow }}\\`*`;\n" +
+              "github.issues.createComment({\n" +
+              "issue_number: context.issue.number,\n" +
+              "owner: context.repo.owner,\n" +
+              "repo: context.repo.repo,\n" +
+              "body: output\n" +
+              "})",
           },
         },
       ],
