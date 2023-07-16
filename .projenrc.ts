@@ -49,6 +49,7 @@ const project = new typescript.TypeScriptAppProject({
     },
   },
 
+  eslint: true,
   eslintOptions: {
     prettier: true,
     dirs: ["src"],
