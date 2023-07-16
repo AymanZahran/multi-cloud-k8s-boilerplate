@@ -1,5 +1,5 @@
 import { typescript } from "projen";
-import { PackageVersions } from "./const";
+import { PackageVersions, Scripts } from "./const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -91,19 +91,19 @@ const project = new typescript.TypeScriptAppProject({
 
 // Add scripts for cdktf and cdk8s
 const scripts = {
-  "cdktf-cli-install": "npm i -g cdktf-cli --force",
-  "cdktf-get": "cdktf get",
-  "cdktf-synth": "cdktf synth",
-  "cdktf-deploy": "cdktf deploy",
-  "cdktf-upgrade": "npm i cdktf@latest cdktf-cli@latest",
-  "cdktf-upgrade:next": "npm i cdktf@next cdktf-cli@next",
+  "cdktf-cli-install": Scripts.cdktf_cli_install,
+  "cdktf-get": Scripts.cdktf_get,
+  "cdktf-synth": Scripts.cdktf_synth,
+  "cdktf-deploy": Scripts.cdktf_deploy,
+  "cdktf-upgrade": Scripts.cdktf_upgrade,
+  "cdktf-upgrade:next": Scripts.cdktf_upgrade_next,
 
-  "cdk8s-cli-install": "npm i -g cdk8s-cli --force",
-  "cdk8s-synth": "cdk8s synth",
-  "cdk8s-diff": "cdk8s diff",
-  "cdk8s-import": "cdk8s import",
-  "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
-  "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
+  "cdk8s-cli-install": Scripts.cdk8s_cli_install,
+  "cdk8s-synth": Scripts.cdk8s_synth,
+  "cdk8s-diff": Scripts.cdk8s_diff,
+  "cdk8s-import": Scripts.cdk8s_import,
+  "cdk8s-upgrade": Scripts.cdk8s_upgrade,
+  "cdk8s-upgrade:next": Scripts.cdk8s_upgrade_next,
 };
 
 // create array of objects called tasks
