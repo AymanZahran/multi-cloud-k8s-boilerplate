@@ -16,6 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Kubeval
-        run: ./scripts/install-kubeval.sh
+        run: ./scripts/install_kubeval.sh
       - name: Validate K8s Manifests
         run: ./scripts/validate_k8s_manifests.sh

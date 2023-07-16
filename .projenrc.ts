@@ -147,7 +147,7 @@ k8s_validate.addJob("build", {
     },
     {
       name: "Install Kubeval",
-      run: "./scripts/install-kubeval.sh",
+      run: "./scripts/install_kubeval.sh",
     },
     {
       name: "Validate K8s Manifests",
