@@ -97,6 +97,7 @@ const scripts = {
   "cdktf-deploy": Scripts.cdktf_deploy,
   "cdktf-upgrade": Scripts.cdktf_upgrade,
   "cdktf-upgrade:next": Scripts.cdktf_upgrade_next,
+  "cdk8s-add-helm-repos": Scripts.cdk8s_add_helm_repos,
   "cdk8s-cli-install": Scripts.cdk8s_cli_install,
   "cdk8s-synth": Scripts.cdk8s_synth,
   "cdk8s-diff": Scripts.cdk8s_diff,
@@ -113,10 +114,10 @@ for (const [key, value] of Object.entries(scripts)) {
   });
 }
 
-project.compileTask.spawn(tasks["cdktf-get"]);
-project.compileTask.spawn(tasks["cdktf-synth"]);
-project.compileTask.exec("./scripts/add_helm_repos.sh");
-project.compileTask.spawn(tasks["cdk8s-synth"]);
+project.compileTask.reset();
+const compile_tasks = [tasks["cdktf-get"], tasks["cdktf-synth"], tasks["cdk8s-add-helm-repos"], tasks["cdk8s-synth"]];
+for (const task of compile_tasks)
+  project.compileTask.spawn(task);
 
 // Add cdktf and cdk8s Workflows
 

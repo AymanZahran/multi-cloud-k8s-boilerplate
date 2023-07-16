@@ -41,6 +41,15 @@
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
+    "cdk8s-add-helm-repos": {
+      "name": "cdk8s-add-helm-repos",
+      "description": "cdk8s-add-helm-repos",
+      "steps": [
+        {
+          "exec": "./scripts/add_helm_repos.sh"
+        }
+      ]
+    },
     "cdk8s-cli-install": {
       "name": "cdk8s-cli-install",
       "description": "cdk8s-cli-install",
@@ -186,16 +195,13 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "tsc --build"
-        },
-        {
           "spawn": "cdktf-get"
         },
         {
           "spawn": "cdktf-synth"
         },
         {
-          "exec": "./scripts/add_helm_repos.sh"
+          "spawn": "cdk8s-add-helm-repos"
         },
         {
           "spawn": "cdk8s-synth"

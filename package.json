@@ -4,6 +4,7 @@
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "cdk8s-add-helm-repos": "npx projen cdk8s-add-helm-repos",
     "cdk8s-cli-install": "npx projen cdk8s-cli-install",
     "cdk8s-diff": "npx projen cdk8s-diff",
     "cdk8s-import": "npx projen cdk8s-import",

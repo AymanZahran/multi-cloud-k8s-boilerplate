@@ -21,6 +21,7 @@ export class Scripts {
     public static readonly cdktf_deploy = "cdktf deploy";
     public static readonly cdktf_upgrade = "npm i cdktf@latest cdktf-cli@latest";
     public static readonly cdktf_upgrade_next = "npm i cdktf@next cdktf-cli@next";
+    public static readonly cdk8s_add_helm_repos = "./scripts/add_helm_repos.sh";
     public static readonly cdk8s_cli_install = "npm i -g cdk8s-cli --force";
     public static readonly cdk8s_synth = "cdk8s synth";
     public static readonly cdk8s_diff = "cdk8s diff";
