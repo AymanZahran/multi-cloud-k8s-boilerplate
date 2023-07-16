@@ -23,12 +23,16 @@ const project = new typescript.TypeScriptAppProject({
     "---",
     "## What is the goal of this PR?",
     "",
+
     "## What are the changes?",
     "",
+
     "## How can this be tested?",
     "",
+
     "## Related issues",
     "",
+
     "## Checklist",
     "- [ ] I have added tests to cover my changes.",
     "- [ ] All new and existing tests passed.",
@@ -73,7 +77,6 @@ const project = new typescript.TypeScriptAppProject({
   description: "This is a multi-cloud project",
   devDeps: [] /* Build dependencies for this module. */,
   packageName: "multi-cloud" /* The "name" in package.json. */,
-
   gitignore: [
     ".DS_Store",
     ".idea",
