@@ -115,9 +115,13 @@ for (const [key, value] of Object.entries(scripts)) {
 }
 
 project.compileTask.reset();
-const compile_tasks = [tasks["cdktf-get"], tasks["cdktf-synth"], tasks["cdk8s-add-helm-repos"], tasks["cdk8s-synth"]];
-for (const task of compile_tasks)
-  project.compileTask.spawn(task);
+const compile_tasks = [
+  tasks["cdktf-get"],
+  tasks["cdktf-synth"],
+  tasks["cdk8s-add-helm-repos"],
+  tasks["cdk8s-synth"],
+];
+for (const task of compile_tasks) project.compileTask.spawn(task);
 
 // Add cdktf and cdk8s Workflows
 
