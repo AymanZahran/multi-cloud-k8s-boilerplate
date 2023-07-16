@@ -223,7 +223,14 @@ for (const context of ["build", "deploy"]) {
         },
         {
           name: "Set Terraform Token",
-          run: "./scripts/set_terraform_token.sh",
+          run: "mkdir -p ~/.terraform.d\n" +
+              "echo '{\n" +
+              "  \"credentials\": {\n" +
+              "    \"app.terraform.io\":\n" +
+              "      \"token\": \"${{ secrets.TF_API_TOKEN }}\"\n" +
+              "    }\n" +
+              "  }\n" +
+              "}' >~/.terraform.d/credentials.tfrc.json",
         },
         {
           name: "Terraform Plan",

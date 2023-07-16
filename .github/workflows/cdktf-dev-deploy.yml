@@ -35,7 +35,15 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Set Terraform Token
-        run: ./scripts/set_terraform_token.sh
+        run: |-
+          mkdir -p ~/.terraform.d
+          echo '{
+            "credentials": {
+              "app.terraform.io":
+                "token": "${{ secrets.TF_API_TOKEN }}"
+              }
+            }
+          }' >~/.terraform.d/credentials.tfrc.json
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
       - name: Comment on the PR
