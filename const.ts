@@ -1,7 +1,7 @@
 export class PackageVersions {
     // Readonly static constants
     public static readonly constructs = "10.2.52";
-    public static readonly cdktf = "1.1.0";
+    public static readonly cdktf = "0.17.0";
     public static readonly cdktf_cli = "0.17.0";
     public static readonly provider_aws = "15.0.0";
     public static readonly provider_azurerm = "8.0.0";
