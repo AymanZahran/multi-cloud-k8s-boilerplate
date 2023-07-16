@@ -105,12 +105,12 @@
     },
     {
       "name": "cdk8s-cli",
-      "version": "2.2.110",
+      "version": "^2.2.110",
       "type": "runtime"
     },
     {
       "name": "cdk8s-plus",
-      "version": "0.33.0",
+      "version": "^0.33.0",
       "type": "runtime"
     },
     {
@@ -120,7 +120,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.17.0",
+      "version": "^0.17.0",
       "type": "runtime"
     },
     {

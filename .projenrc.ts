@@ -1,4 +1,5 @@
 import { typescript } from "projen";
+import { PackageVersions } from "./const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -54,17 +55,17 @@ const project = new typescript.TypeScriptAppProject({
   },
 
   deps: [
-    "constructs@^10.2.52",
-    "cdktf@^0.17.0",
-    "cdktf-cli@0.17.0",
-    "@cdktf/provider-aws@^15.0.0",
-    "@cdktf/provider-azurerm@^8.0.0",
-    "@cdktf/provider-google@^7.0.11",
-    "@cdktf/provider-kubernetes@^7.0.0",
-    "cdk8s-cli@2.2.110",
-    "cdk8s@^2.7.77",
-    "cdk8s-plus@0.33.0",
-    "dotenv@^16.1.4",
+    "constructs@^" + PackageVersions.constructs,
+    "cdktf@^" + PackageVersions.cdktf,
+    "cdktf-cli@^" + PackageVersions.cdktf_cli,
+    "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
+    "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
+    "@cdktf/provider-google@^" + PackageVersions.provider_google,
+    "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
+    "cdk8s@^" + PackageVersions.cdk8s,
+    "cdk8s-cli@^" + PackageVersions.cdk8s_cli,
+    "cdk8s-plus@^" + PackageVersions.cdk8s_plus,
+    "dotenv@^" + PackageVersions.dotenv,
   ],
   description: "This is a multi-cloud project",
   devDeps: [] /* Build dependencies for this module. */,

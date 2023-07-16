@@ -1,5 +1,6 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
+import { HelmChartVersions } from "../const";
 
 export class KubeStateMetrics extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -7,7 +8,7 @@ export class KubeStateMetrics extends Chart {
 
     new Helm(this, "kube-state-metrics-dev", {
       chart: "prometheus-community/kube-state-metrics",
-      version: "5.9.0",
+      version: HelmChartVersions.kube_state_metrics,
       namespace: "observability",
       releaseName: "kube-state-metrics",
       values: {},

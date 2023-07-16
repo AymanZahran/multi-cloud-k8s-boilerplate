@@ -1,5 +1,6 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
+import { HelmChartVersions } from "../const";
 
 export class Vault extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
@@ -8,7 +9,7 @@ export class Vault extends Chart {
     // Storage Backend
     new Helm(this, "consul", {
       chart: "hashicorp/consul",
-      version: "1.1.2",
+      version: HelmChartVersions.consul,
       namespace: "consul",
       releaseName: "consul",
       values: {},
@@ -17,7 +18,7 @@ export class Vault extends Chart {
     // Vault
     new Helm(this, "vault", {
       chart: "hashicorp/vault",
-      version: "0.25.0",
+      version: HelmChartVersions.vault,
       namespace: "vault",
       releaseName: "vault",
       values: {},
