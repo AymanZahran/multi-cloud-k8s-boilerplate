@@ -107,17 +107,15 @@ const scripts = {
 
 const tasks: any = {};
 for (const [key, value] of Object.entries(scripts)) {
-    tasks[key] = project.addTask(key, {
-      exec: value,
-      description: key,
-    });
+  tasks[key] = project.addTask(key, {
+    exec: value,
+    description: key,
+  });
 }
 
 project.compileTask.spawn(tasks["cdktf-get"]);
 project.compileTask.spawn(tasks["cdktf-synth"]);
-project.compileTask.exec(
-  "./scripts/add_helm_repos.sh"
-);
+project.compileTask.exec("./scripts/add_helm_repos.sh");
 project.compileTask.spawn(tasks["cdk8s-synth"]);
 
 // Add cdktf and cdk8s Workflows
