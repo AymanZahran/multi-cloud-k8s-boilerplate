@@ -229,7 +229,7 @@ for (const context of ["build", "deploy"]) {
           uses: "actions/github-script@0.9.0",
           if: "github.event_name == 'pull_request'",
           env: {
-            PLAN: '"terraform\\n${{ steps.plan.outputs.stdout }}"',
+            PLAN: "terraform\\n${{ steps.plan.outputs.stdout }}",
           },
           with: {
             "github-token": "${{ secrets.GH_COMMENT_TOKEN }}",
@@ -240,10 +240,10 @@ for (const context of ["build", "deploy"]) {
               "</details>\n" +
               "*Pusher: @${{ github.actor }}, Action: \\`${{ github.event_name }}\\`, Working Directory: \\`${{ env.tf_actions_working_dir }}\\`, Workflow: \\`${{ github.workflow }}\\`*`;\n" +
               "github.issues.createComment({\n" +
-              "issue_number: context.issue.number,\n" +
-              "owner: context.repo.owner,\n" +
-              "repo: context.repo.repo,\n" +
-              "body: output\n" +
+              "  issue_number: context.issue.number,\n" +
+              "  owner: context.repo.owner,\n" +
+              "  repo: context.repo.repo,\n" +
+              "  body: output\n" +
               "})",
           },
         },
