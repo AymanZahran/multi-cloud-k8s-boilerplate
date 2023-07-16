@@ -39,11 +39,11 @@ jobs:
           mkdir -p ~/.terraform.d
           echo '{
             "credentials": {
-              "app.terraform.io":
+              "app.terraform.io": {
                 "token": "${{ secrets.TF_API_TOKEN }}"
               }
             }
-          }' >~/.terraform.d/credentials.tfrc.json
+          }' > ~/.terraform.d/credentials.tfrc.json
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
       - name: Comment on the PR
