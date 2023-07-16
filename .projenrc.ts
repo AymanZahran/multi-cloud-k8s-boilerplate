@@ -105,16 +105,21 @@ const scripts = {
   "cdk8s-upgrade": "npm i cdk8s@latest cdk8s-cli@latest",
   "cdk8s-upgrade:next": "npm i cdk8s@next cdk8s-cli@next",
 };
+
+// create array of objects called tasks
+const tasks: any = {};
 for (const [key, value] of Object.entries(scripts)) {
-  project.addTask(key, {
-    exec: value,
-    description: key,
-  });
+    tasks[key] = project.addTask(key, {
+      exec: value,
+      description: key,
+    });
 }
 
-project.compileTask.exec("npx projen cdktf-get && npx projen cdktf-synth");
+project.compileTask.spawn(tasks["cdktf-get"]);
+project.compileTask.spawn(tasks["cdktf-synth"]);
 project.compileTask.exec(
-  "./scripts/add_helm_repos.sh && npx projen cdk8s-synth",
+  "./scripts/add_helm_repos.sh"
 );
+project.compileTask.spawn(tasks["cdk8s-synth"]);
 
 project.synth();

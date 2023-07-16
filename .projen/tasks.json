@@ -189,10 +189,16 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "npx projen cdktf-get && npx projen cdktf-synth"
+          "spawn": "cdktf-get"
         },
         {
-          "exec": "./scripts/add_helm_repos.sh && npx projen cdk8s-synth"
+          "spawn": "cdktf-synth"
+        },
+        {
+          "exec": "./scripts/add_helm_repos.sh"
+        },
+        {
+          "spawn": "cdk8s-synth"
         }
       ]
     },
