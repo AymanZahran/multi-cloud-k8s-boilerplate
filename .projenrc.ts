@@ -30,7 +30,7 @@ const project = new typescript.TypeScriptAppProject({
     "## How can this be tested?",
     "",
 
-    "## Related issues",
+    "## Related issues: ",
     "",
 
     "## Checklist",
