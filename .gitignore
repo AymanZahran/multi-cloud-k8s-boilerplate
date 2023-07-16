@@ -62,3 +62,4 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/.github/workflows/k8s-validate.yml
