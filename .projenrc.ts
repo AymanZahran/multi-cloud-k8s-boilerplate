@@ -89,7 +89,7 @@ const project = new typescript.TypeScriptAppProject({
   ],
 });
 
-// Add scripts for cdktf and cdk8s
+// Add cdktf and cdk8s Tasks
 const scripts = {
   "cdktf-cli-install": Scripts.cdktf_cli_install,
   "cdktf-get": Scripts.cdktf_get,
@@ -97,7 +97,6 @@ const scripts = {
   "cdktf-deploy": Scripts.cdktf_deploy,
   "cdktf-upgrade": Scripts.cdktf_upgrade,
   "cdktf-upgrade:next": Scripts.cdktf_upgrade_next,
-
   "cdk8s-cli-install": Scripts.cdk8s_cli_install,
   "cdk8s-synth": Scripts.cdk8s_synth,
   "cdk8s-diff": Scripts.cdk8s_diff,
@@ -106,7 +105,6 @@ const scripts = {
   "cdk8s-upgrade:next": Scripts.cdk8s_upgrade_next,
 };
 
-// create array of objects called tasks
 const tasks: any = {};
 for (const [key, value] of Object.entries(scripts)) {
     tasks[key] = project.addTask(key, {
@@ -121,5 +119,7 @@ project.compileTask.exec(
   "./scripts/add_helm_repos.sh"
 );
 project.compileTask.spawn(tasks["cdk8s-synth"]);
+
+// Add cdktf and cdk8s Workflows
 
 project.synth();
