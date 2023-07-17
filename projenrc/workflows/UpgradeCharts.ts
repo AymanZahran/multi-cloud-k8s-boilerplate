@@ -2,9 +2,9 @@ import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
 
-export function UpdateCharts(project: typescript.TypeScriptAppProject) {
-  const update_charts = new GithubWorkflow(project.github!, "update-charts");
-  update_charts.on({
+export function UpgradeCharts(project: typescript.TypeScriptAppProject) {
+  const upgrade_charts = new GithubWorkflow(project.github!, "upgrade-charts");
+  upgrade_charts.on({
     workflowDispatch: {},
     schedule: [
       {
@@ -12,7 +12,7 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
       },
     ],
   });
-  update_charts.addJob("build", {
+  upgrade_charts.addJob("build", {
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,
@@ -23,8 +23,8 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
         uses: "actions/checkout@v3",
       },
       {
-        name: "update helm charts",
-        run: "./scripts/update_helm_charts.sh",
+        name: "upgrade charts",
+        run: "./scripts/upgrade_charts.sh",
       },
       {
         name: "Install dependencies",
@@ -53,7 +53,7 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
     ],
   });
 
-  update_charts.addJob("pr", {
+  upgrade_charts.addJob("pr", {
     name: "Create Pull Request",
     needs: ["upgrade"],
     runsOn: ["ubuntu-latest"],
@@ -94,16 +94,16 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
         with: {
           token: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
           commitMessage:
-            "chore: update helm charts\n" +
+            "chore: upgrade charts\n" +
             "Upgrades project dependencies. See details in [workflow run].\n" +
             "\n" +
             "[Workflow Run]: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n" +
             "\n" +
             "------\n" +
             "\n" +
-            '*Automatically created by projen via the "update-charts" workflow*',
-          branch: "github-actions/update-charts",
-          title: "chore(deps): update helm charts",
+            '*Automatically created by projen via the "upgrade-charts" workflow*',
+          branch: "github-actions/upgrade-charts",
+          title: "chore(deps): upgrade charts",
           body:
             "Upgrades project dependencies. See details in [workflow run].\n" +
             "\n" +
@@ -111,7 +111,7 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
             "\n" +
             "------\n" +
             "\n" +
-            '*Automatically created by projen via the "update-charts" workflow*',
+            '*Automatically created by projen via the "upgrade-charts" workflow*',
           author: "github-actions <github-actions@github.com>",
           committer: "github-actions <github-actions@github.com>",
           signoff: true,
