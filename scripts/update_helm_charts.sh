@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#./scripts/add_helm_repos.sh
+#helm repo update
+
 # Charts Array
 Charts=(
     "argo/argo-cd"

@@ -24,11 +24,7 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
         uses: "actions/checkout@v3",
       },
       {
-        name: "Add and update repos",
-        run: "./scripts/add_helm_repos.sh",
-      },
-      {
-        name: "Get latest chart versions",
+        name: "update helm charts",
         run: "./scripts/update_helm_charts.sh",
       },
     ],
