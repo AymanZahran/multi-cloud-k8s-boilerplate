@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: 0 0 * * *
 jobs:
-  build:
+  upgrade-charts:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,7 +32,7 @@ jobs:
           path: .repo.patch
   pr:
     name: Create Pull Request
-    needs: upgrade
+    needs: upgrade-charts
     runs-on: ubuntu-latest
     permissions:
       contents: read

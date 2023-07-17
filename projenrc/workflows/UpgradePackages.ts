@@ -15,7 +15,7 @@ export function Upgradepackages(project: typescript.TypeScriptAppProject) {
       },
     ],
   });
-  upgrade_packages.addJob("build", {
+  upgrade_packages.addJob("upgrade-packages", {
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,
@@ -58,7 +58,7 @@ export function Upgradepackages(project: typescript.TypeScriptAppProject) {
 
   upgrade_packages.addJob("pr", {
     name: "Create Pull Request",
-    needs: ["upgrade"],
+    needs: ["upgrade-packages"],
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,

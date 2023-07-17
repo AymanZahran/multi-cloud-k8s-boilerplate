@@ -12,7 +12,7 @@ export function UpgradeCharts(project: typescript.TypeScriptAppProject) {
       },
     ],
   });
-  upgrade_charts.addJob("build", {
+  upgrade_charts.addJob("upgrade-charts", {
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,
@@ -55,7 +55,7 @@ export function UpgradeCharts(project: typescript.TypeScriptAppProject) {
 
   upgrade_charts.addJob("pr", {
     name: "Create Pull Request",
-    needs: ["upgrade"],
+    needs: ["upgrade-charts"],
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,
