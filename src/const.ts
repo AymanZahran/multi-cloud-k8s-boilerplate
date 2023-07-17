@@ -9,6 +9,10 @@ export class Scripts {
   public static readonly cdk8s_add_helm_repos = "./scripts/add_helm_repos.sh";
   public static readonly cdk8s_cli_install = "npm i -g cdk8s-cli --force";
   public static readonly cdk8s_synth = "cdk8s synth";
+  public static readonly cdk8s_get =
+    "rm -rf kubernetes/dev/* && cp dist/* kubernetes/dev/ " +
+    "&& rm -rf kubernetes/staging/* && cp dist/* kubernetes/staging/ " +
+    "&& rm -rf kubernetes/prod/* && cp dist/* kubernetes/prod/";
   public static readonly cdk8s_diff = "cdk8s diff";
   public static readonly cdk8s_import = "cdk8s import";
   public static readonly cdk8s_upgrade = "npm i cdk8s@latest cdk8s-cli@latest";

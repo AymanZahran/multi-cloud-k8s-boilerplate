@@ -26,9 +26,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
       cdktf_workflow.addJob("build", {
         runsOn: ["ubuntu-latest"],
         permissions: {
-          pullRequests: JobPermission.WRITE,
-          actions: JobPermission.WRITE,
-          contents: JobPermission.WRITE,
+          contents: JobPermission.READ,
         },
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
