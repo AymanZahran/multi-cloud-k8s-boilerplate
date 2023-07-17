@@ -5,6 +5,7 @@ import { JobPermission } from "projen/lib/github/workflows-model";
 export function UpdateCharts(project: typescript.TypeScriptAppProject) {
   const update_charts = new GithubWorkflow(project.github!, "update-charts");
   update_charts.on({
+    workflowDispatch: {},
     schedule: [
       {
         cron: "0 0 * * *",
@@ -14,9 +15,7 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
   update_charts.addJob("build", {
     runsOn: ["ubuntu-latest"],
     permissions: {
-      pullRequests: JobPermission.WRITE,
-      actions: JobPermission.WRITE,
-      contents: JobPermission.WRITE,
+      contents: JobPermission.READ,
     },
     steps: [
       {
@@ -24,12 +23,99 @@ export function UpdateCharts(project: typescript.TypeScriptAppProject) {
         uses: "actions/checkout@v3",
       },
       {
-        name: "Add and update repos",
-        run: "./scripts/add_helm_repos.sh",
+        name: "update helm charts",
+        run: "./scripts/update_helm_charts.sh",
       },
       {
-        name: "Get latest chart versions",
-        run: "./scripts/update_helm_charts.sh",
+        name: "Install dependencies",
+        run: "yarn install --check-files --frozen-lockfile",
+      },
+      {
+        name: "Build",
+        run: "npx projen build",
+      },
+      {
+        name: "Find mutations",
+        id: "create_patch",
+        run:
+          "git add .\n" +
+          'git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT',
+      },
+      {
+        name: "Upload patch",
+        if: "steps.create_patch.outputs.patch_created",
+        uses: "actions/upload-artifact@v3",
+        with: {
+          name: ".repo.patch",
+          path: ".repo.patch",
+        },
+      },
+    ],
+  });
+
+  update_charts.addJob("pr", {
+    name: "Create Pull Request",
+    needs: ["upgrade"],
+    runsOn: ["ubuntu-latest"],
+    permissions: {
+      contents: JobPermission.READ,
+    },
+    if: "${{ needs.upgrade.outputs.patch_created }}",
+    steps: [
+      {
+        name: "Checkout",
+        uses: "actions/checkout@v3",
+        with: {
+          ref: "master",
+        },
+      },
+      {
+        name: "Download patch",
+        uses: "actions/download-artifact@v3",
+        with: {
+          name: ".repo.patch",
+          path: "${{ runner.temp }}",
+        },
+      },
+      {
+        name: "Apply patch",
+        run: '[ -s ${{ runner.temp }}/.repo.patch ] && git apply ${{ runner.temp }}/.repo.patch || echo "Empty patch. Skipping."',
+      },
+      {
+        name: "Set git identity",
+        run:
+          'git config user.name "github-actions"\n' +
+          'git config user.email "github-actions@github.com"\n',
+      },
+      {
+        name: "Create Pull Request",
+        id: "create_pr",
+        uses: "peter-evans/create-pull-request@v4",
+        with: {
+          token: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
+          commitMessage:
+            "chore: update helm charts\n" +
+            "Upgrades project dependencies. See details in [workflow run].\n" +
+            "\n" +
+            "[Workflow Run]: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n" +
+            "\n" +
+            "------\n" +
+            "\n" +
+            '*Automatically created by projen via the "update-charts" workflow*',
+          branch: "github-actions/update-charts",
+          title: "chore(deps): update helm charts",
+          body:
+            "Upgrades project dependencies. See details in [workflow run].\n" +
+            "\n" +
+            "[Workflow Run]: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n" +
+            "\n" +
+            "------\n" +
+            "\n" +
+            '*Automatically created by projen via the "update-charts" workflow*',
+          author: "github-actions <github-actions@github.com>",
+          committer: "github-actions <github-actions@github.com>",
+          signoff: true,
+        },
       },
     ],
   });

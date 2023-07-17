@@ -8,11 +8,11 @@ export class HelmChartVersions {
   public static readonly cert_manager = "1.12.2";
   public static readonly cluster_autoscaler = "9.29.1";
   public static readonly consul = "1.1.2";
+  public static readonly crossplane = "1.12.2";
   public static readonly kube_state_metrics = "5.9.0";
   public static readonly metrics_server = "3.10.0";
-  public static readonly prometheus = "48.1.1";
+  public static readonly kube_prometheus_stack = "48.1.1";
   public static readonly secrets_store_csi_driver = "1.3.4";
-  public static readonly tekton = "0.6.4";
+  public static readonly tekton_pipeline = "0.6.4";
   public static readonly vault = "0.25.0";
-  public static readonly crossplane = "1.12.2";
 }

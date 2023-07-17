@@ -8,7 +8,7 @@ export class Tekton extends Chart {
 
     new Helm(this, "tekton", {
       chart: "cdf/tekton-pipeline",
-      version: HelmChartVersions.tekton,
+      version: HelmChartVersions.tekton_pipeline,
       namespace: "tekton-pipelines",
       releaseName: "tekton",
       values: {},
