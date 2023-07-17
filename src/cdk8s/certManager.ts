@@ -1,17 +1,21 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
-import { HelmChartVersions } from "../const";
-
 export class CertManager extends Chart {
-  constructor(scope: Construct, id: string, props: ChartProps = {}) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: ChartProps = {},
+    version: string,
+    values: any,
+  ) {
     super(scope, id, props);
 
     new Helm(this, "cert-manager", {
       chart: "jetstack/cert-manager",
-      version: HelmChartVersions.cert_manager,
+      version: version,
       namespace: "cert-manager",
       releaseName: "cert-manager",
-      values: {},
+      values: values,
     });
   }
 }
