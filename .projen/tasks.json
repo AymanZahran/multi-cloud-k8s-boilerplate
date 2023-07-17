@@ -68,6 +68,15 @@
         }
       ]
     },
+    "cdk8s-get": {
+      "name": "cdk8s-get",
+      "description": "cdk8s-get",
+      "steps": [
+        {
+          "exec": "rm -rf kubernetes/dev/* && cp dist/* kubernetes/dev/ && rm -rf kubernetes/staging/* && cp dist/* kubernetes/staging/ && rm -rf kubernetes/prod/* && cp dist/* kubernetes/prod/"
+        }
+      ]
+    },
     "cdk8s-import": {
       "name": "cdk8s-import",
       "description": "cdk8s-import",
@@ -205,6 +214,9 @@
         },
         {
           "spawn": "cdk8s-synth"
+        },
+        {
+          "spawn": "cdk8s-get"
         }
       ]
     },
