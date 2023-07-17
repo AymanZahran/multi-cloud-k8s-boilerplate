@@ -13,6 +13,8 @@
     ".github/workflows/k8s-validate.yml",
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
+    ".github/workflows/update-charts.yml",
+    ".github/workflows/update-packages.yml",
     ".github/workflows/upgrade-master.yml",
     ".gitignore",
     ".gitpod.yml",

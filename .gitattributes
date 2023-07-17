@@ -14,6 +14,8 @@
 /.github/workflows/k8s-validate.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
+/.github/workflows/update-charts.yml linguist-generated
+/.github/workflows/update-packages.yml linguist-generated
 /.github/workflows/upgrade-master.yml linguist-generated
 /.gitignore linguist-generated
 /.gitpod.yml linguist-generated

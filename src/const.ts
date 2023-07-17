@@ -14,4 +14,5 @@ export class HelmChartVersions {
   public static readonly secrets_store_csi_driver = "1.3.4";
   public static readonly tekton = "0.6.4";
   public static readonly vault = "0.25.0";
+  public static readonly crossplane = "1.12.2";
 }
