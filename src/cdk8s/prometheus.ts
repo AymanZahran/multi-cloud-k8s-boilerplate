@@ -8,7 +8,7 @@ export class Prometheus extends Chart {
 
     new Helm(this, "prometheus", {
       chart: "prometheus-community/kube-prometheus-stack",
-      version: HelmChartVersions.prometheus,
+      version: HelmChartVersions.kube_prometheus_stack,
       namespace: "observability",
       releaseName: "prometheus",
       values: {},
