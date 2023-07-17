@@ -73,7 +73,7 @@
       "description": "cdk8s-get",
       "steps": [
         {
-          "exec": "rm -rf kubernetes/dev/* && cp dist/* kubernetes/dev/ && rm -rf kubernetes/staging/* && cp dist/* kubernetes/staging/ && rm -rf kubernetes/prod/* && cp dist/* kubernetes/prod/"
+          "exec": "rm -rf kubernetes/dev/* && cp dist/dev/* kubernetes/dev/ && rm -rf kubernetes/staging/* && cp dist/staging/* kubernetes/staging/ && rm -rf kubernetes/prod/* && cp dist/prod/* kubernetes/prod/"
         }
       ]
     },

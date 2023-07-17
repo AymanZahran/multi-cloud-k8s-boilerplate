@@ -1,17 +1,22 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
-import { HelmChartVersions } from "../const";
 
 export class ArgoCd extends Chart {
-  constructor(scope: Construct, id: string, props: ChartProps = {}) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: ChartProps = {},
+    version: string,
+    values: any,
+  ) {
     super(scope, id, props);
 
     new Helm(this, "argo-cd", {
       chart: "argo/argo-cd",
-      version: HelmChartVersions.argo_cd,
+      version: version,
       namespace: "argocd",
       releaseName: "argocd",
-      values: {},
+      values: values,
     });
   }
 }
