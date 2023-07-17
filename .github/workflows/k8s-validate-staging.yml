@@ -27,7 +27,7 @@ jobs:
             echo 'Error: kubeval is not installed.' >&2
             exit 1
           fi
-          if kubeval --ignore-missing-schemas kubernetes/${{ env.stack }}; then
+          if kubeval --ignore-missing-schemas kubernetes/${{ env.stack }}/*; then
             echo "Static analysis found no problems."
             exit 0
           else
