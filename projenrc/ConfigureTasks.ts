@@ -1,5 +1,5 @@
 import { typescript } from "projen";
-import { Scripts } from "../const";
+import { Scripts } from "../src/const";
 
 export function ConfigureTasks(project: typescript.TypeScriptAppProject) {
   // Add cdktf and cdk8s Tasks
