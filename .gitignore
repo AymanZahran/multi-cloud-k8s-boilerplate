@@ -62,8 +62,8 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
-!/.github/workflows/update-packages.yml
-!/.github/workflows/update-charts.yml
+!/.github/workflows/upgrade-packages.yml
+!/.github/workflows/upgrade-charts.yml
 !/.github/workflows/k8s-validate.yml
 !/.github/workflows/cdktf-dev-build.yml
 !/.github/workflows/cdktf-staging-build.yml

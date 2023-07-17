@@ -2,12 +2,12 @@ import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
 
-export function UpdatePackages(project: typescript.TypeScriptAppProject) {
-  const update_packages = new GithubWorkflow(
+export function Upgradepackages(project: typescript.TypeScriptAppProject) {
+  const upgrade_packages = new GithubWorkflow(
     project.github!,
-    "update-packages",
+    "upgrade-packages",
   );
-  update_packages.on({
+  upgrade_packages.on({
     workflowDispatch: {},
     schedule: [
       {
@@ -15,7 +15,7 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
       },
     ],
   });
-  update_packages.addJob("build", {
+  upgrade_packages.addJob("build", {
     runsOn: ["ubuntu-latest"],
     permissions: {
       contents: JobPermission.READ,
@@ -26,8 +26,8 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
         uses: "actions/checkout@v3",
       },
       {
-        name: "update packages",
-        run: "./scripts/update_packages.sh",
+        name: "upgrade packages",
+        run: "./scripts/upgrade_packages.sh",
       },
       {
         name: "Install dependencies",
@@ -45,7 +45,7 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
           'git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT',
       },
       {
-        name: "Update patch",
+        name: "Upload patch",
         if: "steps.create_patch.outputs.patch_created",
         uses: "actions/upload-artifact@v3",
         with: {
@@ -56,7 +56,7 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
     ],
   });
 
-  update_packages.addJob("pr", {
+  upgrade_packages.addJob("pr", {
     name: "Create Pull Request",
     needs: ["upgrade"],
     runsOn: ["ubuntu-latest"],
@@ -97,16 +97,16 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
         with: {
           token: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
           commitMessage:
-            "chore: update packages\n" +
+            "chore: upgrade packages\n" +
             "Upgrades project dependencies. See details in [workflow run].\n" +
             "\n" +
             "[Workflow Run]: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n" +
             "\n" +
             "------\n" +
             "\n" +
-            '*Automatically created by projen via the "update-packages" workflow*',
-          branch: "github-actions/update-packages",
-          title: "chore(deps): update packages",
+            '*Automatically created by projen via the "upgrade-packages" workflow*',
+          branch: "github-actions/upgrade-packages",
+          title: "chore(deps): upgrade packages",
           body:
             "Upgrades project dependencies. See details in [workflow run].\n" +
             "\n" +
@@ -114,7 +114,7 @@ export function UpdatePackages(project: typescript.TypeScriptAppProject) {
             "\n" +
             "------\n" +
             "\n" +
-            '*Automatically created by projen via the "update-packages" workflow*',
+            '*Automatically created by projen via the "upgrade-packages" workflow*',
           author: "github-actions <github-actions@github.com>",
           committer: "github-actions <github-actions@github.com>",
           signoff: true,

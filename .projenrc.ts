@@ -3,8 +3,8 @@ import { PackageVersions, CI_Versions } from "./const";
 import { ConfigureTasks } from "./projenrc/ConfigureTasks";
 import { CdktfWorkflows } from "./projenrc/workflows/CdktfWorkflows";
 import { K8sValidate } from "./projenrc/workflows/K8sValidate";
-import { UpdateCharts } from "./projenrc/workflows/UpdateCharts";
-import { UpdatePackages } from "./projenrc/workflows/UpdatePackages";
+import { UpgradeCharts } from "./projenrc/workflows/UpgradeCharts";
+import { Upgradepackages } from "./projenrc/workflows/UpgradePackages";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
@@ -110,8 +110,8 @@ const project = new typescript.TypeScriptAppProject({
 ConfigureTasks(project);
 
 // Add workflows
-UpdatePackages(project);
-UpdateCharts(project);
+Upgradepackages(project);
+UpgradeCharts(project);
 K8sValidate(project);
 CdktfWorkflows(project);
 
