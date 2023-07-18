@@ -177,16 +177,6 @@ class MyStack extends TerraformStack {
       value: aks_provider.host,
       description: "The AKS provider endpoint",
     });
-    new TerraformOutput(this, "eks_provider_key", {
-      value: eks_provider.clientKey,
-      sensitive: true,
-      description: "The EKS provider key",
-    });
-    new TerraformOutput(this, "aks_provider_key", {
-      value: aks_provider.clientKey,
-      sensitive: true,
-      description: "The AKS provider key",
-    });
   }
 }
 
