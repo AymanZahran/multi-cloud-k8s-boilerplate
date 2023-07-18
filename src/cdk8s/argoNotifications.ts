@@ -13,9 +13,9 @@ export class ArgoNotifications extends Chart {
 
     new Helm(this, "argocd-notifications", {
       chart: "argo/argocd-notifications",
-      version: version,
-      namespace: "argocd",
       releaseName: "argocd-notifications",
+      namespace: "argocd",
+      version: version,
       values: values,
     });
   }

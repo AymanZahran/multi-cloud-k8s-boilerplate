@@ -12,9 +12,9 @@ export class Tekton extends Chart {
 
     new Helm(this, "tekton", {
       chart: "cdf/tekton-pipeline",
-      version: version,
-      namespace: "tekton-pipelines",
       releaseName: "tekton",
+      namespace: "tekton-pipelines",
+      version: version,
       values: values,
     });
   }

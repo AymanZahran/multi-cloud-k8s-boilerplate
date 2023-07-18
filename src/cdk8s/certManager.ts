@@ -12,9 +12,9 @@ export class CertManager extends Chart {
 
     new Helm(this, "cert-manager", {
       chart: "jetstack/cert-manager",
-      version: version,
-      namespace: "cert-manager",
       releaseName: "cert-manager",
+      namespace: "cert-manager",
+      version: version,
       values: values,
     });
   }

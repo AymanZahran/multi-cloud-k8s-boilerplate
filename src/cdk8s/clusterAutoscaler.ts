@@ -13,9 +13,9 @@ export class ClusterAutoscaler extends Chart {
 
     new Helm(this, "cluster-autoscaler", {
       chart: "autoscaler/cluster-autoscaler",
-      version: version,
-      namespace: "cluster-autoscaler",
       releaseName: "cluster-autoscaler",
+      namespace: "cluster-autoscaler",
+      version: version,
       values: values,
     });
   }

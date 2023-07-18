@@ -13,9 +13,9 @@ export class SecretStoreDriver extends Chart {
 
     new Helm(this, "secret-store", {
       chart: "secrets-store-csi-driver/secrets-store-csi-driver",
-      version: version,
-      namespace: "secret-store",
       releaseName: "secret-store",
+      namespace: "secret-store",
+      version: version,
       values: values,
     });
   }
