@@ -14,23 +14,23 @@ import { Prometheus } from "./cdk8s/prometheus";
 import { SecretStoreDriver } from "./cdk8s/secretStoreDriver";
 import { Tekton } from "./cdk8s/tekton";
 import { Vault } from "./cdk8s/vault";
-import { HelmChartVersions, HelmChartValues } from "./const";
+import { Environment, HelmChartVersions, HelmChartValues } from "./const";
 
 // Loop on dev, staging and prod
 
-enum Environments {
-  dev = "dev",
-  staging = "staging",
-  prod = "prod",
-}
-
-for (const env of Object.values(Environments)) {
+for (const env of Object.values(Environment)) {
   const app = new App({
     outdir: "dist/" + env,
     outputFileExtension: ".yaml",
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
-  new ArgoCd(app, "argo-cd", {}, HelmChartVersions.argo_cd[env], {});
+  new ArgoCd(
+    app,
+    "argo-cd",
+    {},
+    HelmChartVersions.argo_cd[env],
+    HelmChartValues.argo_cd[env],
+  );
   new ArgoImageUpdater(
     app,
     "argo-image-updater",
@@ -73,8 +73,20 @@ for (const env of Object.values(Environments)) {
     HelmChartVersions.cluster_autoscaler[env],
     HelmChartValues.cluster_autoscaler[env],
   );
-  new Consul(app, "consul", {}, HelmChartVersions.consul[env], {});
-  new CrossPlane(app, "crossplane", {}, HelmChartVersions.crossplane[env], {});
+  new Consul(
+    app,
+    "consul",
+    {},
+    HelmChartVersions.consul[env],
+    HelmChartValues.consul[env],
+  );
+  new CrossPlane(
+    app,
+    "crossplane",
+    {},
+    HelmChartVersions.crossplane[env],
+    HelmChartValues.crossplane[env],
+  );
   new KubeStateMetrics(
     app,
     "kube-state-metrics",

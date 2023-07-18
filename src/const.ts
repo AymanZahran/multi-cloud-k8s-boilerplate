@@ -1,3 +1,9 @@
+export enum Environment {
+  dev = "dev",
+  staging = "staging",
+  prod = "prod",
+}
+
 export class Scripts {
   // Readonly static constants
   public static readonly cdktf_cli_install = "npm i -g cdktf-cli --force";
@@ -193,4 +199,135 @@ export class CI_Versions {
   public static readonly node = "19.x";
   public static readonly cdktf_cli = "0.17.0";
   public static readonly cdk8s_cli = "2.2.110";
+}
+
+export class TerraformVariables {
+  // AWS / EKS
+  public static readonly eks_cluster_name = {
+    dev: "dev-eks-cluster",
+    staging: "staging-eks-cluster",
+    prod: "prod-eks-cluster",
+  };
+  public static readonly eks_vpc_cidr_block = {
+    dev: "10.0.0.0/16",
+    staging: "10.0.0.0/16",
+    prod: "10.0.0.0/16",
+  };
+  public static readonly eks_enable_dns_hostnames = {
+    dev: true,
+    staging: true,
+    prod: true,
+  };
+  public static readonly eks_number_of_subnets = {
+    dev: 3,
+    staging: 3,
+    prod: 3,
+  };
+  public static readonly eks_control_plane_version = {
+    dev: "1.24",
+    staging: "1.24",
+    prod: "1.24",
+  };
+  public static readonly eks_data_plane_version = {
+    dev: "1.24",
+    staging: "1.24",
+    prod: "1.24",
+  };
+  public static readonly eks_control_plane_role_arn = {
+    dev: "arn:aws:iam::123456789012:role/eks-control-plane-role",
+    staging: "arn:aws:iam::123456789012:role/eks-control-plane-role",
+    prod: "arn:aws:iam::123456789012:role/eks-control-plane-role",
+  };
+  public static readonly eks_data_plane_role_arn = {
+    dev: "arn:aws:iam::123456789012:role/eks-data-plane-role",
+    staging: "arn:aws:iam::123456789012:role/eks-data-plane-role",
+    prod: "arn:aws:iam::123456789012:role/eks-data-plane-role",
+  };
+  public static readonly eks_node_group_name = {
+    dev: "dev-eks-node-group",
+    staging: "staging-eks-node-group",
+    prod: "prod-eks-node-group",
+  };
+  public static readonly eks_node_group_min_size = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
+  public static readonly eks_node_group_max_size = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
+  public static readonly eks_node_group_desired_size = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
+
+  // Azure / AKS
+  public static readonly aks_cluster_name = {
+    dev: "dev-aks-cluster",
+    staging: "staging-aks-cluster",
+    prod: "prod-aks-cluster",
+  };
+  public static readonly aks_resource_group_name = {
+    dev: "dev-aks-cluster",
+    staging: "staging-aks-cluster",
+    prod: "prod-aks-cluster",
+  };
+  public static readonly aks_vnet_cidr_block = {
+    dev: "10.0.0.0/16",
+    staging: "10.0.0.0/16",
+    prod: "10.0.0.0/16",
+  };
+  public static readonly aks_subnet_cidr_block = {
+    dev: "10.0.0.0/16",
+    staging: "10.0.0.0/16",
+    prod: "10.0.0.0/16",
+  };
+  public static readonly aks_vnet_name = {
+    dev: "dev-vnet-aks-cluster",
+    staging: "staging-vnet-aks-cluster",
+    prod: "prod-vnet-aks-cluster",
+  };
+  public static readonly aks_subnet_name = {
+    dev: "dev-subnet-aks-cluster",
+    staging: "staging-subnet-aks-cluster",
+    prod: "prod-subnet-aks-cluster",
+  };
+  public static readonly aks_control_plane_version = {
+    dev: "1.24",
+    staging: "1.24",
+    prod: "1.24",
+  };
+  public static readonly aks_data_plane_version = {
+    dev: "1.24",
+    staging: "1.24",
+    prod: "1.24",
+  };
+  public static readonly aks_node_pool_name = {
+    dev: "dev-aks-node-pool",
+    staging: "staging-aks-node-pool",
+    prod: "prod-aks-node-pool",
+  };
+  public static readonly aks_node_pool_vm_size = {
+    dev: "Standard_D2_v2",
+    staging: "Standard_D2_v2",
+    prod: "Standard_D2_v2",
+  };
+  public static readonly aks_node_pool_min_count = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
+  public static readonly aks_node_pool_max_count = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
+  public static readonly aks_node_pool_count = {
+    dev: 2,
+    staging: 2,
+    prod: 2,
+  };
 }

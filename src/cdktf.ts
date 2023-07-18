@@ -1,101 +1,77 @@
-// CDKTF
-
 // AWS
 import { EksCluster } from "@cdktf/provider-aws/lib/eks-cluster";
 import { EksNodeGroup } from "@cdktf/provider-aws/lib/eks-node-group";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
+import { Subnet as AWS_Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 
 // // Azure
-// import {AzurermProvider} from '@cdktf/provider-azurerm/lib/provider';
-// import {KubernetesCluster} from '@cdktf/provider-azurerm/lib/kubernetes-cluster';
-
-// // GCP
-// import {GoogleProvider} from '@cdktf/provider-google/lib/provider';
+import { KubernetesCluster } from "@cdktf/provider-azurerm/lib/kubernetes-cluster";
+import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
+import { Subnet as AZ_Subnet } from "@cdktf/provider-azurerm/lib/subnet";
+import { VirtualNetwork } from "@cdktf/provider-azurerm/lib/virtual-network";
 
 // Kubernetes
-import { Namespace } from "@cdktf/provider-kubernetes/lib/namespace";
+import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import {
-  App,
-  TerraformStack,
-  TerraformOutput,
-  RemoteBackend,
-  Fn,
-  TerraformVariable,
-} from "cdktf";
+import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 
 // General
 import { config } from "dotenv";
+import { DefineAksVariables } from "./cdktf/aks";
+import { DefineEksVariables } from "./cdktf/eks";
+import { Environment } from "./const";
 
 // Load the values from the .env file into process.env
 config();
 
 interface StackConfig {
-  environment: string;
+  environment: Environment;
   aws_region?: string;
-  // azure_region?: string;
-  // gcp_region?: string;
+  azure_region?: string;
 }
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string, configuration: StackConfig) {
     super(scope, id);
 
-    const {
-      aws_region = "us-east-1",
-      // azure_region = "eastus",
-      // gcp_region = "us-central1",
-    } = configuration;
+    const { aws_region = "us-east-1", azure_region = "eastus" } = configuration;
 
-    // Define Terraform Variables
-    const eksClusterName = new TerraformVariable(this, "eks_cluster_name", {
-      type: "string",
-      default: "eks-cluster",
-      description: "The name of the EKS cluster",
-    });
-    // const aksClusterName = new TerraformVariable(this, "aks_cluster_name", {
-    //     type: "string",
-    //     default: "aks-cluster",
-    //     description: "The name of the AKS cluster",
-    // });
-    // const gkeClusterName = new TerraformVariable(this, "gke_cluster_name", {
-    //     type: "string",
-    //     default: "gke-cluster",
-    //     description: "The name of the GKE cluster",
-    // });
+    const EksVariables: any = DefineEksVariables(
+      this,
+      configuration.environment,
+    );
+
+    const AksVariables: any = DefineAksVariables(
+      this,
+      configuration.environment,
+    );
 
     // Define Cloud Providers
     new AwsProvider(this, "AWS", {
-      // profile: process.env.AWS_PROFILE || '',
       accessKey: process.env.AWS_ACCESS_KEY_ID || "",
       secretKey: process.env.AWS_SECRET_ACCESS_KEY || "",
       region: aws_region,
     });
-    // new AzurermProvider(this, 'AZURE', {
-    //     features: {},
-    //     subscriptionId: process.env.AZURE_SUBSCRIPTION_ID || '',
-    //     tenantId: process.env.AZURE_TENANT_ID || '',
-    //     clientSecret: process.env.AZURE_CLIENT_SECRET || '',
-    //     clientId: process.env.AZURE_CLIENT_ID || '',
-    // });
-    // new GoogleProvider(this, 'GOOGLE', {
-    //     region: process.env.GOOGLE_REGION || '',
-    //     project: process.env.GOOGLE_PROJECT || '',
-    //     zone: process.env.GOOGLE_ZONE || '',
-    // });
-
-    const vpc = new Vpc(this, "vpc", {
-      cidrBlock: "10.0.0.0/16",
-      enableDnsHostnames: true,
+    new AzurermProvider(this, "AZURE", {
+      features: {},
+      subscriptionId: process.env.AZURE_SUBSCRIPTION_ID || "",
+      tenantId: process.env.AZURE_TENANT_ID || "",
+      clientSecret: process.env.AZURE_CLIENT_SECRET || "",
+      clientId: process.env.AZURE_CLIENT_ID || "",
     });
 
-    // Create array to store IDs
-    const subnet = [];
-    for (let i = 0; i < 3; i++) {
-      subnet[i] = new Subnet(this, `subnet-${i}`, {
+    const vpc = new Vpc(this, "vpc", {
+      cidrBlock: EksVariables.eksVpcCidrBlock.value,
+      enableDnsHostnames: EksVariables.eksEnableDnsHostnames.value,
+      tags: {
+        environment: configuration.environment,
+      },
+    });
+    const eks_subnets = [];
+    for (let i = 0; i < EksVariables.eksNumberOfSubnets.value - 1; i++) {
+      eks_subnets[i] = new AWS_Subnet(this, `subnet-${i}`, {
         vpcId: vpc.id,
         cidrBlock: `10.0.${i}.0/24`,
       }).id;
@@ -103,11 +79,11 @@ class MyStack extends TerraformStack {
 
     // Create an EKS cluster
     const eks_cluster = new EksCluster(this, "eks_cluster", {
-      name: eksClusterName.value,
-      version: "1.24",
-      roleArn: "arn:aws:iam::123456789012:role/eks-cluster-role",
+      name: EksVariables.eksClusterName.value,
+      version: EksVariables.eksControlPlaneVersion.value,
+      roleArn: EksVariables.eksControlPlaneRoleArn.value,
       vpcConfig: {
-        subnetIds: subnet,
+        subnetIds: eks_subnets,
       },
       tags: {
         environment: configuration.environment,
@@ -116,18 +92,22 @@ class MyStack extends TerraformStack {
 
     // Create an EKS Node Group
     new EksNodeGroup(this, "eks_node_group", {
-      nodeGroupName: "eks-node-group",
-      version: "1.24",
+      nodeGroupName: EksVariables.eksNodeGroupName.value,
+      version: EksVariables.eksDataPlaneVersion.value,
       clusterName: eks_cluster.name,
-      subnetIds: subnet,
+      subnetIds: eks_subnets,
       scalingConfig: {
-        desiredSize: 2,
-        minSize: 2,
-        maxSize: 2,
+        minSize: EksVariables.eksNodeGroupMinSize.value,
+        maxSize: EksVariables.eksNodeGroupMaxSize.value,
+        desiredSize: EksVariables.eksNodeGroupDesiredSize.value,
       },
-      nodeRoleArn: "arn:aws:iam::123456789012:role/eks-node-role",
+      nodeRoleArn: EksVariables.eksDataPlaneRoleArn.value,
+      tags: {
+        environment: configuration.environment,
+      },
     });
 
+    // Create EKS Kubernetes Provider
     const eks_provider = new KubernetesProvider(this, "EKS_KUBERNETES", {
       host: eks_cluster.endpoint,
       clusterCaCertificate: Fn.base64decode(
@@ -135,61 +115,92 @@ class MyStack extends TerraformStack {
       ),
     });
 
-    // const aks_cluster = new KubernetesCluster(this, 'aks_cluster', {
-    //     name: aksClusterName.value,
-    //     location: azure_region,
-    //     resourceGroupName: 'kubernetes',
-    //     defaultNodePool: {
-    //         name: 'default',
-    //         vmSize: 'Standard_D2_v2',
-    //     },
-    //     tags: {
-    //         environment: configuration.environment,
-    //     }
-    // });
-    //
-    // const aks_provider = new KubernetesProvider(this, 'AKS_KUBERNETES', {
-    //     host: aks_cluster.id,
-    //     clusterCaCertificate: aks_cluster.kubeConfigRaw,
-    // });
+    // Create Virtal Network and Subnet
+    const vnet = new VirtualNetwork(this, "vnet", {
+      name: AksVariables.aksVnetName.value,
+      addressSpace: [AksVariables.aksVnetCidrBlock.value],
+      location: azure_region,
+      resourceGroupName: AksVariables.aksResourceGroupName.value,
+      tags: {
+        environment: configuration.environment,
+      },
+    });
+    const aks_subnet = new AZ_Subnet(this, "aks-subnet", {
+      resourceGroupName: AksVariables.aksResourceGroupName.value,
+      virtualNetworkName: vnet.name,
+      name: AksVariables.aksSubnetName.value,
+      addressPrefixes: AksVariables.aksSubnetCidrBlock.value,
+    });
 
-    new Namespace(this, "flux-namespace", {
-      metadata: {
-        name: "flux-system",
+    // Create an AKS cluster
+    const aks_cluster = new KubernetesCluster(this, "aks_cluster", {
+      name: AksVariables.aksClusterName.value,
+      location: azure_region,
+      kubernetesVersion: AksVariables.aksControlPlaneVersion.value,
+      resourceGroupName: AksVariables.aksResourceGroupName.value,
+      defaultNodePool: {
+        name: AksVariables.aksNodePoolName.value,
+        vmSize: AksVariables.aksNodePoolVmSize.value,
+        orchestratorVersion: AksVariables.aksDataPlaneVersion.value,
+        minCount: AksVariables.aksNodePoolMinCount.value,
+        maxCount: AksVariables.aksNodePoolMaxCount.value,
+        nodeCount: AksVariables.aksNodePoolCount.value,
+        vnetSubnetId: aks_subnet.id,
+        podSubnetId: aks_subnet.id,
+      },
+      tags: {
+        environment: configuration.environment,
+      },
+    });
+
+    // Create AKS Kubernetes Provider
+    const aks_provider = new KubernetesProvider(this, "AKS_KUBERNETES", {
+      host: aks_cluster.id,
+      clusterCaCertificate: aks_cluster.kubeConfigRaw,
+    });
+
+    new Manifest(this, "argo-cd", {
+      manifest: {
+        __filename:
+          "../kubernetes/" + configuration.environment + "/argo-cd.yaml",
       },
     });
 
     // Terraform Outputs
-    new TerraformOutput(this, "eks_provider_key", {
-      description: "The EKS provider key",
+    new TerraformOutput(this, "eks_provider_endpoint", {
       value: eks_provider.host,
+      description: "The EKS provider endpoint",
     });
-    // new TerraformOutput(this, 'aks_provider_key', {
-    //     value: aks_provider.clientKey,
-    //     description: 'The AKS provider key',
-    // });
-    // new TerraformOutput(this, 'gcp_region', {
-    //     value: gcp_region,
-    //     description: 'The GCP region',
-    // });
-    // new TerraformOutput(this, 'gcp_cluster_name', {
-    //     value: gkeClusterName.value,
-    //     description: 'The GKE cluster name',
-    // });
+    new TerraformOutput(this, "aks_provider_endpoint", {
+      value: aks_provider.host,
+      description: "The AKS provider endpoint",
+    });
+    new TerraformOutput(this, "eks_provider_key", {
+      value: eks_provider.clientKey,
+      description: "The EKS provider key",
+    });
+    new TerraformOutput(this, "aks_provider_key", {
+      value: aks_provider.clientKey,
+      description: "The AKS provider key",
+    });
   }
 }
 
 const app = new App();
 
-const environments = ["dev", "staging", "prod"];
+const environments: any = [
+  Environment.dev,
+  Environment.staging,
+  Environment.prod,
+];
 const aws_region = "us-east-2";
+const azure_region = "eastus2";
 
 for (const env of environments) {
   const stack = new MyStack(app, `${env}`, {
     environment: env,
     aws_region: aws_region,
-    // azure_region: "eastus2",
-    // gcp_region: "us-central1",
+    azure_region: azure_region,
   });
   new RemoteBackend(stack, {
     hostname: "app.terraform.io",

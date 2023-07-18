@@ -8,14 +8,27 @@
     },
     "outputs": {
       "prod": {
+        "aks_provider_endpoint": "aks_provider_endpoint",
+        "aks_provider_key": "aks_provider_key",
+        "eks_provider_endpoint": "eks_provider_endpoint",
         "eks_provider_key": "eks_provider_key"
       }
     }
   },
   "output": {
-    "eks_provider_key": {
-      "description": "The EKS provider key",
+    "aks_provider_endpoint": {
+      "description": "The AKS provider endpoint",
+      "value": "${azurerm_kubernetes_cluster.aks_cluster.id}"
+    },
+    "aks_provider_key": {
+      "description": "The AKS provider key"
+    },
+    "eks_provider_endpoint": {
+      "description": "The EKS provider endpoint",
       "value": "${aws_eks_cluster.eks_cluster.endpoint}"
+    },
+    "eks_provider_key": {
+      "description": "The EKS provider key"
     }
   },
   "provider": {
@@ -26,10 +39,24 @@
         "secret_key": ""
       }
     ],
+    "azurerm": [
+      {
+        "client_id": "",
+        "client_secret": "",
+        "features": {
+        },
+        "subscription_id": "",
+        "tenant_id": ""
+      }
+    ],
     "kubernetes": [
       {
         "cluster_ca_certificate": "${base64decode(aws_eks_cluster.eks_cluster.certificate_authority[0].data)}",
         "host": "${aws_eks_cluster.eks_cluster.endpoint}"
+      },
+      {
+        "cluster_ca_certificate": "${azurerm_kubernetes_cluster.aks_cluster.kube_config_raw}",
+        "host": "${azurerm_kubernetes_cluster.aks_cluster.id}"
       }
     ]
   },
@@ -43,16 +70,13 @@
           }
         },
         "name": "${var.eks_cluster_name}",
-        "role_arn": "arn:aws:iam::123456789012:role/eks-cluster-role",
+        "role_arn": "${var.eks_control_plane_role_arn}",
         "tags": {
           "environment": "prod"
         },
-        "version": "1.24",
+        "version": "${var.eks_control_plane_version}",
         "vpc_config": {
           "subnet_ids": [
-            "${aws_subnet.subnet-0.id}",
-            "${aws_subnet.subnet-1.id}",
-            "${aws_subnet.subnet-2.id}"
           ]
         }
       }
@@ -66,51 +90,19 @@
           }
         },
         "cluster_name": "${aws_eks_cluster.eks_cluster.name}",
-        "node_group_name": "eks-node-group",
-        "node_role_arn": "arn:aws:iam::123456789012:role/eks-node-role",
+        "node_group_name": "${var.eks_node_group_name}",
+        "node_role_arn": "${var.eks_data_plane_role_arn}",
         "scaling_config": {
-          "desired_size": 2,
-          "max_size": 2,
-          "min_size": 2
+          "desired_size": "${var.eks_node_group_desired_size}",
+          "max_size": "${var.eks_node_group_max_size}",
+          "min_size": "${var.eks_node_group_min_size}"
         },
         "subnet_ids": [
-          "${aws_subnet.subnet-0.id}",
-          "${aws_subnet.subnet-1.id}",
-          "${aws_subnet.subnet-2.id}"
         ],
-        "version": "1.24"
-      }
-    },
-    "aws_subnet": {
-      "subnet-0": {
-        "//": {
-          "metadata": {
-            "path": "prod/subnet-0",
-            "uniqueId": "subnet-0"
-          }
+        "tags": {
+          "environment": "prod"
         },
-        "cidr_block": "10.0.0.0/24",
-        "vpc_id": "${aws_vpc.vpc.id}"
-      },
-      "subnet-1": {
-        "//": {
-          "metadata": {
-            "path": "prod/subnet-1",
-            "uniqueId": "subnet-1"
-          }
-        },
-        "cidr_block": "10.0.1.0/24",
-        "vpc_id": "${aws_vpc.vpc.id}"
-      },
-      "subnet-2": {
-        "//": {
-          "metadata": {
-            "path": "prod/subnet-2",
-            "uniqueId": "subnet-2"
-          }
-        },
-        "cidr_block": "10.0.2.0/24",
-        "vpc_id": "${aws_vpc.vpc.id}"
+        "version": "${var.eks_data_plane_version}"
       }
     },
     "aws_vpc": {
@@ -121,20 +113,83 @@
             "uniqueId": "vpc"
           }
         },
-        "cidr_block": "10.0.0.0/16",
-        "enable_dns_hostnames": true
+        "cidr_block": "${var.vpc_cidr}",
+        "enable_dns_hostnames": "${var.enable_dns_hostnames}",
+        "tags": {
+          "environment": "prod"
+        }
       }
     },
-    "kubernetes_namespace": {
-      "flux-namespace": {
+    "azurerm_kubernetes_cluster": {
+      "aks_cluster": {
         "//": {
           "metadata": {
-            "path": "prod/flux-namespace",
-            "uniqueId": "flux-namespace"
+            "path": "prod/aks_cluster",
+            "uniqueId": "aks_cluster"
           }
         },
-        "metadata": {
-          "name": "flux-system"
+        "default_node_pool": {
+          "max_count": "${var.aks_node_pool_max_count}",
+          "min_count": "${var.aks_node_pool_min_count}",
+          "name": "${var.aks_node_pool_name}",
+          "node_count": "${var.aks_node_pool_count}",
+          "orchestrator_version": "${var.aks_data_plane_version}",
+          "pod_subnet_id": "${azurerm_subnet.aks-subnet.id}",
+          "vm_size": "${var.aks_node_pool_vm_size}",
+          "vnet_subnet_id": "${azurerm_subnet.aks-subnet.id}"
+        },
+        "kubernetes_version": "${var.aks_control_plane_version}",
+        "location": "eastus2",
+        "name": "${var.aks_cluster_name}",
+        "resource_group_name": "${var.aks_resource_group_name}",
+        "tags": {
+          "environment": "prod"
+        }
+      }
+    },
+    "azurerm_subnet": {
+      "aks-subnet": {
+        "//": {
+          "metadata": {
+            "path": "prod/aks-subnet",
+            "uniqueId": "aks-subnet"
+          }
+        },
+        "address_prefixes": "${var.aks_subnet_cidr_block}",
+        "name": "${var.aks_subnet_name}",
+        "resource_group_name": "${var.aks_resource_group_name}",
+        "virtual_network_name": "${azurerm_virtual_network.vnet.name}"
+      }
+    },
+    "azurerm_virtual_network": {
+      "vnet": {
+        "//": {
+          "metadata": {
+            "path": "prod/vnet",
+            "uniqueId": "vnet"
+          }
+        },
+        "address_space": [
+          "${var.aks_vnet_cidr_block}"
+        ],
+        "location": "eastus2",
+        "name": "${var.aks_vnet_name}",
+        "resource_group_name": "${var.aks_resource_group_name}",
+        "tags": {
+          "environment": "prod"
+        }
+      }
+    },
+    "kubernetes_manifest": {
+      "argo-cd": {
+        "//": {
+          "metadata": {
+            "path": "prod/argo-cd",
+            "uniqueId": "argo-cd"
+          }
+        },
+        "manifest": {
+          "__filename": "../kubernetes/prod/argo-cd.yaml"
         }
       }
     }
@@ -154,6 +209,10 @@
         "source": "aws",
         "version": "4.67.0"
       },
+      "azurerm": {
+        "source": "azurerm",
+        "version": "3.61.0"
+      },
       "kubernetes": {
         "source": "kubernetes",
         "version": "2.21.1"
@@ -161,9 +220,129 @@
     }
   },
   "variable": {
+    "aks_cluster_name": {
+      "default": "prod-aks-cluster",
+      "description": "The name of the AKS cluster",
+      "type": "string"
+    },
+    "aks_control_plane_version": {
+      "default": "1.24",
+      "description": "The version of the AKS control plane",
+      "type": "string"
+    },
+    "aks_data_plane_version": {
+      "default": "1.24",
+      "description": "The version of the AKS data plane",
+      "type": "string"
+    },
+    "aks_node_pool_count": {
+      "default": 2,
+      "description": "The size of the AKS node pool",
+      "type": "number"
+    },
+    "aks_node_pool_max_count": {
+      "default": 2,
+      "description": "The maximum size of the AKS node pool",
+      "type": "number"
+    },
+    "aks_node_pool_min_count": {
+      "default": 2,
+      "description": "The minimum size of the AKS node pool",
+      "type": "number"
+    },
+    "aks_node_pool_name": {
+      "default": "prod-aks-node-pool",
+      "description": "The name of the AKS node pool",
+      "type": "string"
+    },
+    "aks_node_pool_vm_size": {
+      "default": "Standard_D2_v2",
+      "description": "The VM size of the AKS node pool",
+      "type": "string"
+    },
+    "aks_resource_group_name": {
+      "default": "prod-aks-cluster",
+      "description": "The name of the AKS resource group",
+      "type": "string"
+    },
+    "aks_subnet_cidr_block": {
+      "default": "10.0.0.0/16",
+      "description": "The CIDR block for the AKS Subnet",
+      "type": "string"
+    },
+    "aks_subnet_name": {
+      "default": "prod-subnet-aks-cluster",
+      "description": "The name of the AKS Subnet",
+      "type": "string"
+    },
+    "aks_vnet_cidr_block": {
+      "default": "10.0.0.0/16",
+      "description": "The CIDR block for the AKS VNet",
+      "type": "string"
+    },
+    "aks_vnet_name": {
+      "default": "prod-vnet-aks-cluster",
+      "description": "The name of the AKS VNet",
+      "type": "string"
+    },
     "eks_cluster_name": {
-      "default": "eks-cluster",
+      "default": "prod-eks-cluster",
       "description": "The name of the EKS cluster",
+      "type": "string"
+    },
+    "eks_control_plane_role_arn": {
+      "default": "arn:aws:iam::123456789012:role/eks-control-plane-role",
+      "description": "The ARN of the IAM role for the EKS control plane",
+      "type": "string"
+    },
+    "eks_control_plane_version": {
+      "default": "1.24",
+      "description": "The version of the EKS control plane",
+      "type": "string"
+    },
+    "eks_data_plane_role_arn": {
+      "default": "arn:aws:iam::123456789012:role/eks-data-plane-role",
+      "description": "The ARN of the IAM role for the EKS data plane",
+      "type": "string"
+    },
+    "eks_data_plane_version": {
+      "default": "1.24",
+      "description": "The version of the EKS data plane",
+      "type": "string"
+    },
+    "eks_node_group_desired_size": {
+      "default": 2,
+      "description": "The desired size of the EKS node group",
+      "type": "number"
+    },
+    "eks_node_group_max_size": {
+      "default": 2,
+      "description": "The maximum size of the EKS node group",
+      "type": "number"
+    },
+    "eks_node_group_min_size": {
+      "default": 2,
+      "description": "The minimum size of the EKS node group",
+      "type": "number"
+    },
+    "eks_node_group_name": {
+      "default": "prod-eks-node-group",
+      "description": "The name of the EKS node group",
+      "type": "string"
+    },
+    "enable_dns_hostnames": {
+      "default": true,
+      "description": "A boolean flag to enable/disable DNS hostnames in the VPC",
+      "type": "string"
+    },
+    "number_of_subnets": {
+      "default": 3,
+      "description": "The number of subnets to create in the VPC",
+      "type": "number"
+    },
+    "vpc_cidr": {
+      "default": "10.0.0.0/16",
+      "description": "The CIDR block for the VPC",
       "type": "string"
     }
   }
