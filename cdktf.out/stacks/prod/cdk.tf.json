@@ -9,9 +9,7 @@
     "outputs": {
       "prod": {
         "aks_provider_endpoint": "aks_provider_endpoint",
-        "aks_provider_key": "aks_provider_key",
-        "eks_provider_endpoint": "eks_provider_endpoint",
-        "eks_provider_key": "eks_provider_key"
+        "eks_provider_endpoint": "eks_provider_endpoint"
       }
     }
   },
@@ -20,17 +18,9 @@
       "description": "The AKS provider endpoint",
       "value": "${azurerm_kubernetes_cluster.aks_cluster.id}"
     },
-    "aks_provider_key": {
-      "description": "The AKS provider key",
-      "sensitive": true
-    },
     "eks_provider_endpoint": {
       "description": "The EKS provider endpoint",
       "value": "${aws_eks_cluster.eks_cluster.endpoint}"
-    },
-    "eks_provider_key": {
-      "description": "The EKS provider key",
-      "sensitive": true
     }
   },
   "provider": {
