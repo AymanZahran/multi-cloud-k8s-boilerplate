@@ -13,9 +13,9 @@ export class CrossPlane extends Chart {
 
     new Helm(this, "crossplane", {
       chart: "crossplane-stable/crossplane",
-      version: version,
-      namespace: "crossplane-system",
       releaseName: "crossplane",
+      namespace: "crossplane-system",
+      version: version,
       values: values,
     });
   }

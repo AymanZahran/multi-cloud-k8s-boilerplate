@@ -13,9 +13,9 @@ export class KubeStateMetrics extends Chart {
 
     new Helm(this, "kube-state-metrics-dev", {
       chart: "prometheus-community/kube-state-metrics",
-      version: version,
-      namespace: "observability",
       releaseName: "kube-state-metrics",
+      namespace: "observability",
+      version: version,
       values: values,
     });
   }

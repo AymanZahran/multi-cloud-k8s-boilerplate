@@ -13,9 +13,9 @@ export class Consul extends Chart {
 
     new Helm(this, "consul", {
       chart: "hashicorp/consul",
-      version: version,
-      namespace: "consul",
       releaseName: "consul",
+      namespace: "consul",
+      version: version,
       values: values,
     });
   }

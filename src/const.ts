@@ -20,7 +20,6 @@ export class Scripts {
 }
 
 export class HelmChartVersions {
-  // Create dictionary of versions for dev, staging, prod
   public static readonly argo_cd = {
     dev: "5.39.0",
     staging: "5.39.0",
@@ -95,6 +94,84 @@ export class HelmChartVersions {
     dev: "0.25.0",
     staging: "0.25.0",
     prod: "0.25.0",
+  };
+}
+
+export class HelmChartValues {
+  public static readonly argo_cd = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly argocd_image_updater = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly argo_notifications = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly argo_rollouts = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly argo_workflows = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly cert_manager = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly cluster_autoscaler = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly consul = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly crossplane = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly kube_state_metrics = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly metrics_server = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly kube_prometheus_stack = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly secrets_store_csi_driver = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly tekton_pipeline = {
+    dev: {},
+    staging: {},
+    prod: {},
+  };
+  public static readonly vault = {
+    dev: {},
+    staging: {},
+    prod: {},
   };
 }
 

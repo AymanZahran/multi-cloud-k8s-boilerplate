@@ -13,9 +13,9 @@ export class ArgoWorkflows extends Chart {
 
     new Helm(this, "argo-workflows", {
       chart: "argo/argo-workflows",
-      version: version,
-      namespace: "argocd-workflows",
       releaseName: "argocd-workflows",
+      namespace: "argocd-workflows",
+      version: version,
       values: values,
     });
   }

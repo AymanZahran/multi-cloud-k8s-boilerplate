@@ -13,9 +13,9 @@ export class ArgoImageUpdater extends Chart {
 
     new Helm(this, "argo-image-updater", {
       chart: "argo/argocd-image-updater",
-      version: version,
-      namespace: "argo-image-updater",
       releaseName: "argo-image-updater",
+      namespace: "argo-image-updater",
+      version: version,
       values: values,
     });
   }

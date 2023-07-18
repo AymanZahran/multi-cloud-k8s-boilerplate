@@ -13,9 +13,9 @@ export class ArgoCd extends Chart {
 
     new Helm(this, "argo-cd", {
       chart: "argo/argo-cd",
-      version: version,
-      namespace: "argocd",
       releaseName: "argocd",
+      namespace: "argocd",
+      version: version,
       values: values,
     });
   }

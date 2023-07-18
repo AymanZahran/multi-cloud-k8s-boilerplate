@@ -14,18 +14,18 @@ export class Vault extends Chart {
     // Storage Backend
     new Helm(this, "consul", {
       chart: "hashicorp/consul",
-      version: version,
-      namespace: "consul",
       releaseName: "consul",
+      namespace: "consul",
+      version: version,
       values: values,
     });
 
     // Vault
     new Helm(this, "vault", {
       chart: "hashicorp/vault",
-      version: version,
-      namespace: "vault",
       releaseName: "vault",
+      namespace: "vault",
+      version: version,
       values: values,
     });
   }

@@ -13,9 +13,9 @@ export class Prometheus extends Chart {
 
     new Helm(this, "prometheus", {
       chart: "prometheus-community/kube-prometheus-stack",
-      version: version,
-      namespace: "observability",
       releaseName: "prometheus",
+      namespace: "observability",
+      version: version,
       values: values,
     });
   }

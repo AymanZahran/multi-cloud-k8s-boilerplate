@@ -13,9 +13,9 @@ export class MetricsServer extends Chart {
 
     new Helm(this, "metrics-server", {
       chart: "metrics-server/metrics-server",
-      version: version,
-      namespace: "observability",
       releaseName: "metrics-server",
+      namespace: "observability",
+      version: version,
       values: values,
     });
   }

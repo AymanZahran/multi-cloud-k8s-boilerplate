@@ -13,9 +13,9 @@ export class ArgoRollouts extends Chart {
 
     new Helm(this, "argo-rollouts", {
       chart: "argo/argo-rollouts",
-      version: version,
-      namespace: "argocd-rollouts",
       releaseName: "argocd-rollouts",
+      namespace: "argocd-rollouts",
+      version: version,
       values: values,
     });
   }
