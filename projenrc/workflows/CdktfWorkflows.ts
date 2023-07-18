@@ -1,11 +1,17 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { CI_Versions } from "../../src/const";
+import { CI_Versions, Environment } from "../../src/const";
+
+const environments: any = [
+  Environment.dev,
+  Environment.staging,
+  Environment.prod,
+];
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
-    for (const env of ["dev", "staging", "prod"]) {
+    for (const env of environments) {
       const cdktf_workflow = new GithubWorkflow(
         project.github!,
         "cdktf-" + env + "-" + context,
@@ -30,8 +36,9 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         },
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
-          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}",
-          AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}",
+          AWS_ACCESS_KEY_ID: "${{ secrets." + env + "_AWS_ACCESS_KEY_ID }}",
+          AWS_SECRET_ACCESS_KEY:
+            "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
           stack: env,
           context: context,
         },

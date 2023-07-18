@@ -21,14 +21,16 @@
       "value": "${azurerm_kubernetes_cluster.aks_cluster.id}"
     },
     "aks_provider_key": {
-      "description": "The AKS provider key"
+      "description": "The AKS provider key",
+      "sensitive": true
     },
     "eks_provider_endpoint": {
       "description": "The EKS provider endpoint",
       "value": "${aws_eks_cluster.eks_cluster.endpoint}"
     },
     "eks_provider_key": {
-      "description": "The EKS provider key"
+      "description": "The EKS provider key",
+      "sensitive": true
     }
   },
   "provider": {
@@ -51,10 +53,12 @@
     ],
     "kubernetes": [
       {
+        "alias": "eks-kubernetes",
         "cluster_ca_certificate": "${base64decode(aws_eks_cluster.eks_cluster.certificate_authority[0].data)}",
         "host": "${aws_eks_cluster.eks_cluster.endpoint}"
       },
       {
+        "alias": "aks-kubernetes",
         "cluster_ca_certificate": "${azurerm_kubernetes_cluster.aks_cluster.kube_config_raw}",
         "host": "${azurerm_kubernetes_cluster.aks_cluster.id}"
       }

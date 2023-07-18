@@ -113,6 +113,7 @@ class MyStack extends TerraformStack {
       clusterCaCertificate: Fn.base64decode(
         eks_cluster.certificateAuthority.get(0).data,
       ),
+      alias: "eks-kubernetes",
     });
 
     // Create Virtal Network and Subnet
@@ -157,6 +158,7 @@ class MyStack extends TerraformStack {
     const aks_provider = new KubernetesProvider(this, "AKS_KUBERNETES", {
       host: aks_cluster.id,
       clusterCaCertificate: aks_cluster.kubeConfigRaw,
+      alias: "aks-kubernetes",
     });
 
     new Manifest(this, "argo-cd", {
@@ -177,10 +179,12 @@ class MyStack extends TerraformStack {
     });
     new TerraformOutput(this, "eks_provider_key", {
       value: eks_provider.clientKey,
+      sensitive: true,
       description: "The EKS provider key",
     });
     new TerraformOutput(this, "aks_provider_key", {
       value: aks_provider.clientKey,
+      sensitive: true,
       description: "The AKS provider key",
     });
   }
