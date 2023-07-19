@@ -85,12 +85,12 @@
     },
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^16.0.3",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-azurerm",
-      "version": "^8.0.0",
+      "version": "^9.0.3",
       "type": "runtime"
     },
     {
@@ -100,7 +100,7 @@
     },
     {
       "name": "@cdktf/provider-kubernetes",
-      "version": "^7.0.0",
+      "version": "^8.0.0",
       "type": "runtime"
     },
     {

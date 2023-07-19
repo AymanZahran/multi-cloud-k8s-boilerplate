@@ -140,15 +140,15 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "4.67.0"
+        "version": "5.8.0"
       },
       "azurerm": {
         "source": "azurerm",
-        "version": "3.61.0"
+        "version": "3.65.0"
       },
       "kubernetes": {
         "source": "kubernetes",
-        "version": "2.21.1"
+        "version": "2.22.0"
       }
     }
   },

@@ -3,7 +3,11 @@
   "app": "npx ts-node src/cdktf.ts",
   "projectId": "df407d80-67ee-4507-9c19-5b6200225b31",
   "sendCrashReports": "false",
-  "terraformProviders": [],
+  "terraformProviders": [
+    "aws@~> 5.8.0",
+    "azurerm@~> 3.65.0",
+    "kubernetes@~> 2.22.0"
+  ],
   "terraformModules": [
     {
       "name": "vpc",

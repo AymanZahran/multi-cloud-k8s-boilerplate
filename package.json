@@ -62,10 +62,10 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^15.0.0",
-    "@cdktf/provider-azurerm": "^8.0.0",
+    "@cdktf/provider-aws": "^16.0.3",
+    "@cdktf/provider-azurerm": "^9.0.3",
     "@cdktf/provider-google": "^7.0.11",
-    "@cdktf/provider-kubernetes": "^7.0.0",
+    "@cdktf/provider-kubernetes": "^8.0.0",
     "cdk8s": "^2.7.77",
     "cdk8s-cli": "^2.2.110",
     "cdk8s-plus": "^0.33.0",
