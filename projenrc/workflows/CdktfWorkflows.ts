@@ -68,7 +68,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           },
           {
             name: "Install dependencies",
-            run: "yarn install",
+            run: "npx projen install:ci",
           },
           {
             name: "Install Terraform Providers and Modules",
