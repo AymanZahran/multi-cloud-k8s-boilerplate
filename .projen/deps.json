@@ -94,11 +94,6 @@
       "type": "runtime"
     },
     {
-      "name": "@cdktf/provider-google",
-      "version": "^7.0.11",
-      "type": "runtime"
-    },
-    {
       "name": "@cdktf/provider-kubernetes",
       "version": "^8.0.0",
       "type": "runtime"

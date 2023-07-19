@@ -66,7 +66,6 @@ const project = new typescript.TypeScriptAppProject({
     "cdktf-cli@^" + CI_Versions.cdktf_cli,
     "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
-    "@cdktf/provider-google@^" + PackageVersions.provider_google,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
     "cdk8s@^" + PackageVersions.cdk8s,
     "cdk8s-cli@^" + CI_Versions.cdk8s_cli,

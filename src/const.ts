@@ -198,7 +198,6 @@ export const PackageVersions: any = {
   cdktf: "0.17.1",
   provider_aws: "16.0.3",
   provider_azurerm: "9.0.3",
-  provider_google: "7.0.11",
   provider_kubernetes: "8.0.0",
   cdk8s: "2.7.77",
   cdk8s_plus: "0.33.0",
