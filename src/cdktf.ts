@@ -1,7 +1,7 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
-import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
+// import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
 import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
@@ -69,12 +69,12 @@ class MyStack extends TerraformStack {
     eks_provider.host = eksCluster.getEksEndpoint;
     aks_provider.host = aksCluster.getAksEndpoint;
 
-    new Manifest(this, "argo-cd", {
-      manifest: {
-        __filename:
-          "../kubernetes/" + configuration.environment + "/argo-cd.yaml",
-      },
-    });
+    // new Manifest(this, "argo-cd", {
+    //   manifest: {
+    //     __filename:
+    //       "../kubernetes/" + configuration.environment + "/argo-cd.yaml",
+    //   },
+    // });
 
     // Terraform Outputs
     new TerraformOutput(this, "eks_provider_endpoint", {
