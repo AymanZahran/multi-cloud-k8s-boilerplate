@@ -112,21 +112,6 @@
       }
     ]
   },
-  "resource": {
-    "kubernetes_manifest": {
-      "argo-cd": {
-        "//": {
-          "metadata": {
-            "path": "prod/argo-cd",
-            "uniqueId": "argo-cd"
-          }
-        },
-        "manifest": {
-          "__filename": "../kubernetes/prod/argo-cd.yaml"
-        }
-      }
-    }
-  },
   "terraform": {
     "backend": {
       "remote": {
