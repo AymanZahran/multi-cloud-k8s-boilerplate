@@ -1,9 +1,3 @@
-export enum Environment {
-  dev = "dev",
-  staging = "staging",
-  prod = "prod",
-}
-
 export class Scripts {
   // Readonly static constants
   public static readonly cdktf_cli_install = "npm i -g cdktf-cli --force";
@@ -184,7 +178,7 @@ export class HelmChartValues {
 export class PackageVersions {
   // Readonly static constants
   public static readonly constructs = "10.2.52";
-  public static readonly cdktf = "0.17.0";
+  public static readonly cdktf = "0.17.1";
   public static readonly provider_aws = "15.0.0";
   public static readonly provider_azurerm = "8.0.0";
   public static readonly provider_google = "7.0.11";
@@ -201,17 +195,46 @@ export class CI_Versions {
   public static readonly cdk8s_cli = "2.2.110";
 }
 
+export enum Environment {
+  dev = "dev",
+  staging = "staging",
+  prod = "prod",
+}
+
+export enum AwsRegion {
+  us_east_1 = "us-east-1",
+  us_east_2 = "us-east-2",
+}
+
+export enum AzureRegion {
+  east_us = "eastus",
+  east_us_2 = "eastus2",
+}
+
+export interface StackConfig {
+  environment: Environment;
+  region: {
+    aws?: AwsRegion;
+    azure?: AzureRegion;
+  };
+}
+
 export class TerraformVariables {
   // AWS / EKS
-  public static readonly eks_cluster_name = {
-    dev: "dev-eks-cluster",
-    staging: "staging-eks-cluster",
-    prod: "prod-eks-cluster",
+  public static readonly eks_vpc_name = {
+    dev: "dev-eks-vpc",
+    staging: "staging-eks-vpc",
+    prod: "prod-eks-vpc",
   };
   public static readonly eks_vpc_cidr_block = {
     dev: "10.0.0.0/16",
     staging: "10.0.0.0/16",
     prod: "10.0.0.0/16",
+  };
+  public static readonly eks_cluster_name = {
+    dev: "dev-eks-cluster",
+    staging: "staging-eks-cluster",
+    prod: "prod-eks-cluster",
   };
   public static readonly eks_enable_dns_hostnames = {
     dev: true,

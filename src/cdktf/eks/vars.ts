@@ -1,19 +1,24 @@
 import { TerraformStack, TerraformVariable } from "cdktf";
-import { TerraformVariables, Environment } from "../const";
+import { TerraformVariables, Environment } from "../../const";
 
 export function DefineEksVariables(
   stack: TerraformStack,
   environment: Environment,
 ) {
-  const eksClusterName = new TerraformVariable(stack, "eks_cluster_name", {
-    type: "string",
-    default: TerraformVariables.eks_cluster_name[environment],
-    description: "The name of the EKS cluster",
-  });
   const eksVpcCidrBlock = new TerraformVariable(stack, "vpc_cidr", {
     type: "string",
     default: TerraformVariables.eks_vpc_cidr_block[environment],
     description: "The CIDR block for the VPC",
+  });
+  const eksVpcName = new TerraformVariable(stack, "vpc_name", {
+    type: "string",
+    default: TerraformVariables.eks_vpc_name[environment],
+    description: "The name of the VPC",
+  });
+  const eksClusterName = new TerraformVariable(stack, "eks_cluster_name", {
+    type: "string",
+    default: TerraformVariables.eks_cluster_name[environment],
+    description: "The name of the EKS cluster",
   });
   const eksEnableDnsHostnames = new TerraformVariable(
     stack,
@@ -99,10 +104,11 @@ export function DefineEksVariables(
   );
 
   return {
-    eksClusterName,
+    eksVpcName,
     eksVpcCidrBlock,
     eksEnableDnsHostnames,
     eksNumberOfSubnets,
+    eksClusterName,
     eksControlPlaneVersion,
     eksDataPlaneVersion,
     eksControlPlaneRoleArn,

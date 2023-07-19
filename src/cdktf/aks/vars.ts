@@ -1,5 +1,5 @@
 import { TerraformStack, TerraformVariable } from "cdktf";
-import { TerraformVariables, Environment } from "../const";
+import { TerraformVariables, Environment } from "../../const";
 
 export function DefineAksVariables(
   stack: TerraformStack,
