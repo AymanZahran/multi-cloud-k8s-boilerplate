@@ -71,6 +71,10 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
             run: "yarn install",
           },
           {
+            name: "Install Terraform Providers and Modules",
+            run: "npx projen cdktf-get",
+          },
+          {
             name: "Set Terraform Token",
             run:
               "mkdir -p ~/.terraform.d\n" +
