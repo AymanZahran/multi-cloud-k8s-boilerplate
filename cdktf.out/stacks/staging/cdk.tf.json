@@ -21,10 +21,42 @@
           "uniqueId": "aks_BAB83E91"
         }
       },
+      "agents_count": 1,
+      "agents_labels": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "agents_max_count": 3,
+      "agents_min_count": 1,
+      "agents_pool_name": "agentpool",
+      "agents_size": "Standard_B2s",
+      "agents_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "agents_type": "VirtualMachineScaleSets",
+      "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
+      "auto_scaler_profile_enabled": true,
       "cluster_name": "${var.aks_cluster_name}",
+      "depends_on": [
+        "module.aks_vnet_CD5E95BE"
+      ],
+      "enable_auto_scaling": true,
+      "key_vault_secrets_provider_enabled": true,
       "location": "eastus",
+      "network_plugin": "azure",
+      "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
       "resource_group_name": "${var.aks_resource_group_name}",
       "source": "Azure/aks/azurerm",
+      "storage_profile_blob_driver_enabled": true,
+      "storage_profile_disk_driver_enabled": true,
+      "storage_profile_enabled": true,
+      "storage_profile_file_driver_enabled": true,
+      "storage_profile_snapshot_controller_enabled": true,
+      "tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
       "version": "7.2.0",
       "vnet_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}"
     },
@@ -37,6 +69,16 @@
       },
       "resource_group_name": "${var.aks_resource_group_name}",
       "source": "Azure/vnet/azurerm",
+      "subnet_names": [
+        "aks-subnet"
+      ],
+      "subnet_prefixes": [
+        "10.0.0.0/16"
+      ],
+      "tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
       "use_for_each": true,
       "version": "4.1.0",
       "vnet_location": "eastus",
@@ -50,7 +92,48 @@
         }
       },
       "cluster_name": "${var.eks_cluster_name}",
+      "cluster_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "create": true,
+      "create_aws_auth_configmap": true,
+      "create_cloudwatch_log_group": true,
+      "create_cluster_security_group": true,
+      "create_iam_role": true,
+      "create_node_security_group": true,
+      "depends_on": [
+        "module.eks_vpc_924ECCC8"
+      ],
+      "eks_managed_node_groups": {
+        "desiredSize": 3,
+        "instanceType": "t3.medium",
+        "labels": {
+          "environment": "staging",
+          "managed-by": "cdktf"
+        },
+        "maxSize": 4,
+        "minSize": 2,
+        "name": "managed-ng",
+        "tags": {
+          "environment": "staging",
+          "managed-by": "cdktf"
+        }
+      },
+      "iam_role_name": "eks-role",
+      "iam_role_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "manage_aws_auth_configmap": true,
       "source": "terraform-aws-modules/eks/aws",
+      "subnet_ids": [
+        "${module.eks_vpc_924ECCC8.public_subnets}"
+      ],
+      "tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
     },
@@ -66,9 +149,55 @@
         "us-east-1b",
         "us-east-1c"
       ],
+      "create_igw": true,
+      "create_vpc": true,
+      "enable_nat_gateway": true,
+      "igw_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "intra_subnet_names": [
+        "intra-subnet-1",
+        "intra-subnet-2",
+        "intra-subnet-3"
+      ],
       "name": "${var.vpc_name}",
+      "nat_eip_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "nat_gateway_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "private_subnet_names": [
+        "private-subnet-1",
+        "private-subnet-2",
+        "private-subnet-3"
+      ],
+      "private_subnet_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "public_subnet_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "public_subnets": [
+        "public-subnet-1",
+        "public-subnet-2",
+        "public-subnet-3"
+      ],
       "source": "terraform-aws-modules/vpc/aws",
-      "version": "5.1.0"
+      "tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      },
+      "version": "5.1.0",
+      "vpc_tags": {
+        "environment": "staging",
+        "managed-by": "cdktf"
+      }
     }
   },
   "output": {
