@@ -21,15 +21,6 @@ export function DefineEksVariables(
     default: EksTerraformVariables.eksAzs[environment],
     description: "A list of availability zones",
   });
-  const eksIntraSubnetNames = new TerraformVariable(
-    stack,
-    "eks_intra_subnet_names",
-    {
-      type: "list(string)",
-      default: EksTerraformVariables.eksIntraSubnetNames[environment],
-      description: "A list of intra subnet names",
-    },
-  );
   const eksPrivateSubnetNames = new TerraformVariable(
     stack,
     "eks_private_subnet_names",
@@ -192,7 +183,6 @@ export function DefineEksVariables(
     eksCreateVpc,
     eksCreateIgw,
     eksAzs,
-    eksIntraSubnetNames,
     eksPrivateSubnetNames,
     eksPublicSubnets,
     eksEnableNatGateway,

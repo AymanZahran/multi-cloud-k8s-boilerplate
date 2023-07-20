@@ -40,7 +40,6 @@ class MyStack extends TerraformStack {
       eksCreateVpc: EksVariables.eksCreateVpc.value,
       eksCreateIgw: EksVariables.eksCreateIgw.value,
       eksAzs: EksVariables.eksAzs.value,
-      eksIntraSubnetNames: EksVariables.eksIntraSubnetNames.value,
       eksPrivateSubnetNames: EksVariables.eksPrivateSubnetNames.value,
       eksPublicSubnets: EksVariables.eksPublicSubnets.value,
       eksEnableNatGateway: EksVariables.eksEnableNatGateway.value,

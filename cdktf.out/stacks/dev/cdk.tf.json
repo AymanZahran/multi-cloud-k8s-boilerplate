@@ -113,11 +113,11 @@
           "uniqueId": "eks_vpc_924ECCC8"
         }
       },
+      "azs": "${var.eks_azs}",
       "create_igw": "${var.eks_create_igw}",
       "create_vpc": "${var.eks_create_vpc}",
       "enable_nat_gateway": "${var.enable_nat_gateway}",
       "igw_tags": "${var.eks_tags}",
-      "intra_subnet_names": "${var.eks_intra_subnet_names}",
       "name": "${var.eks_vpc_name}",
       "nat_eip_tags": "${var.eks_tags}",
       "nat_gateway_tags": "${var.eks_tags}",
@@ -365,15 +365,6 @@
       "default": "dev-eks-iam-role",
       "description": "The name of the IAM role",
       "type": "string"
-    },
-    "eks_intra_subnet_names": {
-      "default": [
-        "dev-eks-intra-subnet-1",
-        "dev-eks-intra-subnet-2",
-        "dev-eks-intra-subnet-3"
-      ],
-      "description": "A list of intra subnet names",
-      "type": "list(string)"
     },
     "eks_manage_aws_auth_configmap": {
       "default": true,

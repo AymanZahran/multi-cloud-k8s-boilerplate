@@ -14,23 +14,6 @@ export const EksTerraformVariables: any = {
     staging: ["us-east-1a", "us-east-1b", "us-east-1c"],
     prod: ["us-east-1a", "us-east-1b", "us-east-1c"],
   },
-  eksIntraSubnetNames: {
-    dev: [
-      "dev-eks-intra-subnet-1",
-      "dev-eks-intra-subnet-2",
-      "dev-eks-intra-subnet-3",
-    ],
-    staging: [
-      "staging-eks-intra-subnet-1",
-      "staging-eks-intra-subnet-2",
-      "staging-eks-intra-subnet-3",
-    ],
-    prod: [
-      "prod-eks-intra-subnet-1",
-      "prod-eks-intra-subnet-2",
-      "prod-eks-intra-subnet-3",
-    ],
-  },
   eksPrivateSubnetNames: {
     dev: [
       "dev-eks-private-subnet-1",

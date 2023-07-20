@@ -8,7 +8,6 @@ export interface EksClusterProps {
   readonly eksCreateVpc: boolean;
   readonly eksCreateIgw: boolean;
   readonly eksAzs: string[];
-  readonly eksIntraSubnetNames: string[];
   readonly eksPrivateSubnetNames: string[];
   readonly eksPublicSubnets: string[];
   readonly eksEnableNatGateway: boolean;
@@ -42,7 +41,7 @@ export class EksCluster extends Construct {
       createVpc: props.eksCreateVpc,
       createIgw: props.eksCreateIgw,
       enableNatGateway: props.eksEnableNatGateway,
-      intraSubnetNames: props.eksIntraSubnetNames,
+      azs: props.eksAzs,
       privateSubnetNames: props.eksPrivateSubnetNames,
       publicSubnets: props.eksPublicSubnets,
       publicSubnetTags: props.eksTags,
