@@ -31,7 +31,7 @@ export const EksTerraformVariables: any = {
       "prod-eks-private-subnet-3",
     ],
   },
-  eksPublicSubnets: {
+  eksPublicSubnetNames: {
     dev: [
       "dev-eks-public-subnet-1",
       "dev-eks-public-subnet-2",

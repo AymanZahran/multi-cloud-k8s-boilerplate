@@ -114,6 +114,7 @@
           "uniqueId": "eks_vpc_924ECCC8"
         }
       },
+      "azs": "${var.eks_azs}",
       "cidr": "${var.eks_cidr}",
       "create_igw": "${var.eks_create_igw}",
       "create_vpc": "${var.eks_create_vpc}",
@@ -124,8 +125,8 @@
       "nat_gateway_tags": "${var.eks_tags}",
       "private_subnet_names": "${var.eks_private_subnet_names}",
       "private_subnet_tags": "${var.eks_tags}",
+      "public_subnet_names": "${var.eks_public_subnet_names}",
       "public_subnet_tags": "${var.eks_tags}",
-      "public_subnets": "${var.eks_public_subnet_names}",
       "source": "terraform-aws-modules/vpc/aws",
       "tags": "${var.eks_tags}",
       "version": "5.1.0",

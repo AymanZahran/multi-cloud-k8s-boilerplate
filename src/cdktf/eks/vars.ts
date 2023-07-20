@@ -30,12 +30,12 @@ export function DefineEksVariables(
       description: "A list of private subnet names",
     },
   );
-  const eksPublicSubnets = new TerraformVariable(
+  const eksPublicSubnetNames = new TerraformVariable(
     stack,
     "eks_public_subnet_names",
     {
       type: "list(string)",
-      default: EksTerraformVariables.eksPublicSubnets[environment],
+      default: EksTerraformVariables.eksPublicSubnetNames[environment],
       description: "A list of public subnet names",
     },
   );
@@ -189,7 +189,7 @@ export function DefineEksVariables(
     eksCreateIgw,
     eksAzs,
     eksPrivateSubnetNames,
-    eksPublicSubnets,
+    eksPublicSubnetNames,
     eksEnableNatGateway,
     eksCidr,
     eksVpcName,
