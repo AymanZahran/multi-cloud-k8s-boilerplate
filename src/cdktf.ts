@@ -73,7 +73,7 @@ class MyStack extends TerraformStack {
       aksVnetName: AksVariables.aksVnetName.value,
       aksResourceGroupName: AksVariables.aksResourceGroupName.value,
       aksSubnetNames: AksVariables.aksSubnetNames.value,
-      aksSubnetPrefixes: AksVariables.aksSubnetPrefixes.value,
+      aksAddressSpace: AksVariables.aksAddressSpace.value,
       aksClusterName: AksVariables.aksClusterName.value,
       aksAgentsSize: AksVariables.aksAgentsSize.value,
       aksAgentsCount: AksVariables.aksAgentsCount.value,

@@ -8,26 +8,26 @@ export function DefineAksVariables(
 ) {
   const aksResourceGroupName = new TerraformVariable(
     stack,
-    "resource_group_name",
+    "aks_resource_group_name",
     {
       type: "string",
       default: AksTerraformVariables.aksResource_group_name[environment],
       description: "The name of the AKS resource group",
     },
   );
-  const aksVnetName = new TerraformVariable(stack, "vnet_name", {
+  const aksVnetName = new TerraformVariable(stack, "aks_vnet_name", {
     type: "string",
     default: AksTerraformVariables.aksVnetName[environment],
     description: "The name of the AKS VNet",
   });
-  const aksSubnetNames = new TerraformVariable(stack, "subnet_names", {
+  const aksSubnetNames = new TerraformVariable(stack, "aks_subnet_names", {
     type: "list(string)",
     default: AksTerraformVariables.aksSubnetNames[environment],
     description: "The names of the AKS subnets",
   });
-  const aksSubnetPrefixes = new TerraformVariable(stack, "subnet_prefixes", {
+  const aksAddressSpace = new TerraformVariable(stack, "aks_address_space", {
     type: "list(string)",
-    default: AksTerraformVariables.aksSubnetPrefixes[environment],
+    default: AksTerraformVariables.aksAddressSpace[environment],
     description: "The CIDR blocks for the AKS subnets",
   });
   const aksClusterName = new TerraformVariable(stack, "aks_cluster_name", {
@@ -35,34 +35,42 @@ export function DefineAksVariables(
     default: AksTerraformVariables.aksClusterName[environment],
     description: "The name of the AKS cluster",
   });
-  const aksAgentsSize = new TerraformVariable(stack, "agents_size", {
+  const aksAgentsSize = new TerraformVariable(stack, "aks_agents_size", {
     type: "string",
     default: AksTerraformVariables.aksAgentsSize[environment],
     description: "The size of the AKS agents",
   });
-  const aksAgentsCount = new TerraformVariable(stack, "agents_count", {
+  const aksAgentsCount = new TerraformVariable(stack, "aks_agents_count", {
     type: "number",
     default: AksTerraformVariables.aksAgentsCount[environment],
     description: "The number of AKS agents",
   });
-  const aksAgentsMinCount = new TerraformVariable(stack, "agents_min_count", {
-    type: "number",
-    default: AksTerraformVariables.aksAgentsMinCount[environment],
-    description: "The minimum number of AKS agents",
-  });
-  const aksAgentsMaxCount = new TerraformVariable(stack, "agents_max_count", {
-    type: "number",
-    default: AksTerraformVariables.aksAgentsMaxCount[environment],
-    description: "The maximum number of AKS agents",
-  });
-  const aksAgentsType = new TerraformVariable(stack, "agents_type", {
+  const aksAgentsMinCount = new TerraformVariable(
+    stack,
+    "aks_agents_min_count",
+    {
+      type: "number",
+      default: AksTerraformVariables.aksAgentsMinCount[environment],
+      description: "The minimum number of AKS agents",
+    },
+  );
+  const aksAgentsMaxCount = new TerraformVariable(
+    stack,
+    "aks_agents_max_count",
+    {
+      type: "number",
+      default: AksTerraformVariables.aksAgentsMaxCount[environment],
+      description: "The maximum number of AKS agents",
+    },
+  );
+  const aksAgentsType = new TerraformVariable(stack, "aks_agents_type", {
     type: "string",
     default: AksTerraformVariables.aksAgentsType[environment],
     description: "The type of AKS agents",
   });
   const aksEnableAutoScaling = new TerraformVariable(
     stack,
-    "enable_auto_scaling",
+    "aks_enable_auto_scaling",
     {
       type: "bool",
       default: AksTerraformVariables.aksEnableAutoScaling[environment],
@@ -71,7 +79,7 @@ export function DefineAksVariables(
   );
   const aksAutoScalerProfileEnabled = new TerraformVariable(
     stack,
-    "auto_scaler_profile_enabled",
+    "aks_auto_scaler_profile_enabled",
     {
       type: "bool",
       default: AksTerraformVariables.aksAutoScalerProfileEnabled[environment],
@@ -80,7 +88,7 @@ export function DefineAksVariables(
   );
   const aksStorageProfileEnabled = new TerraformVariable(
     stack,
-    "storage_profile_enabled",
+    "aks_storage_profile_enabled",
     {
       type: "bool",
       default: AksTerraformVariables.aksStorageProfileEnabled[environment],
@@ -89,7 +97,7 @@ export function DefineAksVariables(
   );
   const aksStorageProfileBlobDriverEnabled = new TerraformVariable(
     stack,
-    "storage_profile_blob_driver_enabled",
+    "aks_storage_profile_blob_driver_enabled",
     {
       type: "bool",
       default:
@@ -99,7 +107,7 @@ export function DefineAksVariables(
   );
   const aksStorageProfileDiskDriverEnabled = new TerraformVariable(
     stack,
-    "storage_profile_disk_driver_enabled",
+    "aks_storage_profile_disk_driver_enabled",
     {
       type: "bool",
       default:
@@ -109,7 +117,7 @@ export function DefineAksVariables(
   );
   const aksStorageProfileFileDriverEnabled = new TerraformVariable(
     stack,
-    "storage_profile_file_driver_enabled",
+    "aks_storage_profile_file_driver_enabled",
     {
       type: "bool",
       default:
@@ -119,7 +127,7 @@ export function DefineAksVariables(
   );
   const aksStorageProfileSnapshotControllerEnabled = new TerraformVariable(
     stack,
-    "storage_profile_snapshot_controller_enabled",
+    "aks_storage_profile_snapshot_controller_enabled",
     {
       type: "bool",
       default:
@@ -131,7 +139,7 @@ export function DefineAksVariables(
   );
   const aksKeyVaultSecretsProviderEnabled = new TerraformVariable(
     stack,
-    "key_vault_secrets_provider_enabled",
+    "aks_key_vault_secrets_provider_enabled",
     {
       type: "bool",
       default:
@@ -140,12 +148,16 @@ export function DefineAksVariables(
         "Whether to enable key vault secrets provider for AKS agents",
     },
   );
-  const aksAgentsPoolName = new TerraformVariable(stack, "agents_pool_name", {
-    type: "string",
-    default: AksTerraformVariables.aksAgentsPoolName[environment],
-    description: "The name of the AKS agents pool",
-  });
-  const aksNetworkPlugin = new TerraformVariable(stack, "network_plugin", {
+  const aksAgentsPoolName = new TerraformVariable(
+    stack,
+    "aks_agents_pool_name",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksAgentsPoolName[environment],
+      description: "The name of the AKS agents pool",
+    },
+  );
+  const aksNetworkPlugin = new TerraformVariable(stack, "aks_network_plugin", {
     type: "string",
     default: AksTerraformVariables.aksNetworkPlugin[environment],
     description: "The network plugin to use for AKS",
@@ -160,7 +172,7 @@ export function DefineAksVariables(
     aksResourceGroupName,
     aksVnetName,
     aksSubnetNames,
-    aksSubnetPrefixes,
+    aksAddressSpace,
     aksClusterName,
     aksAgentsSize,
     aksAgentsCount,

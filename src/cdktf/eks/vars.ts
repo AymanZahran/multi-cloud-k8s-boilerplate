@@ -6,24 +6,24 @@ export function DefineEksVariables(
   stack: TerraformStack,
   environment: Environment,
 ) {
-  const eksCreateVpc = new TerraformVariable(stack, "create_vpc", {
+  const eksCreateVpc = new TerraformVariable(stack, "eks_create_vpc", {
     type: "bool",
     default: EksTerraformVariables.eksCreateVpc[environment],
     description: "A boolean flag to create a new VPC",
   });
-  const eksCreateIgw = new TerraformVariable(stack, "create_igw", {
+  const eksCreateIgw = new TerraformVariable(stack, "eks_create_igw", {
     type: "bool",
     default: EksTerraformVariables.eksCreateIgw[environment],
     description: "A boolean flag to create a new Internet Gateway",
   });
-  const eksAzs = new TerraformVariable(stack, "azs", {
+  const eksAzs = new TerraformVariable(stack, "eks_azs", {
     type: "list(string)",
     default: EksTerraformVariables.eksAzs[environment],
     description: "A list of availability zones",
   });
   const eksIntraSubnetNames = new TerraformVariable(
     stack,
-    "intra_subnet_names",
+    "eks_intra_subnet_names",
     {
       type: "list(string)",
       default: EksTerraformVariables.eksIntraSubnetNames[environment],
@@ -32,18 +32,22 @@ export function DefineEksVariables(
   );
   const eksPrivateSubnetNames = new TerraformVariable(
     stack,
-    "private_subnet_names",
+    "eks_private_subnet_names",
     {
       type: "list(string)",
       default: EksTerraformVariables.eksPrivateSubnetNames[environment],
       description: "A list of private subnet names",
     },
   );
-  const eksPublicSubnets = new TerraformVariable(stack, "public_subnets", {
-    type: "list(string)",
-    default: EksTerraformVariables.eksPublicSubnets[environment],
-    description: "A list of public subnet names",
-  });
+  const eksPublicSubnets = new TerraformVariable(
+    stack,
+    "eks_public_subnet_names",
+    {
+      type: "list(string)",
+      default: EksTerraformVariables.eksPublicSubnets[environment],
+      description: "A list of public subnet names",
+    },
+  );
   const eksEnableNatGateway = new TerraformVariable(
     stack,
     "enable_nat_gateway",
@@ -53,7 +57,7 @@ export function DefineEksVariables(
       description: "A boolean flag to enable NAT Gateway",
     },
   );
-  const eksVpcName = new TerraformVariable(stack, "vpc_name", {
+  const eksVpcName = new TerraformVariable(stack, "eks_vpc_name", {
     type: "string",
     default: EksTerraformVariables.eksVpcName[environment],
     description: "The name of the VPC",
@@ -65,7 +69,7 @@ export function DefineEksVariables(
   });
   const eksCreateAwsAuthConfigmap = new TerraformVariable(
     stack,
-    "create_aws_auth_configmap",
+    "eks_create_aws_auth_configmap",
     {
       type: "bool",
       default: EksTerraformVariables.eksCreateAwsAuthConfigmap[environment],
@@ -74,7 +78,7 @@ export function DefineEksVariables(
   );
   const eksManageAwsAuthConfigmap = new TerraformVariable(
     stack,
-    "manage_aws_auth_configmap",
+    "eks_manage_aws_auth_configmap",
     {
       type: "bool",
       default: EksTerraformVariables.eksManageAwsAuthConfigmap[environment],
@@ -83,7 +87,7 @@ export function DefineEksVariables(
   );
   const eksCreateNodeSecurityGroup = new TerraformVariable(
     stack,
-    "create_node_security_group",
+    "eks_create_node_security_group",
     {
       type: "bool",
       default: EksTerraformVariables.eksCreateNodeSecurityGroup[environment],
@@ -92,7 +96,7 @@ export function DefineEksVariables(
   );
   const eksCreateClusterSecurityGroup = new TerraformVariable(
     stack,
-    "create_cluster_security_group",
+    "eks_create_cluster_security_group",
     {
       type: "bool",
       default: EksTerraformVariables.eksCreateClusterSecurityGroup[environment],
@@ -101,26 +105,26 @@ export function DefineEksVariables(
   );
   const eksCreateCloudwatchLogGroup = new TerraformVariable(
     stack,
-    "create_cloudwatch_log_group",
+    "eks_create_cloudwatch_log_group",
     {
       type: "bool",
       default: EksTerraformVariables.eksCreateCloudwatchLogGroup[environment],
       description: "A boolean flag to create cloudwatch log group",
     },
   );
-  const eksCreateIamRole = new TerraformVariable(stack, "create_iam_role", {
+  const eksCreateIamRole = new TerraformVariable(stack, "eks_create_iam_role", {
     type: "bool",
     default: EksTerraformVariables.eksCreateIamRole[environment],
     description: "A boolean flag to create iam role",
   });
-  const eksIamRoleName = new TerraformVariable(stack, "iam_role_name", {
+  const eksIamRoleName = new TerraformVariable(stack, "eks_iam_role_name", {
     type: "string",
     default: EksTerraformVariables.eksIamRoleName[environment],
     description: "The name of the IAM role",
   });
   const eksManagedNodeGroupName = new TerraformVariable(
     stack,
-    "managed_node_group_name",
+    "eks_managed_node_group_name",
     {
       type: "string",
       default: EksTerraformVariables.eksManagedNodeGroupName[environment],
@@ -129,7 +133,7 @@ export function DefineEksVariables(
   );
   const eksManagedNodeGroupInstanceType = new TerraformVariable(
     stack,
-    "managed_node_group_instance_type",
+    "eks_managed_node_group_instance_type",
     {
       type: "string",
       default:
@@ -139,7 +143,7 @@ export function DefineEksVariables(
   );
   const eksManagedNodeGroupMinSize = new TerraformVariable(
     stack,
-    "managed_node_group_min_size",
+    "eks_managed_node_group_min_size",
     {
       type: "number",
       default: EksTerraformVariables.eksManagedNodeGroupMinSize[environment],
@@ -148,7 +152,7 @@ export function DefineEksVariables(
   );
   const eksManagedNodeGroupMaxSize = new TerraformVariable(
     stack,
-    "managed_node_group_max_size",
+    "eks_managed_node_group_max_size",
     {
       type: "number",
       default: EksTerraformVariables.eksManagedNodeGroupMaxSize[environment],
@@ -157,7 +161,7 @@ export function DefineEksVariables(
   );
   const eksManagedNodeGroupDesiredSize = new TerraformVariable(
     stack,
-    "managed_node_group_desired_size",
+    "eks_managed_node_group_desired_size",
     {
       type: "number",
       default:
@@ -167,7 +171,7 @@ export function DefineEksVariables(
   );
   const eksManagedNodeGroupCustomLaunchTemplate = new TerraformVariable(
     stack,
-    "managed_node_group_custom_launch_template",
+    "eks_managed_node_group_custom_launch_template",
     {
       type: "bool",
       default:
