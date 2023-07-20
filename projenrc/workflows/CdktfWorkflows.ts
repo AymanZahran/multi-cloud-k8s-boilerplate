@@ -39,10 +39,11 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           AWS_ACCESS_KEY_ID: "${{ secrets." + env + "_AWS_ACCESS_KEY_ID }}",
           AWS_SECRET_ACCESS_KEY:
             "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
-          ARM_CLIENT_ID: "${{ secrets." + env + "_ARM_CLIENT_ID }}",
-          ARM_CLIENT_SECRET: "${{ secrets." + env + "_ARM_CLIENT_SECRET }}",
-          ARM_TENANT_ID: "${{ secrets." + env + "_ARM_TENANT_ID }}",
-          ARM_SUBSCRIPTION_ID: "${{ secrets." + env + "_ARM_SUBSCRIPTION_ID }}",
+          AZURE_CLIENT_ID: "${{ secrets." + env + "_AZURE_CLIENT_ID }}",
+          AZURE_CLIENT_SECRET: "${{ secrets." + env + "_AZURE_CLIENT_SECRET }}",
+          AZURE_TENANT_ID: "${{ secrets." + env + "_AZURE_TENANT_ID }}",
+          AZURE_SUBSCRIPTION_ID:
+            "${{ secrets." + env + "_AZURE_SUBSCRIPTION_ID }}",
           stack: env,
           context: context,
         },
@@ -89,6 +90,26 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
               "    }\n" +
               "  }\n" +
               "}' > ~/.terraform.d/credentials.tfrc.json",
+          },
+          {
+            name: "AZ Login",
+            run:
+              "az login --service-principal -u " +
+              "${{ secrets." +
+              env +
+              "_AZURE_CLIENT_ID }}" +
+              " -p " +
+              "${{ secrets." +
+              env +
+              "_AZURE_CLIENT_SECRET }}" +
+              " --tenant " +
+              "${{ secrets." +
+              env +
+              "_AZURE_TENANT_ID }}\n" +
+              "az account set --subscription " +
+              "${{ secrets." +
+              env +
+              "_AZURE_SUBSCRIPTION_ID }}",
           },
           {
             name: "Terraform Plan",
