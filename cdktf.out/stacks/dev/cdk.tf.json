@@ -78,9 +78,7 @@
       },
       "cluster_name": "${var.eks_cluster_name}",
       "cluster_tags": "${var.eks_tags}",
-      "control_plane_subnet_ids": [
-        "${module.eks_vpc_924ECCC8.public_subnets}"
-      ],
+      "control_plane_subnet_ids": "${var.eks_public_subnet_names}",
       "create": true,
       "create_aws_auth_configmap": "${var.eks_create_aws_auth_configmap}",
       "create_cloudwatch_log_group": "${var.eks_create_cloudwatch_log_group}",
@@ -102,9 +100,7 @@
       "iam_role_tags": "${var.eks_tags}",
       "manage_aws_auth_configmap": "${var.eks_manage_aws_auth_configmap}",
       "source": "terraform-aws-modules/eks/aws",
-      "subnet_ids": [
-        "${module.eks_vpc_924ECCC8.public_subnets}"
-      ],
+      "subnet_ids": "${var.eks_public_subnet_names}",
       "tags": "${var.eks_tags}",
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
