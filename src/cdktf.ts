@@ -95,6 +95,12 @@ class MyStack extends TerraformStack {
         AksVariables.aksKeyVaultSecretsProviderEnabled.value,
       aksAgentsPoolName: AksVariables.aksAgentsPoolName.value,
       aksNetworkPlugin: AksVariables.aksNetworkPlugin.value,
+      aksIngressApplicationGatewayEnabled:
+        AksVariables.aksIngressApplicationGatewayEnabled.value,
+      aksIngressApplicationGatewayName:
+        AksVariables.aksIngressApplicationGatewayName.value,
+      aksIngressApplicationGatewaySubnetCidr:
+        AksVariables.aksIngressApplicationGatewaySubnetCidr.value,
       aksTags: AksVariables.aksTags.value,
     });
 

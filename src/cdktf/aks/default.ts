@@ -104,6 +104,21 @@ export const AksTerraformVariables: any = {
     staging: "azure",
     prod: "azure",
   },
+  aksIngressApplicationGatewayEnabled: {
+    dev: true,
+    staging: true,
+    prod: true,
+  },
+  aksIngressApplicationGatewayName: {
+    dev: "dev-aks-ingress",
+    staging: "staging-aks-ingress",
+    prod: "prod-aks-ingress",
+  },
+  aksIngressApplicationGatewaySubnetCidr: {
+    dev: "10.0.10.0/16",
+    staging: "10.0.10.0/16",
+    prod: "10.0.10.0/16",
+  },
   aksTags: {
     dev: {
       environment: "dev",

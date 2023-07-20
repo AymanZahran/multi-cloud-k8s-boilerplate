@@ -14,11 +14,10 @@ jobs:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.staging_AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.staging_AWS_SECRET_ACCESS_KEY }}
-      AZURE_CLIENT_ID: ${{ secrets.staging_AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.staging_AZURE_CLIENT_SECRET }}
-      AZURE_TENANT_ID: ${{ secrets.staging_AZURE_TENANT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.staging_AZURE_SUBSCRIPTION_ID }}
-      ARM_USE_CLI: "false"
+      ARM_CLIENT_ID: ${{ secrets.staging_AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.staging_AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.staging_AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.staging_AZURE_SUBSCRIPTION_ID }}
       stack: staging
       context: deploy
     steps:

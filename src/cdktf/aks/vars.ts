@@ -171,6 +171,38 @@ export function DefineAksVariables(
     default: AksTerraformVariables.aksNetworkPlugin[environment],
     description: "The network plugin to use for AKS",
   });
+  const aksIngressApplicationGatewayEnabled = new TerraformVariable(
+    stack,
+    "aks_ingress_application_gateway_enabled",
+    {
+      type: "bool",
+      default:
+        AksTerraformVariables.aksIngressApplicationGatewayEnabled[environment],
+      description: "Whether to enable application gateway for AKS",
+    },
+  );
+  const aksIngressApplicationGatewayName = new TerraformVariable(
+    stack,
+    "aks_ingress_application_gateway_name",
+    {
+      type: "string",
+      default:
+        AksTerraformVariables.aksIngressApplicationGatewayName[environment],
+      description: "The name of the application gateway for AKS",
+    },
+  );
+  const aksIngressApplicationGatewaySubnetCidr = new TerraformVariable(
+    stack,
+    "aks_ingress_application_gateway_subnet_cidr",
+    {
+      type: "string",
+      default:
+        AksTerraformVariables.aksIngressApplicationGatewaySubnetCidr[
+          environment
+        ],
+      description: "The subnet cidr of the application gateway for AKS",
+    },
+  );
   const aksTags = new TerraformVariable(stack, "aks_tags", {
     type: "map(string)",
     default: AksTerraformVariables.aksTags[environment],
@@ -199,6 +231,9 @@ export function DefineAksVariables(
     aksKeyVaultSecretsProviderEnabled,
     aksAgentsPoolName,
     aksNetworkPlugin,
+    aksIngressApplicationGatewayEnabled,
+    aksIngressApplicationGatewayName,
+    aksIngressApplicationGatewaySubnetCidr,
     aksTags,
   };
 }

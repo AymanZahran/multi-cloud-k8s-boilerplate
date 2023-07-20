@@ -59,7 +59,7 @@ export const HelmChartValues: any = {
     staging: {},
     prod: {},
   },
-  secrets_store_csi_driver: {
+  vault_secrets_store_csi_driver: {
     dev: {},
     staging: {},
     prod: {},
@@ -70,6 +70,36 @@ export const HelmChartValues: any = {
     prod: {},
   },
   vault: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_ebs_csi_driver: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_efs_csi_driver: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_fsx_csi_driver: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_secret_store_csi_driver: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_cloudwatch_agent: {
+    dev: {},
+    staging: {},
+    prod: {},
+  },
+  aws_load_balancer_controller: {
     dev: {},
     staging: {},
     prod: {},

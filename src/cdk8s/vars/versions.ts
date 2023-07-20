@@ -59,7 +59,7 @@ export const HelmChartVersions: any = {
     staging: "48.1.1",
     prod: "48.1.1",
   },
-  secrets_store_csi_driver: {
+  vault_secrets_store_csi_driver: {
     dev: "1.3.4",
     staging: "1.3.4",
     prod: "1.3.4",
@@ -73,5 +73,35 @@ export const HelmChartVersions: any = {
     dev: "0.25.0",
     staging: "0.25.0",
     prod: "0.25.0",
+  },
+  aws_ebs_csi_driver: {
+    dev: "2.20.0",
+    staging: "2.20.0",
+    prod: "2.20.0",
+  },
+  aws_efs_csi_driver: {
+    dev: "1.5.8",
+    staging: "1.5.8",
+    prod: "1.5.8",
+  },
+  aws_fsx_csi_driver: {
+    dev: "1.7.0",
+    staging: "1.7.0",
+    prod: "1.7.0",
+  },
+  aws_secret_store_csi_driver: {
+    dev: "0.0.4",
+    staging: "0.0.4",
+    prod: "0.0.4",
+  },
+  aws_cloudwatch_agent: {
+    dev: "0.0.9",
+    staging: "0.0.9",
+    prod: "0.0.9",
+  },
+  aws_load_balancer_controller: {
+    dev: "1.5.5",
+    staging: "1.5.5",
+    prod: "1.5.5",
   },
 };

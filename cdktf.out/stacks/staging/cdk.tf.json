@@ -36,6 +36,9 @@
         "module.aks_vnet_CD5E95BE"
       ],
       "enable_auto_scaling": "${var.aks_enable_auto_scaling}",
+      "ingress_application_gateway_enabled": "${var.aks_ingress_application_gateway_enabled}",
+      "ingress_application_gateway_name": "${var.aks_ingress_application_gateway_name}",
+      "ingress_application_gateway_subnet_cidr": "${var.aks_ingress_application_gateway_subnet_cidr}",
       "key_vault_secrets_provider_enabled": "${var.aks_key_vault_secrets_provider_enabled}",
       "location": "eastus",
       "network_plugin": "${var.aks_network_plugin}",
@@ -236,7 +239,7 @@
       "type": "string"
     },
     "aks_auto_scaler_profile_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable auto scaler profile for AKS agents",
       "type": "bool"
     },
@@ -246,12 +249,27 @@
       "type": "string"
     },
     "aks_enable_auto_scaling": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable auto scaling for AKS agents",
       "type": "bool"
     },
+    "aks_ingress_application_gateway_enabled": {
+      "default": true,
+      "description": "Whether to enable application gateway for AKS",
+      "type": "bool"
+    },
+    "aks_ingress_application_gateway_name": {
+      "default": "staging-aks-ingress",
+      "description": "The name of the application gateway for AKS",
+      "type": "string"
+    },
+    "aks_ingress_application_gateway_subnet_cidr": {
+      "default": "10.0.10.0/16",
+      "description": "The subnet cidr of the application gateway for AKS",
+      "type": "string"
+    },
     "aks_key_vault_secrets_provider_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable key vault secrets provider for AKS agents",
       "type": "bool"
     },
@@ -266,27 +284,27 @@
       "type": "string"
     },
     "aks_storage_profile_blob_driver_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable blob driver for AKS agents",
       "type": "bool"
     },
     "aks_storage_profile_disk_driver_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable disk driver for AKS agents",
       "type": "bool"
     },
     "aks_storage_profile_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable storage profile for AKS agents",
       "type": "bool"
     },
     "aks_storage_profile_file_driver_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable file driver for AKS agents",
       "type": "bool"
     },
     "aks_storage_profile_snapshot_controller_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable snapshot controller for AKS agents",
       "type": "bool"
     },

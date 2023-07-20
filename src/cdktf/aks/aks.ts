@@ -26,6 +26,9 @@ export interface AksClusterProps {
   readonly aksKeyVaultSecretsProviderEnabled: boolean;
   readonly aksAgentsPoolName: string;
   readonly aksNetworkPlugin: string;
+  readonly aksIngressApplicationGatewayEnabled: boolean;
+  readonly aksIngressApplicationGatewayName: string;
+  readonly aksIngressApplicationGatewaySubnetCidr: string;
   readonly aksTags?: { [key: string]: string };
 }
 
@@ -71,6 +74,11 @@ export class AksCluster extends Construct {
       keyVaultSecretsProviderEnabled: props.aksKeyVaultSecretsProviderEnabled,
       agentsPoolName: props.aksAgentsPoolName,
       networkPlugin: props.aksNetworkPlugin,
+      ingressApplicationGatewayEnabled:
+        props.aksIngressApplicationGatewayEnabled,
+      ingressApplicationGatewayName: props.aksIngressApplicationGatewayName,
+      ingressApplicationGatewaySubnetCidr:
+        props.aksIngressApplicationGatewaySubnetCidr,
       agentsLabels: props.aksTags,
       agentsTags: props.aksTags,
       tags: props.aksTags,

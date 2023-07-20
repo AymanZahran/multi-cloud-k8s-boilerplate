@@ -4,6 +4,12 @@ import { ArgoImageUpdater } from "./cdk8s/argoImageUpdater";
 import { ArgoNotifications } from "./cdk8s/argoNotifications";
 import { ArgoRollouts } from "./cdk8s/argoRollouts";
 import { ArgoWorkflows } from "./cdk8s/argoWorkflows";
+import { AwsCloudWatchAgent } from "./cdk8s/awsCloudWatchAgent";
+import { AwsEbsCsiDriver } from "./cdk8s/awsEbsCsiDriver";
+import { AwsEfsCsiDriver } from "./cdk8s/awsEfsCsiDriver";
+import { AwsFsxCsiDriver } from "./cdk8s/awsFsxCsiDriver";
+import { AwsLoadBalancerController } from "./cdk8s/awsLoadBalancerController";
+import { AwsSecretStoreCsiDriver } from "./cdk8s/awsSecretStoreCsiDriver";
 import { CertManager } from "./cdk8s/certManager";
 import { ClusterAutoscaler } from "./cdk8s/clusterAutoscaler";
 import { Consul } from "./cdk8s/consul";
@@ -11,15 +17,14 @@ import { CrossPlane } from "./cdk8s/crossPlane";
 import { KubeStateMetrics } from "./cdk8s/kubeStateMetrics";
 import { MetricsServer } from "./cdk8s/metricsServer";
 import { Prometheus } from "./cdk8s/prometheus";
-import { SecretStoreDriver } from "./cdk8s/secretStoreDriver";
 import { Tekton } from "./cdk8s/tekton";
 import { HelmChartFeatureFlags } from "./cdk8s/vars/feature";
 import { HelmChartValues } from "./cdk8s/vars/values";
 import { HelmChartVersions } from "./cdk8s/vars/versions";
 import { Vault } from "./cdk8s/vault";
+import { VaultSecretStoreDriver } from "./cdk8s/vaultSecretStoreDriver";
 import { Environment } from "./const";
 
-// Loop on dev, staging and prod
 for (const env of Object.values(Environment)) {
   const app = new App({
     outdir: "dist/" + env,
@@ -134,13 +139,13 @@ for (const env of Object.values(Environment)) {
       HelmChartValues.kube_prometheus_stack[env],
     );
   }
-  if (HelmChartFeatureFlags.secrets_store_csi_driver) {
-    new SecretStoreDriver(
+  if (HelmChartFeatureFlags.vault_secrets_store_csi_driver) {
+    new VaultSecretStoreDriver(
       app,
       "secret-store-driver",
       {},
-      HelmChartVersions.secrets_store_csi_driver[env],
-      HelmChartValues.secrets_store_csi_driver[env],
+      HelmChartVersions.vault_secrets_store_csi_driver[env],
+      HelmChartValues.vault_secrets_store_csi_driver[env],
     );
   }
   if (HelmChartFeatureFlags.tekton_pipeline) {
@@ -161,6 +166,59 @@ for (const env of Object.values(Environment)) {
       HelmChartValues.vault[env],
     );
   }
-
+  if (HelmChartFeatureFlags.aws_cloudwatch_agent) {
+    new AwsCloudWatchAgent(
+      app,
+      "aws-cloudwatch-agent",
+      {},
+      HelmChartVersions.aws_cloudwatch_agent[env],
+      HelmChartValues.aws_cloudwatch_agent[env],
+    );
+  }
+  if (HelmChartFeatureFlags.aws_ebs_csi_driver) {
+    new AwsEbsCsiDriver(
+      app,
+      "aws-ebs-csi-driver",
+      {},
+      HelmChartVersions.aws_ebs_csi_driver[env],
+      HelmChartValues.aws_ebs_csi_driver[env],
+    );
+  }
+  if (HelmChartFeatureFlags.aws_efs_csi_driver) {
+    new AwsEfsCsiDriver(
+      app,
+      "aws-efs-csi-driver",
+      {},
+      HelmChartVersions.aws_efs_csi_driver[env],
+      HelmChartValues.aws_efs_csi_driver[env],
+    );
+  }
+  if (HelmChartFeatureFlags.aws_fsx_csi_driver) {
+    new AwsFsxCsiDriver(
+      app,
+      "aws-fsx-csi-driver",
+      {},
+      HelmChartVersions.aws_fsx_csi_driver[env],
+      HelmChartValues.aws_fsx_csi_driver[env],
+    );
+  }
+  if (HelmChartFeatureFlags.secrets_store_csi_driver) {
+    new AwsSecretStoreCsiDriver(
+      app,
+      "secrets-store-csi-driver",
+      {},
+      HelmChartVersions.secrets_store_csi_driver[env],
+      HelmChartValues.secrets_store_csi_driver[env],
+    );
+  }
+  if (HelmChartFeatureFlags.aws_load_balancer_controller) {
+    new AwsLoadBalancerController(
+      app,
+      "aws-load-balancer-controller",
+      {},
+      HelmChartVersions.aws_load_balancer_controller[env],
+      HelmChartValues.aws_load_balancer_controller[env],
+    );
+  }
   app.synth();
 }
