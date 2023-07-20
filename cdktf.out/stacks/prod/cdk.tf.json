@@ -29,7 +29,7 @@
       "agents_size": "${var.aks_agents_size}",
       "agents_tags": "${var.aks_tags}",
       "agents_type": "${var.aks_agents_type}",
-      "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
+      "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets_name_id}",
       "auto_scaler_profile_enabled": "${var.aks_auto_scaler_profile_enabled}",
       "cluster_log_analytics_workspace_name": "${var.aks_log_analytics_workspace_name}",
       "cluster_name": "${var.aks_cluster_name}",
@@ -45,7 +45,7 @@
       "log_analytics_workspace_enabled": "${var.aks_log_analytics_workspace_enabled}",
       "log_analytics_workspace_resource_group_name": "${var.aks_resource_group_name}",
       "network_plugin": "${var.aks_network_plugin}",
-      "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
+      "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets_name_id}",
       "resource_group_name": "${var.aks_resource_group_name}",
       "source": "Azure/aks/azurerm",
       "storage_profile_blob_driver_enabled": "${var.aks_storage_profile_blob_driver_enabled}",
@@ -55,7 +55,7 @@
       "storage_profile_snapshot_controller_enabled": "${var.aks_storage_profile_snapshot_controller_enabled}",
       "tags": "${var.aks_tags}",
       "version": "7.2.0",
-      "vnet_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}"
+      "vnet_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets_name_id}"
     },
     "aks_vnet_CD5E95BE": {
       "//": {
