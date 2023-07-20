@@ -31,6 +31,7 @@
       "agents_type": "${var.aks_agents_type}",
       "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
       "auto_scaler_profile_enabled": "${var.aks_auto_scaler_profile_enabled}",
+      "cluster_log_analytics_workspace_name": "${var.aks_log_analytics_workspace_name}",
       "cluster_name": "${var.aks_cluster_name}",
       "depends_on": [
         "module.aks_vnet_CD5E95BE"
@@ -41,6 +42,8 @@
       "ingress_application_gateway_subnet_cidr": "${var.aks_ingress_application_gateway_subnet_cidr}",
       "key_vault_secrets_provider_enabled": "${var.aks_key_vault_secrets_provider_enabled}",
       "location": "eastus",
+      "log_analytics_workspace_enabled": "${var.aks_log_analytics_workspace_enabled}",
+      "log_analytics_workspace_resource_group_name": "${var.aks_resource_group_name}",
       "network_plugin": "${var.aks_network_plugin}",
       "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
       "resource_group_name": "${var.aks_resource_group_name}",
@@ -272,6 +275,16 @@
       "default": true,
       "description": "Whether to enable key vault secrets provider for AKS agents",
       "type": "bool"
+    },
+    "aks_log_analytics_workspace_enabled": {
+      "default": true,
+      "description": "Whether to enable log analytics workspace for AKS",
+      "type": "bool"
+    },
+    "aks_log_analytics_workspace_name": {
+      "default": "staging-aks-log-analytics",
+      "description": "The name of the log analytics workspace for AKS",
+      "type": "string"
     },
     "aks_network_plugin": {
       "default": "azure",

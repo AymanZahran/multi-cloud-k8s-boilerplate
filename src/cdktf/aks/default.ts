@@ -104,6 +104,16 @@ export const AksTerraformVariables: any = {
     staging: "azure",
     prod: "azure",
   },
+  aksLogAnalyticsWorkspaceEnabled: {
+    dev: true,
+    staging: true,
+    prod: true,
+  },
+  aksLogAnalyticsWorkspaceName: {
+    dev: "dev-aks-log-analytics",
+    staging: "staging-aks-log-analytics",
+    prod: "prod-aks-log-analytics",
+  },
   aksIngressApplicationGatewayEnabled: {
     dev: true,
     staging: true,

@@ -171,6 +171,25 @@ export function DefineAksVariables(
     default: AksTerraformVariables.aksNetworkPlugin[environment],
     description: "The network plugin to use for AKS",
   });
+  const aksLogAnalyticsWorkspaceEnabled = new TerraformVariable(
+    stack,
+    "aks_log_analytics_workspace_enabled",
+    {
+      type: "bool",
+      default:
+        AksTerraformVariables.aksLogAnalyticsWorkspaceEnabled[environment],
+      description: "Whether to enable log analytics workspace for AKS",
+    },
+  );
+  const aksLogAnalyticsWorkspaceName = new TerraformVariable(
+    stack,
+    "aks_log_analytics_workspace_name",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksLogAnalyticsWorkspaceName[environment],
+      description: "The name of the log analytics workspace for AKS",
+    },
+  );
   const aksIngressApplicationGatewayEnabled = new TerraformVariable(
     stack,
     "aks_ingress_application_gateway_enabled",
@@ -231,6 +250,8 @@ export function DefineAksVariables(
     aksKeyVaultSecretsProviderEnabled,
     aksAgentsPoolName,
     aksNetworkPlugin,
+    aksLogAnalyticsWorkspaceEnabled,
+    aksLogAnalyticsWorkspaceName,
     aksIngressApplicationGatewayEnabled,
     aksIngressApplicationGatewayName,
     aksIngressApplicationGatewaySubnetCidr,
