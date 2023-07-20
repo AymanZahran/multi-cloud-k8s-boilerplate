@@ -21,42 +21,33 @@
           "uniqueId": "aks_BAB83E91"
         }
       },
-      "agents_count": 1,
-      "agents_labels": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "agents_max_count": 3,
-      "agents_min_count": 1,
-      "agents_pool_name": "agentpool",
-      "agents_size": "Standard_B2s",
-      "agents_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "agents_type": "VirtualMachineScaleSets",
+      "agents_count": "${var.agents_count}",
+      "agents_labels": "${var.aks_tags}",
+      "agents_max_count": "${var.agents_max_count}",
+      "agents_min_count": "${var.agents_min_count}",
+      "agents_pool_name": "${var.agents_pool_name}",
+      "agents_size": "${var.agents_size}",
+      "agents_tags": "${var.aks_tags}",
+      "agents_type": "${var.agents_type}",
       "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
-      "auto_scaler_profile_enabled": true,
+      "auto_scaler_profile_enabled": "${var.auto_scaler_profile_enabled}",
       "cluster_name": "${var.aks_cluster_name}",
       "depends_on": [
         "module.aks_vnet_CD5E95BE"
       ],
-      "enable_auto_scaling": true,
-      "key_vault_secrets_provider_enabled": true,
+      "enable_auto_scaling": "${var.enable_auto_scaling}",
+      "key_vault_secrets_provider_enabled": "${var.key_vault_secrets_provider_enabled}",
       "location": "eastus",
-      "network_plugin": "azure",
+      "network_plugin": "${var.network_plugin}",
       "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
-      "resource_group_name": "${var.aks_resource_group_name}",
+      "resource_group_name": "${var.resource_group_name}",
       "source": "Azure/aks/azurerm",
-      "storage_profile_blob_driver_enabled": true,
-      "storage_profile_disk_driver_enabled": true,
-      "storage_profile_enabled": true,
-      "storage_profile_file_driver_enabled": true,
-      "storage_profile_snapshot_controller_enabled": true,
-      "tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
+      "storage_profile_blob_driver_enabled": "${var.storage_profile_blob_driver_enabled}",
+      "storage_profile_disk_driver_enabled": "${var.storage_profile_disk_driver_enabled}",
+      "storage_profile_enabled": "${var.storage_profile_enabled}",
+      "storage_profile_file_driver_enabled": "${var.storage_profile_file_driver_enabled}",
+      "storage_profile_snapshot_controller_enabled": "${var.storage_profile_snapshot_controller_enabled}",
+      "tags": "${var.aks_tags}",
       "version": "7.2.0",
       "vnet_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}"
     },
@@ -67,22 +58,15 @@
           "uniqueId": "aks_vnet_CD5E95BE"
         }
       },
-      "resource_group_name": "${var.aks_resource_group_name}",
+      "resource_group_name": "${var.resource_group_name}",
       "source": "Azure/vnet/azurerm",
-      "subnet_names": [
-        "aks-subnet"
-      ],
-      "subnet_prefixes": [
-        "10.0.0.0/16"
-      ],
-      "tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
+      "subnet_names": "${var.subnet_names}",
+      "subnet_prefixes": "${var.subnet_prefixes}",
+      "tags": "${var.aks_tags}",
       "use_for_each": true,
       "version": "4.1.0",
       "vnet_location": "eastus",
-      "vnet_name": "${var.aks_vnet_name}"
+      "vnet_name": "${var.vnet_name}"
     },
     "eks_B1A34D59": {
       "//": {
@@ -92,48 +76,33 @@
         }
       },
       "cluster_name": "${var.eks_cluster_name}",
-      "cluster_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
+      "cluster_tags": "${var.eks_tags}",
       "create": true,
-      "create_aws_auth_configmap": true,
-      "create_cloudwatch_log_group": true,
-      "create_cluster_security_group": true,
-      "create_iam_role": true,
-      "create_node_security_group": true,
+      "create_aws_auth_configmap": "${var.create_aws_auth_configmap}",
+      "create_cloudwatch_log_group": "${var.create_cloudwatch_log_group}",
+      "create_cluster_security_group": "${var.create_cluster_security_group}",
+      "create_iam_role": "${var.create_iam_role}",
+      "create_node_security_group": "${var.create_node_security_group}",
       "depends_on": [
         "module.eks_vpc_924ECCC8"
       ],
       "eks_managed_node_groups": {
-        "desiredSize": 3,
-        "instanceType": "t3.medium",
-        "labels": {
-          "environment": "dev",
-          "managed-by": "cdktf"
-        },
-        "maxSize": 4,
-        "minSize": 2,
-        "name": "managed-ng",
-        "tags": {
-          "environment": "dev",
-          "managed-by": "cdktf"
-        }
+        "desiredSize": "${var.managed_node_group_desired_size}",
+        "instanceType": "${var.managed_node_group_instance_type}",
+        "labels": "${var.eks_tags}",
+        "maxSize": "${var.managed_node_group_max_size}",
+        "minSize": "${var.managed_node_group_min_size}",
+        "name": "${var.managed_node_group_name}",
+        "use_custom_launch_template": "${var.managed_node_group_custom_launch_template}"
       },
-      "iam_role_name": "eks-role",
-      "iam_role_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "manage_aws_auth_configmap": true,
+      "iam_role_name": "${var.iam_role_name}",
+      "iam_role_tags": "${var.eks_tags}",
+      "manage_aws_auth_configmap": "${var.manage_aws_auth_configmap}",
       "source": "terraform-aws-modules/eks/aws",
       "subnet_ids": [
         "${module.eks_vpc_924ECCC8.public_subnets}"
       ],
-      "tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
+      "tags": "${var.eks_tags}",
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
     },
@@ -144,60 +113,22 @@
           "uniqueId": "eks_vpc_924ECCC8"
         }
       },
-      "azs": [
-        "us-east-1a",
-        "us-east-1b",
-        "us-east-1c"
-      ],
-      "create_igw": true,
-      "create_vpc": true,
-      "enable_nat_gateway": true,
-      "igw_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "intra_subnet_names": [
-        "intra-subnet-1",
-        "intra-subnet-2",
-        "intra-subnet-3"
-      ],
+      "create_igw": "${var.create_igw}",
+      "create_vpc": "${var.create_vpc}",
+      "enable_nat_gateway": "${var.enable_nat_gateway}",
+      "igw_tags": "${var.eks_tags}",
+      "intra_subnet_names": "${var.intra_subnet_names}",
       "name": "${var.vpc_name}",
-      "nat_eip_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "nat_gateway_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "private_subnet_names": [
-        "private-subnet-1",
-        "private-subnet-2",
-        "private-subnet-3"
-      ],
-      "private_subnet_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "public_subnet_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
-      "public_subnets": [
-        "public-subnet-1",
-        "public-subnet-2",
-        "public-subnet-3"
-      ],
+      "nat_eip_tags": "${var.eks_tags}",
+      "nat_gateway_tags": "${var.eks_tags}",
+      "private_subnet_names": "${var.private_subnet_names}",
+      "private_subnet_tags": "${var.eks_tags}",
+      "public_subnet_tags": "${var.eks_tags}",
+      "public_subnets": "${var.public_subnets}",
       "source": "terraform-aws-modules/vpc/aws",
-      "tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      },
+      "tags": "${var.eks_tags}",
       "version": "5.1.0",
-      "vpc_tags": {
-        "environment": "dev",
-        "managed-by": "cdktf"
-      }
+      "vpc_tags": "${var.eks_tags}"
     }
   },
   "output": {
@@ -267,129 +198,251 @@
     }
   },
   "variable": {
+    "agents_count": {
+      "default": 3,
+      "description": "The number of AKS agents",
+      "type": "number"
+    },
+    "agents_max_count": {
+      "default": 3,
+      "description": "The maximum number of AKS agents",
+      "type": "number"
+    },
+    "agents_min_count": {
+      "default": 3,
+      "description": "The minimum number of AKS agents",
+      "type": "number"
+    },
+    "agents_pool_name": {
+      "default": "dev-aks-pool",
+      "description": "The name of the AKS agents pool",
+      "type": "string"
+    },
+    "agents_size": {
+      "default": "Standard_B2s",
+      "description": "The size of the AKS agents",
+      "type": "string"
+    },
+    "agents_type": {
+      "default": "VirtualMachineScaleSets",
+      "description": "The type of AKS agents",
+      "type": "string"
+    },
     "aks_cluster_name": {
       "default": "dev-aks-cluster",
       "description": "The name of the AKS cluster",
       "type": "string"
     },
-    "aks_control_plane_version": {
-      "default": "1.24",
-      "description": "The version of the AKS control plane",
-      "type": "string"
+    "aks_tags": {
+      "default": {
+        "cluster": "dev-aks-cluster",
+        "environment": "dev",
+        "managed_by": "cdktf",
+        "provider": "azure"
+      },
+      "description": "The tags to apply to AKS",
+      "type": "map(string)"
     },
-    "aks_data_plane_version": {
-      "default": "1.24",
-      "description": "The version of the AKS data plane",
-      "type": "string"
+    "auto_scaler_profile_enabled": {
+      "default": false,
+      "description": "Whether to enable auto scaler profile for AKS agents",
+      "type": "bool"
     },
-    "aks_node_pool_count": {
-      "default": 2,
-      "description": "The size of the AKS node pool",
-      "type": "number"
+    "azs": {
+      "default": [
+        "us-east-1a",
+        "us-east-1b",
+        "us-east-1c"
+      ],
+      "description": "A list of availability zones",
+      "type": "list(string)"
     },
-    "aks_node_pool_max_count": {
-      "default": 2,
-      "description": "The maximum size of the AKS node pool",
-      "type": "number"
+    "create_aws_auth_configmap": {
+      "default": true,
+      "description": "A boolean flag to create aws-auth configmap",
+      "type": "bool"
     },
-    "aks_node_pool_min_count": {
-      "default": 2,
-      "description": "The minimum size of the AKS node pool",
-      "type": "number"
+    "create_cloudwatch_log_group": {
+      "default": true,
+      "description": "A boolean flag to create cloudwatch log group",
+      "type": "bool"
     },
-    "aks_node_pool_name": {
-      "default": "dev-aks-node-pool",
-      "description": "The name of the AKS node pool",
-      "type": "string"
+    "create_cluster_security_group": {
+      "default": true,
+      "description": "A boolean flag to create cluster security group",
+      "type": "bool"
     },
-    "aks_node_pool_vm_size": {
-      "default": "Standard_D2_v2",
-      "description": "The VM size of the AKS node pool",
-      "type": "string"
+    "create_iam_role": {
+      "default": true,
+      "description": "A boolean flag to create iam role",
+      "type": "bool"
     },
-    "aks_resource_group_name": {
-      "default": "dev-aks-cluster",
-      "description": "The name of the AKS resource group",
-      "type": "string"
+    "create_igw": {
+      "default": true,
+      "description": "A boolean flag to create a new Internet Gateway",
+      "type": "bool"
     },
-    "aks_subnet_cidr_block": {
-      "default": "10.0.0.0/16",
-      "description": "The CIDR block for the AKS Subnet",
-      "type": "string"
+    "create_node_security_group": {
+      "default": true,
+      "description": "A boolean flag to create node security group",
+      "type": "bool"
     },
-    "aks_subnet_name": {
-      "default": "dev-subnet-aks-cluster",
-      "description": "The name of the AKS Subnet",
-      "type": "string"
-    },
-    "aks_vnet_cidr_block": {
-      "default": "10.0.0.0/16",
-      "description": "The CIDR block for the AKS VNet",
-      "type": "string"
-    },
-    "aks_vnet_name": {
-      "default": "dev-vnet-aks-cluster",
-      "description": "The name of the AKS VNet",
-      "type": "string"
+    "create_vpc": {
+      "default": true,
+      "description": "A boolean flag to create a new VPC",
+      "type": "bool"
     },
     "eks_cluster_name": {
       "default": "dev-eks-cluster",
       "description": "The name of the EKS cluster",
       "type": "string"
     },
-    "eks_control_plane_role_arn": {
-      "default": "arn:aws:iam::123456789012:role/eks-control-plane-role",
-      "description": "The ARN of the IAM role for the EKS control plane",
-      "type": "string"
+    "eks_tags": {
+      "default": {
+        "cluster": "dev-eks-cluster",
+        "environment": "dev",
+        "managed_by": "cdktf",
+        "provider": "aws"
+      },
+      "description": "A map of tags",
+      "type": "map(string)"
     },
-    "eks_control_plane_version": {
-      "default": "1.24",
-      "description": "The version of the EKS control plane",
-      "type": "string"
+    "enable_auto_scaling": {
+      "default": false,
+      "description": "Whether to enable auto scaling for AKS agents",
+      "type": "bool"
     },
-    "eks_data_plane_role_arn": {
-      "default": "arn:aws:iam::123456789012:role/eks-data-plane-role",
-      "description": "The ARN of the IAM role for the EKS data plane",
-      "type": "string"
-    },
-    "eks_data_plane_version": {
-      "default": "1.24",
-      "description": "The version of the EKS data plane",
-      "type": "string"
-    },
-    "eks_node_group_desired_size": {
-      "default": 2,
-      "description": "The desired size of the EKS node group",
-      "type": "number"
-    },
-    "eks_node_group_max_size": {
-      "default": 2,
-      "description": "The maximum size of the EKS node group",
-      "type": "number"
-    },
-    "eks_node_group_min_size": {
-      "default": 2,
-      "description": "The minimum size of the EKS node group",
-      "type": "number"
-    },
-    "eks_node_group_name": {
-      "default": "dev-eks-node-group",
-      "description": "The name of the EKS node group",
-      "type": "string"
-    },
-    "enable_dns_hostnames": {
+    "enable_nat_gateway": {
       "default": true,
-      "description": "A boolean flag to enable/disable DNS hostnames in the VPC",
+      "description": "A boolean flag to enable NAT Gateway",
+      "type": "bool"
+    },
+    "iam_role_name": {
+      "default": "dev-eks-iam-role",
+      "description": "The name of the IAM role",
       "type": "string"
     },
-    "number_of_subnets": {
-      "default": 3,
-      "description": "The number of subnets to create in the VPC",
+    "intra_subnet_names": {
+      "default": [
+        "dev-eks-intra-subnet-1",
+        "dev-eks-intra-subnet-2",
+        "dev-eks-intra-subnet-3"
+      ],
+      "description": "A list of intra subnet names",
+      "type": "list(string)"
+    },
+    "key_vault_secrets_provider_enabled": {
+      "default": false,
+      "description": "Whether to enable key vault secrets provider for AKS agents",
+      "type": "bool"
+    },
+    "manage_aws_auth_configmap": {
+      "default": true,
+      "description": "A boolean flag to manage aws-auth configmap",
+      "type": "bool"
+    },
+    "managed_node_group_custom_launch_template": {
+      "default": false,
+      "description": "A boolean flag to use custom launch template for the managed node group",
+      "type": "bool"
+    },
+    "managed_node_group_desired_size": {
+      "default": 2,
+      "description": "The desired size of the managed node group",
       "type": "number"
     },
-    "vpc_cidr": {
-      "default": "10.0.0.0/16",
-      "description": "The CIDR block for the VPC",
+    "managed_node_group_instance_type": {
+      "default": "t3.medium",
+      "description": "The instance type of the managed node group",
+      "type": "string"
+    },
+    "managed_node_group_max_size": {
+      "default": 2,
+      "description": "The maximum size of the managed node group",
+      "type": "number"
+    },
+    "managed_node_group_min_size": {
+      "default": 2,
+      "description": "The minimum size of the managed node group",
+      "type": "number"
+    },
+    "managed_node_group_name": {
+      "default": "dev-eks-managed-node-group",
+      "description": "The name of the managed node group",
+      "type": "string"
+    },
+    "network_plugin": {
+      "default": "azure",
+      "description": "The network plugin to use for AKS",
+      "type": "string"
+    },
+    "private_subnet_names": {
+      "default": [
+        "dev-eks-private-subnet-1",
+        "dev-eks-private-subnet-2",
+        "dev-eks-private-subnet-3"
+      ],
+      "description": "A list of private subnet names",
+      "type": "list(string)"
+    },
+    "public_subnets": {
+      "default": [
+        "dev-eks-public-subnet-1",
+        "dev-eks-public-subnet-2",
+        "dev-eks-public-subnet-3"
+      ],
+      "description": "A list of public subnet names",
+      "type": "list(string)"
+    },
+    "resource_group_name": {
+      "default": "dev-aks-rg",
+      "description": "The name of the AKS resource group",
+      "type": "string"
+    },
+    "storage_profile_blob_driver_enabled": {
+      "default": false,
+      "description": "Whether to enable blob driver for AKS agents",
+      "type": "bool"
+    },
+    "storage_profile_disk_driver_enabled": {
+      "default": false,
+      "description": "Whether to enable disk driver for AKS agents",
+      "type": "bool"
+    },
+    "storage_profile_enabled": {
+      "default": false,
+      "description": "Whether to enable storage profile for AKS agents",
+      "type": "bool"
+    },
+    "storage_profile_file_driver_enabled": {
+      "default": false,
+      "description": "Whether to enable file driver for AKS agents",
+      "type": "bool"
+    },
+    "storage_profile_snapshot_controller_enabled": {
+      "default": false,
+      "description": "Whether to enable snapshot controller for AKS agents",
+      "type": "bool"
+    },
+    "subnet_names": {
+      "default": [
+        "dev-aks-subnet-1",
+        "dev-aks-subnet-2",
+        "dev-aks-subnet-3"
+      ],
+      "description": "The names of the AKS subnets",
+      "type": "list(string)"
+    },
+    "subnet_prefixes": {
+      "default": [
+        "10.0.0.0/16"
+      ],
+      "description": "The CIDR blocks for the AKS subnets",
+      "type": "list(string)"
+    },
+    "vnet_name": {
+      "default": "dev-aks-vnet",
+      "description": "The name of the AKS VNet",
       "type": "string"
     },
     "vpc_name": {
