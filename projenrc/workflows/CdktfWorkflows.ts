@@ -44,6 +44,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           AZURE_TENANT_ID: "${{ secrets." + env + "_AZURE_TENANT_ID }}",
           AZURE_SUBSCRIPTION_ID:
             "${{ secrets." + env + "_AZURE_SUBSCRIPTION_ID }}",
+          ARM_USE_CLI: "false",
           stack: env,
           context: context,
         },
