@@ -30,6 +30,15 @@ export function DefineAksVariables(
     default: AksTerraformVariables.aksAddressSpace[environment],
     description: "The CIDR blocks for the AKS subnets",
   });
+  const aksSubnetPrefixes = new TerraformVariable(
+    stack,
+    "aks_subnet_prefixes",
+    {
+      type: "list(string)",
+      default: AksTerraformVariables.aksSubnetPrefixes[environment],
+      description: "The CIDR blocks for the AKS subnets",
+    },
+  );
   const aksClusterName = new TerraformVariable(stack, "aks_cluster_name", {
     type: "string",
     default: AksTerraformVariables.aksClusterName[environment],
@@ -173,6 +182,7 @@ export function DefineAksVariables(
     aksVnetName,
     aksSubnetNames,
     aksAddressSpace,
+    aksSubnetPrefixes,
     aksClusterName,
     aksAgentsSize,
     aksAgentsCount,

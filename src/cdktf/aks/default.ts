@@ -14,6 +14,11 @@ export const AksTerraformVariables: any = {
     staging: ["staging-aks-subnet"],
     prod: ["prod-aks-subnet"],
   },
+  aksSubnetPrefixes: {
+    dev: ["10.0.0.0/24"],
+    staging: ["10.0.0.0/24"],
+    prod: ["10.0.0.0/24"],
+  },
   aksAddressSpace: {
     dev: ["10.0.0.0/16"],
     staging: ["10.0.0.0/16"],

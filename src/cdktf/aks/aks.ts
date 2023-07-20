@@ -9,6 +9,7 @@ export interface AksClusterProps {
   readonly aksResourceGroupName: string;
   readonly aksSubnetNames: string[];
   readonly aksAddressSpace: string[];
+  readonly aksSubnetPrefixes: string[];
   readonly aksClusterName: string;
   readonly aksAgentsSize: string;
   readonly aksAgentsCount: number;
@@ -42,6 +43,7 @@ export class AksCluster extends Construct {
       useForEach: true,
       subnetNames: props.aksSubnetNames,
       addressSpace: props.aksAddressSpace,
+      subnetPrefixes: props.aksSubnetPrefixes,
       tags: props.aksTags,
     });
 

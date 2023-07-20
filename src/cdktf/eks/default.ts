@@ -53,6 +53,11 @@ export const EksTerraformVariables: any = {
     staging: true,
     prod: true,
   },
+  eksCidr: {
+    dev: "10.0.0.0/16",
+    staging: "10.0.0.0/16",
+    prod: "10.0.0.0/16",
+  },
   eksVpcName: {
     dev: "dev-eks-vpc",
     staging: "staging-eks-vpc",

@@ -48,6 +48,11 @@ export function DefineEksVariables(
       description: "A boolean flag to enable NAT Gateway",
     },
   );
+  const eksCidr = new TerraformVariable(stack, "eks_cidr", {
+    type: "string",
+    default: EksTerraformVariables.eksCidr[environment],
+    description: "The CIDR block for the VPC",
+  });
   const eksVpcName = new TerraformVariable(stack, "eks_vpc_name", {
     type: "string",
     default: EksTerraformVariables.eksVpcName[environment],
@@ -186,6 +191,7 @@ export function DefineEksVariables(
     eksPrivateSubnetNames,
     eksPublicSubnets,
     eksEnableNatGateway,
+    eksCidr,
     eksVpcName,
     eksClusterName,
     eksCreateAwsAuthConfigmap,
