@@ -426,9 +426,7 @@
     },
     "subnet_names": {
       "default": [
-        "prod-aks-subnet-1",
-        "prod-aks-subnet-2",
-        "prod-aks-subnet-3"
+        "prod-aks-subnet"
       ],
       "description": "The names of the AKS subnets",
       "type": "list(string)"

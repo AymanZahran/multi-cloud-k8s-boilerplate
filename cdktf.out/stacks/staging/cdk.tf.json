@@ -426,9 +426,7 @@
     },
     "subnet_names": {
       "default": [
-        "staging-aks-subnet-1",
-        "staging-aks-subnet-2",
-        "staging-aks-subnet-3"
+        "staging-aks-subnet"
       ],
       "description": "The names of the AKS subnets",
       "type": "list(string)"
