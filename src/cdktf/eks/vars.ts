@@ -165,19 +165,6 @@ export function DefineEksVariables(
       description: "The desired size of the managed node group",
     },
   );
-  const eksManagedNodeGroupCustomLaunchTemplate = new TerraformVariable(
-    stack,
-    "eks_managed_node_group_custom_launch_template",
-    {
-      type: "bool",
-      default:
-        EksTerraformVariables.eksManagedNodeGroupCustomLaunchTemplate[
-          environment
-        ],
-      description:
-        "A boolean flag to use custom launch template for the managed node group",
-    },
-  );
   const eksTags = new TerraformVariable(stack, "eks_tags", {
     type: "map(string)",
     default: EksTerraformVariables.eksTags[environment],
@@ -206,7 +193,6 @@ export function DefineEksVariables(
     eksManagedNodeGroupMinSize,
     eksManagedNodeGroupMaxSize,
     eksManagedNodeGroupDesiredSize,
-    eksManagedNodeGroupCustomLaunchTemplate,
     eksTags,
   };
 }

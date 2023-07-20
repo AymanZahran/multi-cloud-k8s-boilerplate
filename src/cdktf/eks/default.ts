@@ -128,11 +128,6 @@ export const EksTerraformVariables: any = {
     staging: 2,
     prod: 2,
   },
-  eksManagedNodeGroupCustomLaunchTemplate: {
-    dev: false,
-    staging: false,
-    prod: false,
-  },
   eksTags: {
     dev: {
       environment: "dev",

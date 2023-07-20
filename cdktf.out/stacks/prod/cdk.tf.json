@@ -87,22 +87,18 @@
       "depends_on": [
         "module.eks_vpc_924ECCC8"
       ],
-      "eks_managed_node_groups": {
+      "eks_managed_node_group_defaults": {
         "desiredSize": "${var.eks_managed_node_group_desired_size}",
         "instanceType": "${var.eks_managed_node_group_instance_type}",
         "labels": "${var.eks_tags}",
         "maxSize": "${var.eks_managed_node_group_max_size}",
         "minSize": "${var.eks_managed_node_group_min_size}",
-        "name": "${var.eks_managed_node_group_name}",
-        "use_custom_launch_template": "${var.eks_managed_node_group_custom_launch_template}"
+        "name": "${var.eks_managed_node_group_name}"
       },
       "iam_role_name": "${var.eks_iam_role_name}",
       "iam_role_tags": "${var.eks_tags}",
       "manage_aws_auth_configmap": "${var.eks_manage_aws_auth_configmap}",
       "source": "terraform-aws-modules/eks/aws",
-      "subnet_ids": [
-        "${module.eks_vpc_924ECCC8.public_subnets}"
-      ],
       "tags": "${var.eks_tags}",
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
@@ -383,11 +379,6 @@
     "eks_manage_aws_auth_configmap": {
       "default": true,
       "description": "A boolean flag to manage aws-auth configmap",
-      "type": "bool"
-    },
-    "eks_managed_node_group_custom_launch_template": {
-      "default": false,
-      "description": "A boolean flag to use custom launch template for the managed node group",
       "type": "bool"
     },
     "eks_managed_node_group_desired_size": {

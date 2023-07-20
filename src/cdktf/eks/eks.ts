@@ -26,7 +26,6 @@ export interface EksClusterProps {
   readonly eksManagedNodeGroupMinSize: number;
   readonly eksManagedNodeGroupMaxSize: number;
   readonly eksManagedNodeGroupDesiredSize: number;
-  readonly eksManagedNodeGroupCustomLaunchTemplate: boolean;
   readonly eksTags: { [key: string]: string };
 }
 
@@ -59,7 +58,7 @@ export class EksCluster extends Construct {
       dependsOn: [this.vpc],
       clusterName: props.eksClusterName,
       vpcId: this.vpc.vpcIdOutput,
-      subnetIds: [this.vpc.publicSubnetsOutput],
+      subnetIds: this.vpc.publicSubnets,
       createAwsAuthConfigmap: props.eksCreateAwsAuthConfigmap,
       manageAwsAuthConfigmap: props.eksManageAwsAuthConfigmap,
       create: true,
@@ -68,11 +67,9 @@ export class EksCluster extends Construct {
       createCloudwatchLogGroup: props.eksCreateCloudwatchLogGroup,
       createIamRole: props.eksCreateIamRole,
       iamRoleName: props.eksIamRoleName,
-      eksManagedNodeGroups: {
+      eksManagedNodeGroupDefaults: {
         name: props.eksManagedNodeGroupName,
         instanceType: props.eksManagedNodeGroupInstanceType,
-        use_custom_launch_template:
-          props.eksManagedNodeGroupCustomLaunchTemplate,
         minSize: props.eksManagedNodeGroupMinSize,
         maxSize: props.eksManagedNodeGroupMaxSize,
         desiredSize: props.eksManagedNodeGroupDesiredSize,

@@ -62,8 +62,6 @@ class MyStack extends TerraformStack {
       eksManagedNodeGroupMaxSize: EksVariables.eksManagedNodeGroupMaxSize.value,
       eksManagedNodeGroupDesiredSize:
         EksVariables.eksManagedNodeGroupDesiredSize.value,
-      eksManagedNodeGroupCustomLaunchTemplate:
-        EksVariables.eksManagedNodeGroupCustomLaunchTemplate.value,
       eksTags: EksVariables.eksTags.value,
     });
 
