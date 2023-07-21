@@ -436,7 +436,7 @@
       "type": "string"
     },
     "aks_role_based_access_control_enabled": {
-      "default": false,
+      "default": true,
       "description": "Whether to enable role based access control for AKS agents",
       "type": "bool"
     },
