@@ -23,13 +23,13 @@ import { HelmChartValues } from "./cdk8s/vars/values";
 import { HelmChartVersions } from "./cdk8s/vars/versions";
 import { Vault } from "./cdk8s/vault";
 import { VaultSecretStoreDriver } from "./cdk8s/vaultSecretStoreDriver";
-import { ClusterType, Environment, KubernetesDir } from "./const";
+import { Environment, Providers } from "./const";
 
 // Loop on values "eks" and "aks"
-for (const type of Object.values(ClusterType)) {
+for (const provider of Object.values(Providers)) {
   for (const env of Object.values(Environment)) {
     const app = new App({
-      outdir: KubernetesDir + "/" + type + "/" + env,
+      outdir: "dist/" + provider + "/" + env,
       outputFileExtension: ".yaml",
       yamlOutputType: YamlOutputType.FILE_PER_CHART,
     });

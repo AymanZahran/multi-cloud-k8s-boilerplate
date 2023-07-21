@@ -34,7 +34,7 @@ export const CI_Versions: any = {
   cdk8s_cli: "2.2.110",
 };
 
-export enum ClusterType {
+export enum Providers {
   eks = "eks",
   aks = "aks",
 }
