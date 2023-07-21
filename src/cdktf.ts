@@ -1,9 +1,10 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
+import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
+import { Release } from "@cdktf/provider-helm/lib/release";
 import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
@@ -20,7 +21,6 @@ import {
   RepoURL,
   KubernetesDir,
 } from "./const";
-import {Release} from "@cdktf/provider-helm/lib/release";
 
 config(); // Load the values from the .env file into process.env
 
@@ -121,20 +121,28 @@ class MyStack extends TerraformStack {
     });
 
     // Create EKS Kubernetes Provider
-    const eks_kubernetes_provider = new KubernetesProvider(this, "EKS_KUBERNETES", {
-      host: eksCluster.getEksEndpoint,
-      clusterCaCertificate: Fn.base64decode(
-        eksCluster.getEksCertificateAutothority,
-      ),
-      alias: "eks_kubernetes",
-    });
+    const eks_kubernetes_provider = new KubernetesProvider(
+      this,
+      "EKS_KUBERNETES",
+      {
+        host: eksCluster.getEksEndpoint,
+        clusterCaCertificate: Fn.base64decode(
+          eksCluster.getEksCertificateAutothority,
+        ),
+        alias: "eks_kubernetes",
+      },
+    );
 
     // Create AKS Kubernetes Provider
-    const aks_kubernetes_provider = new KubernetesProvider(this, "AKS_KUBERNETES", {
-      host: aksCluster.getAksEndpoint,
-      clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
-      alias: "aks_kubernetes",
-    });
+    const aks_kubernetes_provider = new KubernetesProvider(
+      this,
+      "AKS_KUBERNETES",
+      {
+        host: aksCluster.getAksEndpoint,
+        clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
+        alias: "aks_kubernetes",
+      },
+    );
 
     // Create EKS Helm Provider
     const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
@@ -147,11 +155,11 @@ class MyStack extends TerraformStack {
 
     // Create AKS Helm Provider
     const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
-        kubernetes: {
-            host: aksCluster.getAksEndpoint,
-            clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
-        },
-        alias: "aks_helm",
+      kubernetes: {
+        host: aksCluster.getAksEndpoint,
+        clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
+      },
+      alias: "aks_helm",
     });
 
     // Install ArgoCD on EKS Cluster
@@ -197,10 +205,7 @@ class MyStack extends TerraformStack {
           },
           project: "default",
           source: {
-            path:
-              KubernetesDir +
-              "/eks/" +
-              configuration.environment,
+            path: KubernetesDir + "/eks/" + configuration.environment,
             repoURL: RepoURL,
             targetRevision: "HEAD",
           },
@@ -227,10 +232,7 @@ class MyStack extends TerraformStack {
           },
           project: "default",
           source: {
-            path:
-                KubernetesDir +
-                "/aks/" +
-                configuration.environment,
+            path: KubernetesDir + "/aks/" + configuration.environment,
             repoURL: RepoURL,
             targetRevision: "HEAD",
           },

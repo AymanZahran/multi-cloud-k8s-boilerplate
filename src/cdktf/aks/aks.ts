@@ -1,8 +1,8 @@
+import { ITerraformDependable } from "cdktf/lib";
 import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
 import { AzureRegion } from "../../const";
-import {ITerraformDependable} from "cdktf/lib";
 
 export interface AksClusterProps {
   readonly aksLocation: AzureRegion | undefined;

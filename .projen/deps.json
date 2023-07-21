@@ -105,7 +105,7 @@
     },
     {
       "name": "cdk8s-cli",
-      "version": "^2.2.110",
+      "version": "^2.3.0",
       "type": "runtime"
     },
     {
