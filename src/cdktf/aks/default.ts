@@ -94,6 +94,16 @@ export const AksTerraformVariables: any = {
     staging: true,
     prod: true,
   },
+  aksRbacAadAzureRbacEnabled: {
+    dev: false,
+    staging: false,
+    prod: false,
+  },
+  aksRoleBasedAccessControlEnabled: {
+    dev: false,
+    staging: false,
+    prod: false,
+  },
   aksAgentsPoolName: {
     dev: "dev-aks-pool",
     staging: "staging-aks-pool",

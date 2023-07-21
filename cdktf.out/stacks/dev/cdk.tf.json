@@ -46,7 +46,9 @@
       "log_analytics_workspace_resource_group_name": "${var.aks_resource_group_name}",
       "network_plugin": "${var.aks_network_plugin}",
       "pod_subnet_id": "$",
+      "rbac_aad_azure_rbac_enabled": "${var.aks_rbac_aad_azure_rbac_enabled}",
       "resource_group_name": "${var.aks_resource_group_name}",
+      "role_based_access_control_enabled": "${var.aks_role_based_access_control_enabled}",
       "source": "Azure/aks/azurerm",
       "storage_profile_blob_driver_enabled": "${var.aks_storage_profile_blob_driver_enabled}",
       "storage_profile_disk_driver_enabled": "${var.aks_storage_profile_disk_driver_enabled}",
@@ -184,7 +186,7 @@
     "kubernetes": [
       {
         "alias": "eks_kubernetes",
-        "cluster_ca_certificate": "${base64decode(module.eks_B1A34D59.cluster_certificate_authority_data)}",
+        "cluster_ca_certificate": "${module.eks_B1A34D59.cluster_certificate_authority_data}",
         "host": "${module.eks_B1A34D59.cluster_endpoint}"
       },
       {
@@ -423,10 +425,20 @@
       "description": "The network plugin to use for AKS",
       "type": "string"
     },
+    "aks_rbac_aad_azure_rbac_enabled": {
+      "default": false,
+      "description": "Whether to enable aad azure rbac for AKS agents",
+      "type": "bool"
+    },
     "aks_resource_group_name": {
       "default": "dev-aks-rg",
       "description": "The name of the AKS resource group",
       "type": "string"
+    },
+    "aks_role_based_access_control_enabled": {
+      "default": false,
+      "description": "Whether to enable role based access control for AKS agents",
+      "type": "bool"
     },
     "aks_storage_profile_blob_driver_enabled": {
       "default": true,

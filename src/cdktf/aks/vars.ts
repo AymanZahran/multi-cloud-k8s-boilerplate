@@ -157,6 +157,25 @@ export function DefineAksVariables(
         "Whether to enable key vault secrets provider for AKS agents",
     },
   );
+  const aksRbacAadAzureRbacEnabled = new TerraformVariable(
+    stack,
+    "aks_rbac_aad_azure_rbac_enabled",
+    {
+      type: "bool",
+      default: AksTerraformVariables.aksRbacAadAzureRbacEnabled[environment],
+      description: "Whether to enable aad azure rbac for AKS agents",
+    },
+  );
+  const aksRoleBasedAccessControlEnabled = new TerraformVariable(
+    stack,
+    "aks_role_based_access_control_enabled",
+    {
+      type: "bool",
+      default:
+        AksTerraformVariables.aksRoleBasedAccessControlEnabled[environment],
+      description: "Whether to enable role based access control for AKS agents",
+    },
+  );
   const aksAgentsPoolName = new TerraformVariable(
     stack,
     "aks_agents_pool_name",
@@ -248,6 +267,8 @@ export function DefineAksVariables(
     aksStorageProfileDiskDriverEnabled,
     aksStorageProfileSnapshotControllerEnabled,
     aksKeyVaultSecretsProviderEnabled,
+    aksRbacAadAzureRbacEnabled,
+    aksRoleBasedAccessControlEnabled,
     aksAgentsPoolName,
     aksNetworkPlugin,
     aksLogAnalyticsWorkspaceEnabled,

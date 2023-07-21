@@ -25,6 +25,8 @@ export interface AksClusterProps {
   readonly aksStorageProfileFileDriverEnabled: boolean;
   readonly aksStorageProfileSnapshotControllerEnabled: boolean;
   readonly aksKeyVaultSecretsProviderEnabled: boolean;
+  readonly aksRbacAadAzureRbacEnabled: boolean;
+  readonly aksRoleBasedAccessControlEnabled: boolean;
   readonly aksAgentsPoolName: string;
   readonly aksNetworkPlugin: string;
   readonly aksLogAnalyticsWorkspaceEnabled: boolean;
@@ -75,6 +77,8 @@ export class AksCluster extends Construct {
       storageProfileSnapshotControllerEnabled:
         props.aksStorageProfileSnapshotControllerEnabled,
       keyVaultSecretsProviderEnabled: props.aksKeyVaultSecretsProviderEnabled,
+      rbacAadAzureRbacEnabled: props.aksRbacAadAzureRbacEnabled,
+      roleBasedAccessControlEnabled: props.aksRoleBasedAccessControlEnabled,
       agentsPoolName: props.aksAgentsPoolName,
       networkPlugin: props.aksNetworkPlugin,
       logAnalyticsWorkspaceEnabled: props.aksLogAnalyticsWorkspaceEnabled,

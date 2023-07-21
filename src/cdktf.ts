@@ -5,7 +5,7 @@ import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release } from "@cdktf/provider-helm/lib/release";
 import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
+import { App, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
 import { AksCluster } from "./cdktf/aks/aks";
@@ -105,6 +105,9 @@ class MyStack extends TerraformStack {
         AksVariables.aksStorageProfileSnapshotControllerEnabled.value,
       aksKeyVaultSecretsProviderEnabled:
         AksVariables.aksKeyVaultSecretsProviderEnabled.value,
+      aksRbacAadAzureRbacEnabled: AksVariables.aksRbacAadAzureRbacEnabled.value,
+      aksRoleBasedAccessControlEnabled:
+        AksVariables.aksRoleBasedAccessControlEnabled.value,
       aksAgentsPoolName: AksVariables.aksAgentsPoolName.value,
       aksNetworkPlugin: AksVariables.aksNetworkPlugin.value,
       aksLogAnalyticsWorkspaceEnabled:
@@ -126,9 +129,7 @@ class MyStack extends TerraformStack {
       "EKS_KUBERNETES",
       {
         host: eksCluster.getEksEndpoint,
-        clusterCaCertificate: Fn.base64decode(
-          eksCluster.getEksCertificateAutothority,
-        ),
+        clusterCaCertificate: eksCluster.getEksCertificateAutothority,
         alias: "eks_kubernetes",
       },
     );
