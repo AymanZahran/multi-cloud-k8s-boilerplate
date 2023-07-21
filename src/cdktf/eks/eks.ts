@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
 import { AwsRegion } from "../../const";
+import {ITerraformDependable} from "cdktf";
 
 export interface EksClusterProps {
   readonly eksRegion: AwsRegion | undefined;
@@ -80,6 +81,10 @@ export class EksCluster extends Construct {
       clusterTags: props.eksTags,
       tags: props.eksTags,
     });
+  }
+
+  public get getEksCluster(): ITerraformDependable {
+    return this.eks as ITerraformDependable;
   }
 
   public get getEksEndpoint(): string | undefined {

@@ -94,6 +94,11 @@
       "type": "runtime"
     },
     {
+      "name": "@cdktf/provider-helm",
+      "version": "^7.0.0",
+      "type": "runtime"
+    },
+    {
       "name": "@cdktf/provider-kubernetes",
       "version": "^8.0.0",
       "type": "runtime"

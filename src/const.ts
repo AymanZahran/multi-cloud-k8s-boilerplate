@@ -22,6 +22,7 @@ export const PackageVersions: any = {
   provider_aws: "16.0.3",
   provider_azurerm: "9.0.3",
   provider_kubernetes: "8.0.0",
+  provider_helm: "7.0.0",
   cdk8s: "2.7.77",
   cdk8s_plus: "0.33.0",
   dotenv: "16.1.4",
@@ -31,7 +32,7 @@ export const CI_Versions: any = {
   terraform: "1.5.3",
   node: "19.x",
   cdktf_cli: "0.17.0",
-  cdk8s_cli: "2.2.110",
+  cdk8s_cli: "2.3.0",
 };
 
 export enum Providers {

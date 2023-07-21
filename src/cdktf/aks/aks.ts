@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
 import { AzureRegion } from "../../const";
+import {ITerraformDependable} from "cdktf/lib";
 
 export interface AksClusterProps {
   readonly aksLocation: AzureRegion | undefined;
@@ -90,11 +91,15 @@ export class AksCluster extends Construct {
     });
   }
 
+  public get getAksCluster(): ITerraformDependable {
+    return this.aks as ITerraformDependable;
+  }
+
   public get getAksEndpoint(): string | undefined {
     return this.aks?.hostOutput as string | undefined;
   }
 
-  public get getEksCertificateAutothority(): string {
+  public get getAksKubeAdminConfigRawOutput(): string {
     return this.aks?.kubeAdminConfigRawOutput as string;
   }
 }

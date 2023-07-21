@@ -64,6 +64,7 @@
   "dependencies": {
     "@cdktf/provider-aws": "^16.0.3",
     "@cdktf/provider-azurerm": "^9.0.3",
+    "@cdktf/provider-helm": "^7.0.0",
     "@cdktf/provider-kubernetes": "^8.0.0",
     "cdk8s": "^2.7.77",
     "cdk8s-cli": "^2.2.110",

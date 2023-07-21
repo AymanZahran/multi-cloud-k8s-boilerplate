@@ -430,6 +430,11 @@
     fs-extra "^8.1.0"
     jsii-srcmak "^0.1.867"
 
+"@cdktf/provider-helm@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@cdktf/provider-helm/-/provider-helm-7.0.0.tgz#f5fa5e408784611f0af9b9c82040ae117c7f388a"
+  integrity sha512-hTN23iHbflUcftt4CWz3YvbRj3exbD/XJpCN2ktAQJXJ+WJI1du9ahm1qgOYgXf2LBwg3GU7v+a/7bD7jp1ZRQ==
+
 "@cdktf/provider-kubernetes@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@cdktf/provider-kubernetes/-/provider-kubernetes-8.0.0.tgz#f8992702caaccb14b82e02c67fb89c97c991e2be"
