@@ -41,6 +41,12 @@ const project = new typescript.TypeScriptAppProject({
     "",
   ],
 
+  tsconfig: {
+    compilerOptions: {
+      rootDir: ".",
+    },
+  },
+
   githubOptions: {
     mergify: false,
     mergifyOptions: {},

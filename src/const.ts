@@ -8,10 +8,7 @@ export const Scripts: any = {
   cdk8s_add_helm_repos: "./scripts/add_helm_repos.sh",
   cdk8s_cli_install: "npm i -g cdk8s-cli --force",
   cdk8s_synth: "cdk8s synth",
-  cdk8s_get:
-    "rm -rf kubernetes/dev/* && cp dist/dev/* kubernetes/dev/ " +
-    "&& rm -rf kubernetes/staging/* && cp dist/staging/* kubernetes/staging/ " +
-    "&& rm -rf kubernetes/prod/* && cp dist/prod/* kubernetes/prod/",
+  cdk8s_get: "rm -rf kubernetes/* && cp -rf dist/* kubernetes/",
   cdk8s_diff: "cdk8s diff",
   cdk8s_import: "cdk8s import",
   cdk8s_upgrade: "npm i cdk8s@latest cdk8s-cli@latest",
@@ -37,6 +34,11 @@ export const CI_Versions: any = {
   cdk8s_cli: "2.2.110",
 };
 
+export enum ClusterType {
+  eks = "eks",
+  aks = "aks",
+}
+
 export enum Environment {
   dev = "dev",
   staging = "staging",
@@ -60,3 +62,6 @@ export interface StackConfig {
     azure?: AzureRegion;
   };
 }
+
+export const RepoURL = "https://github.com/AymanZahran/multi-cloud-boilerplate";
+export const KubernetesDir = "kubernetes";

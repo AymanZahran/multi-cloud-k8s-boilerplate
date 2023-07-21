@@ -1,6 +1,8 @@
+import * as fs from "fs";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
+import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
 import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
@@ -10,7 +12,14 @@ import { AksCluster } from "./cdktf/aks/aks";
 import { DefineAksVariables } from "./cdktf/aks/vars";
 import { EksCluster } from "./cdktf/eks/eks";
 import { DefineEksVariables } from "./cdktf/eks/vars";
-import { AwsRegion, AzureRegion, Environment, StackConfig } from "./const";
+import {
+  AwsRegion,
+  AzureRegion,
+  Environment,
+  StackConfig,
+  RepoURL,
+  KubernetesDir,
+} from "./const";
 
 config(); // Load the values from the .env file into process.env
 
@@ -114,18 +123,70 @@ class MyStack extends TerraformStack {
       clusterCaCertificate: Fn.base64decode(
         eksCluster.getEksCertificateAutothority,
       ),
-      alias: "eks-kubernetes",
+      alias: "eks",
     });
 
     // Create AKS Kubernetes Provider
     const aks_provider = new KubernetesProvider(this, "AKS_KUBERNETES", {
       host: aksCluster.getAksEndpoint,
       clusterCaCertificate: aksCluster.getEksCertificateAutothority,
-      alias: "aks-kubernetes",
+      alias: "aks",
     });
 
-    eks_provider.host = eksCluster.getEksEndpoint;
-    aks_provider.host = aksCluster.getAksEndpoint;
+    // Install ArgoCD and Create the applications
+    for (const provider of [eks_provider, aks_provider]) {
+      const argocd_install = new Manifest(
+        this,
+        "argo-cd-" + provider.alias + "-install",
+        {
+          provider: provider,
+          manifest: Fn.yamldecode(
+            Fn.rawString(
+              fs.readFileSync(
+                KubernetesDir +
+                  "/" +
+                  provider.alias +
+                  "/" +
+                  configuration.environment +
+                  "/argo-cd.yaml",
+                "utf8",
+              ),
+            ),
+          ),
+        },
+      );
+
+      new Manifest(this, "argo-cd-" + provider.alias + "-application", {
+        dependsOn: [argocd_install],
+        provider: provider,
+        manifest: {
+          apiVersion: "argoproj.io/v1alpha1",
+          kind: "Application",
+          metadata: {
+            name: "argocd-application",
+            namespace: "argocd",
+            finalizers: ["resources-finalizer.argocd.argoproj.io"],
+          },
+          spec: {
+            destination: {
+              namespace: "argocd",
+              server: "https://kubernetes.default.svc",
+            },
+            project: "default",
+            source: {
+              path:
+                KubernetesDir +
+                "/" +
+                provider.alias +
+                "/" +
+                configuration.environment,
+              repoURL: RepoURL,
+              targetRevision: "HEAD",
+            },
+          },
+        },
+      });
+    }
 
     // Terraform Outputs
     new TerraformOutput(this, "eks_provider_endpoint", {
