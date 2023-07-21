@@ -7,6 +7,7 @@ import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
 import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
+import {parse} from "querystring";
 import { AksCluster } from "./cdktf/aks/aks";
 
 import { DefineAksVariables } from "./cdktf/aks/vars";
@@ -140,8 +141,7 @@ class MyStack extends TerraformStack {
         "argo-cd-" + provider.alias + "-install",
         {
           provider: provider,
-          manifest: Fn.yamldecode(
-            Fn.rawString(
+          manifest: parse(
               fs.readFileSync(
                 KubernetesDir +
                   "/" +
@@ -151,7 +151,6 @@ class MyStack extends TerraformStack {
                   "/argo-cd.yaml",
                 "utf8",
               ),
-            ),
           ),
         },
       );
