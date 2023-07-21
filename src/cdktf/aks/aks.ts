@@ -55,9 +55,9 @@ export class AksCluster extends Construct {
 
     this.aks = new Aks(this, "aks", {
       dependsOn: [this.vnet],
-      vnetSubnetId: this.vnet.vnetSubnetsNameIdOutput,
-      apiServerSubnetId: this.vnet.vnetSubnetsNameIdOutput,
-      podSubnetId: this.vnet.vnetSubnetsNameIdOutput,
+      vnetSubnetId: this.vnet.vnetSubnetsOutput[0],
+      apiServerSubnetId: this.vnet.vnetSubnetsOutput[0],
+      podSubnetId: this.vnet.vnetSubnetsOutput[0],
       clusterName: props.aksClusterName,
       resourceGroupName: props.aksResourceGroupName,
       location: props.aksLocation,
