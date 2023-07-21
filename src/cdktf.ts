@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { parse } from "querystring";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
@@ -7,7 +8,6 @@ import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
 import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
-import {parse} from "querystring";
 import { AksCluster } from "./cdktf/aks/aks";
 
 import { DefineAksVariables } from "./cdktf/aks/vars";
@@ -142,15 +142,15 @@ class MyStack extends TerraformStack {
         {
           provider: provider,
           manifest: parse(
-              fs.readFileSync(
-                KubernetesDir +
-                  "/" +
-                  provider.alias +
-                  "/" +
-                  configuration.environment +
-                  "/argo-cd.yaml",
-                "utf8",
-              ),
+            fs.readFileSync(
+              KubernetesDir +
+                "/" +
+                provider.alias +
+                "/" +
+                configuration.environment +
+                "/argo-cd.yaml",
+              "utf8",
+            ),
           ),
         },
       );
