@@ -100,9 +100,9 @@ export const AksTerraformVariables: any = {
     prod: false,
   },
   aksRoleBasedAccessControlEnabled: {
-    dev: false,
-    staging: false,
-    prod: false,
+    dev: true,
+    staging: true,
+    prod: true,
   },
   aksAgentsPoolName: {
     dev: "dev-aks-pool",
