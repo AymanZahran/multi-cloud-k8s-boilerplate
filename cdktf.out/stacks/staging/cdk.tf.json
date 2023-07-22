@@ -7,10 +7,6 @@
       "version": "0.17.1"
     },
     "outputs": {
-      "staging": {
-        "aks_provider_endpoint": "aks_provider_endpoint",
-        "eks_provider_endpoint": "eks_provider_endpoint"
-      }
     }
   },
   "module": {
@@ -135,16 +131,6 @@
       "tags": "${var.eks_tags}",
       "version": "5.1.0",
       "vpc_tags": "${var.eks_tags}"
-    }
-  },
-  "output": {
-    "aks_provider_endpoint": {
-      "description": "The AKS provider endpoint",
-      "value": "${module.aks_BAB83E91.host}"
-    },
-    "eks_provider_endpoint": {
-      "description": "The EKS provider endpoint",
-      "value": "${module.eks_B1A34D59.cluster_endpoint}"
     }
   },
   "provider": {

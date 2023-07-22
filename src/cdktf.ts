@@ -3,9 +3,9 @@ import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
 import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release } from "@cdktf/provider-helm/lib/release";
-import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
+// import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import { App, Fn, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
+import { App, Fn, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
 import { AksCluster } from "./cdktf/aks/aks";
@@ -18,8 +18,8 @@ import {
   AzureRegion,
   Environment,
   StackConfig,
-  RepoURL,
-  KubernetesDir,
+  // RepoURL,
+  // KubernetesDir,
 } from "./const";
 
 config(); // Load the values from the .env file into process.env
@@ -205,69 +205,59 @@ class MyStack extends TerraformStack {
       version: "5.39.0",
     });
 
-    // Create EKS ArgoCD Application
-    new Manifest(this, "argo-cd-eks-application", {
-      dependsOn: [eks_argocd_install],
-      provider: eks_kubernetes_provider,
-      manifest: {
-        apiVersion: "argoproj.io/v1alpha1",
-        kind: "Application",
-        metadata: {
-          name: "argocd-application",
-          namespace: "argocd",
-          finalizers: ["resources-finalizer.argocd.argoproj.io"],
-        },
-        spec: {
-          destination: {
-            namespace: "argocd",
-            server: "https://kubernetes.default.svc",
-          },
-          project: "default",
-          source: {
-            path: KubernetesDir + "/eks/" + configuration.environment,
-            repoURL: RepoURL,
-            targetRevision: "HEAD",
-          },
-        },
-      },
-    });
-
-    // Create AKS ArgoCD Application
-    new Manifest(this, "argo-cd-aks-application", {
-      dependsOn: [aks_argocd_install],
-      provider: aks_kubernetes_provider,
-      manifest: {
-        apiVersion: "argoproj.io/v1alpha1",
-        kind: "Application",
-        metadata: {
-          name: "argocd-application",
-          namespace: "argocd",
-          finalizers: ["resources-finalizer.argocd.argoproj.io"],
-        },
-        spec: {
-          destination: {
-            namespace: "argocd",
-            server: "https://kubernetes.default.svc",
-          },
-          project: "default",
-          source: {
-            path: KubernetesDir + "/aks/" + configuration.environment,
-            repoURL: RepoURL,
-            targetRevision: "HEAD",
-          },
-        },
-      },
-    });
-
-    // Terraform Outputs
-    new TerraformOutput(this, "eks_provider_endpoint", {
-      value: eksCluster.getEksEndpoint,
-      description: "The EKS provider endpoint",
-    });
-    new TerraformOutput(this, "aks_provider_endpoint", {
-      value: aksCluster.getAksEndpoint,
-      description: "The AKS provider endpoint",
-    });
+    // // Create EKS ArgoCD Application
+    // new Manifest(this, "argo-cd-eks-application", {
+    //   dependsOn: [eks_argocd_install],
+    //   provider: eks_kubernetes_provider,
+    //   manifest: {
+    //     apiVersion: "argoproj.io/v1alpha1",
+    //     kind: "Application",
+    //     metadata: {
+    //       name: "argocd-application",
+    //       namespace: "argocd",
+    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
+    //     },
+    //     spec: {
+    //       destination: {
+    //         namespace: "argocd",
+    //         server: "https://kubernetes.default.svc",
+    //       },
+    //       project: "default",
+    //       source: {
+    //         path: KubernetesDir + "/eks/" + configuration.environment,
+    //         repoURL: RepoURL,
+    //         targetRevision: "HEAD",
+    //       },
+    //     },
+    //   },
+    // });
+    //
+    // // Create AKS ArgoCD Application
+    // new Manifest(this, "argo-cd-aks-application", {
+    //   dependsOn: [aks_argocd_install],
+    //   provider: aks_kubernetes_provider,
+    //   manifest: {
+    //     apiVersion: "argoproj.io/v1alpha1",
+    //     kind: "Application",
+    //     metadata: {
+    //       name: "argocd-application",
+    //       namespace: "argocd",
+    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
+    //     },
+    //     spec: {
+    //       destination: {
+    //         namespace: "argocd",
+    //         server: "https://kubernetes.default.svc",
+    //       },
+    //       project: "default",
+    //       source: {
+    //         path: KubernetesDir + "/aks/" + configuration.environment,
+    //         repoURL: RepoURL,
+    //         targetRevision: "HEAD",
+    //       },
+    //     },
+    //   },
+    // });
   }
 }
 
