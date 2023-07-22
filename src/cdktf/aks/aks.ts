@@ -6,6 +6,7 @@ import { AzureRegion } from "../../const";
 
 export interface AksClusterProps {
   readonly aksLocation: AzureRegion | undefined;
+  readonly aksPrefix: string;
   readonly aksVnetName: string;
   readonly aksResourceGroupName: string;
   readonly aksSubnetNames: string[];
@@ -57,12 +58,13 @@ export class AksCluster extends Construct {
 
     this.aks = new Aks(this, "aks", {
       dependsOn: [this.vnet],
-      vnetSubnetId: this.vnet.vnetSubnetsOutput[0],
-      apiServerSubnetId: this.vnet.vnetSubnetsOutput[0],
-      podSubnetId: this.vnet.vnetSubnetsOutput[0],
+      location: props.aksLocation,
+      prefix: props.aksPrefix,
+      vnetSubnetId: this.vnet.vnetSubnetsNameIdOutput[0],
+      apiServerSubnetId: this.vnet.vnetSubnetsNameIdOutput[0],
+      podSubnetId: this.vnet.vnetSubnetsNameIdOutput[0],
       clusterName: props.aksClusterName,
       resourceGroupName: props.aksResourceGroupName,
-      location: props.aksLocation,
       agentsSize: props.aksAgentsSize,
       agentsCount: props.aksAgentsCount,
       agentsMinCount: props.aksAgentsMinCount,

@@ -46,6 +46,7 @@
       "log_analytics_workspace_resource_group_name": "${var.aks_resource_group_name}",
       "network_plugin": "${var.aks_network_plugin}",
       "pod_subnet_id": "$",
+      "prefix": "${var.aks_prefix}",
       "rbac_aad_azure_rbac_enabled": "${var.aks_rbac_aad_azure_rbac_enabled}",
       "resource_group_name": "${var.aks_resource_group_name}",
       "role_based_access_control_enabled": "${var.aks_role_based_access_control_enabled}",
@@ -361,7 +362,7 @@
       "type": "number"
     },
     "aks_agents_pool_name": {
-      "default": "staging-aks-pool",
+      "default": "staging",
       "description": "The name of the AKS agents pool",
       "type": "string"
     },
@@ -423,6 +424,11 @@
     "aks_network_plugin": {
       "default": "azure",
       "description": "The network plugin to use for AKS",
+      "type": "string"
+    },
+    "aks_prefix": {
+      "default": "staging",
+      "description": "The prefix for the AKS resources",
       "type": "string"
     },
     "aks_rbac_aad_azure_rbac_enabled": {

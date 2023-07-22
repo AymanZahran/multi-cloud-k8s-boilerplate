@@ -15,6 +15,11 @@ export function DefineAksVariables(
       description: "The name of the AKS resource group",
     },
   );
+  const aksPrefix = new TerraformVariable(stack, "aks_prefix", {
+    type: "string",
+    default: AksTerraformVariables.aksPrefix[environment],
+    description: "The prefix for the AKS resources",
+  });
   const aksVnetName = new TerraformVariable(stack, "aks_vnet_name", {
     type: "string",
     default: AksTerraformVariables.aksVnetName[environment],
@@ -249,6 +254,7 @@ export function DefineAksVariables(
 
   return {
     aksResourceGroupName,
+    aksPrefix,
     aksVnetName,
     aksSubnetNames,
     aksAddressSpace,

@@ -80,6 +80,7 @@ class MyStack extends TerraformStack {
     const AksVariables = DefineAksVariables(this, configuration.environment);
     const aksCluster = new AksCluster(this, "aks", {
       aksLocation: configuration.region.azure,
+      aksPrefix: AksVariables.aksPrefix.value,
       aksVnetName: AksVariables.aksVnetName.value,
       aksResourceGroupName: AksVariables.aksResourceGroupName.value,
       aksSubnetNames: AksVariables.aksSubnetNames.value,

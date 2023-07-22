@@ -4,6 +4,11 @@ export const AksTerraformVariables: any = {
     staging: "staging-aks-rg",
     prod: "prod-aks-rg",
   },
+  aksPrefix: {
+    dev: "dev",
+    staging: "staging",
+    prod: "prod",
+  },
   aksVnetName: {
     dev: "dev-aks-vnet",
     staging: "staging-aks-vnet",
@@ -105,9 +110,9 @@ export const AksTerraformVariables: any = {
     prod: true,
   },
   aksAgentsPoolName: {
-    dev: "dev-aks-pool",
-    staging: "staging-aks-pool",
-    prod: "prod-aks-pool",
+    dev: "dev",
+    staging: "staging",
+    prod: "prod",
   },
   aksNetworkPlugin: {
     dev: "azure",
