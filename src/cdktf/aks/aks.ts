@@ -31,7 +31,7 @@ export interface AksClusterProps {
   readonly aksAgentsPoolName: string;
   readonly aksNetworkPlugin: string;
   readonly aksLogAnalyticsWorkspaceEnabled: boolean;
-  aksLogAnalyticsWorkspaceName: string;
+  readonly aksLogAnalyticsWorkspaceName: string;
   readonly aksIngressApplicationGatewayEnabled: boolean;
   readonly aksIngressApplicationGatewayName: string;
   readonly aksIngressApplicationGatewaySubnetCidr: string;

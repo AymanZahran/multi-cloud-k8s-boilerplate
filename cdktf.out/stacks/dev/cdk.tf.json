@@ -29,7 +29,7 @@
       "agents_size": "${var.aks_agents_size}",
       "agents_tags": "${var.aks_tags}",
       "agents_type": "${var.aks_agents_type}",
-      "api_server_subnet_id": "$",
+      "api_server_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
       "auto_scaler_profile_enabled": "${var.aks_auto_scaler_profile_enabled}",
       "cluster_log_analytics_workspace_name": "${var.aks_log_analytics_workspace_name}",
       "cluster_name": "${var.aks_cluster_name}",
@@ -45,7 +45,7 @@
       "log_analytics_workspace_enabled": "${var.aks_log_analytics_workspace_enabled}",
       "log_analytics_workspace_resource_group_name": "${var.aks_resource_group_name}",
       "network_plugin": "${var.aks_network_plugin}",
-      "pod_subnet_id": "$",
+      "pod_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}",
       "prefix": "${var.aks_prefix}",
       "rbac_aad_azure_rbac_enabled": "${var.aks_rbac_aad_azure_rbac_enabled}",
       "resource_group_name": "${var.aks_resource_group_name}",
@@ -58,7 +58,7 @@
       "storage_profile_snapshot_controller_enabled": "${var.aks_storage_profile_snapshot_controller_enabled}",
       "tags": "${var.aks_tags}",
       "version": "7.2.0",
-      "vnet_subnet_id": "$"
+      "vnet_subnet_id": "${module.aks_vnet_CD5E95BE.vnet_subnets}"
     },
     "aks_vnet_CD5E95BE": {
       "//": {
@@ -172,14 +172,16 @@
       {
         "alias": "eks_helm",
         "kubernetes": {
-          "cluster_ca_certificate": "${module.eks_B1A34D59.cluster_certificate_authority_data}",
+          "cluster_ca_certificate": "${base64decode(module.eks_B1A34D59.cluster_certificate_authority_data)}",
           "host": "${module.eks_B1A34D59.cluster_endpoint}"
         }
       },
       {
         "alias": "aks_helm",
         "kubernetes": {
-          "cluster_ca_certificate": "${module.aks_BAB83E91.kube_admin_config_raw}",
+          "client_certificate": "${base64decode(module.aks_BAB83E91.admin_client_certificate)}",
+          "client_key": "${base64decode(module.aks_BAB83E91.admin_client_key)}",
+          "cluster_ca_certificate": "${base64decode(module.aks_BAB83E91.admin_cluster_ca_certificate)}",
           "host": "${module.aks_BAB83E91.host}"
         }
       }
@@ -187,12 +189,14 @@
     "kubernetes": [
       {
         "alias": "eks_kubernetes",
-        "cluster_ca_certificate": "${module.eks_B1A34D59.cluster_certificate_authority_data}",
+        "cluster_ca_certificate": "${base64decode(module.eks_B1A34D59.cluster_certificate_authority_data)}",
         "host": "${module.eks_B1A34D59.cluster_endpoint}"
       },
       {
         "alias": "aks_kubernetes",
-        "cluster_ca_certificate": "${module.aks_BAB83E91.kube_admin_config_raw}",
+        "client_certificate": "${base64decode(module.aks_BAB83E91.admin_client_certificate)}",
+        "client_key": "${base64decode(module.aks_BAB83E91.admin_client_key)}",
+        "cluster_ca_certificate": "${base64decode(module.aks_BAB83E91.admin_cluster_ca_certificate)}",
         "host": "${module.aks_BAB83E91.host}"
       }
     ]

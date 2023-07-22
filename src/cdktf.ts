@@ -5,7 +5,7 @@ import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release } from "@cdktf/provider-helm/lib/release";
 import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import { App, RemoteBackend, TerraformOutput, TerraformStack } from "cdktf";
+import {App, Fn, RemoteBackend, TerraformOutput, TerraformStack} from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
 import { AksCluster } from "./cdktf/aks/aks";
@@ -130,7 +130,7 @@ class MyStack extends TerraformStack {
       "EKS_KUBERNETES",
       {
         host: eksCluster.getEksEndpoint,
-        clusterCaCertificate: eksCluster.getEksCertificateAutothority,
+        clusterCaCertificate: Fn.base64decode(eksCluster.getEksCertificateAutothority),
         alias: "eks_kubernetes",
       },
     );
@@ -141,9 +141,9 @@ class MyStack extends TerraformStack {
       "AKS_KUBERNETES",
       {
         host: aksCluster.getAksEndpoint,
-        clusterCaCertificate: aksCluster.getAksAdminClusterCaCertificateOutput,
-        clientCertificate: aksCluster.getAksAdminClientCertificateOutput,
-        clientKey: aksCluster.getAksAdminClientKeyOutput,
+        clusterCaCertificate: Fn.base64decode(aksCluster.getAksAdminClusterCaCertificateOutput),
+        clientCertificate: Fn.base64decode(aksCluster.getAksAdminClientCertificateOutput),
+        clientKey: Fn.base64decode(aksCluster.getAksAdminClientKeyOutput),
         alias: "aks_kubernetes",
       },
     );
@@ -152,7 +152,7 @@ class MyStack extends TerraformStack {
     const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
       kubernetes: {
         host: eksCluster.getEksEndpoint,
-        clusterCaCertificate: eksCluster.getEksCertificateAutothority,
+        clusterCaCertificate: Fn.base64decode(eksCluster.getEksCertificateAutothority),
       },
       alias: "eks_helm",
     });
@@ -161,9 +161,9 @@ class MyStack extends TerraformStack {
     const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
       kubernetes: {
         host: aksCluster.getAksEndpoint,
-        clusterCaCertificate: aksCluster.getAksAdminClusterCaCertificateOutput,
-        clientCertificate: aksCluster.getAksAdminClientCertificateOutput,
-        clientKey: aksCluster.getAksAdminClientKeyOutput,
+        clusterCaCertificate: Fn.base64decode(aksCluster.getAksAdminClusterCaCertificateOutput),
+        clientCertificate: Fn.base64decode(aksCluster.getAksAdminClientCertificateOutput),
+        clientKey: Fn.base64decode(aksCluster.getAksAdminClientKeyOutput),
       },
       alias: "aks_helm",
     });
