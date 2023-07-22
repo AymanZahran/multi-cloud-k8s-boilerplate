@@ -7,13 +7,18 @@ on:
       - master
 jobs:
   build:
+    name: cdktf-prod-build
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.prod_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.prod_AWS_SECRET_ACCESS_KEY }}
+      ARM_CLIENT_ID: ${{ secrets.prod_AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.prod_AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.prod_AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.prod_AZURE_SUBSCRIPTION_ID }}
       stack: prod
       context: build
     steps:
@@ -31,7 +36,9 @@ jobs:
         with:
           terraform_version: 1.5.3
       - name: Install dependencies
-        run: yarn install
+        run: npx projen install:ci
+      - name: Install Terraform Providers and Modules
+        run: npx projen cdktf-get
       - name: Set Terraform Token
         run: |-
           mkdir -p ~/.terraform.d
@@ -42,6 +49,10 @@ jobs:
               }
             }
           }' > ~/.terraform.d/credentials.tfrc.json
+      - name: AZ Login
+        run: |-
+          az login --service-principal -u ${{ secrets.prod_AZURE_CLIENT_ID }} -p ${{ secrets.prod_AZURE_CLIENT_SECRET }} --tenant ${{ secrets.prod_AZURE_TENANT_ID }}
+          az account set --subscription ${{ secrets.prod_AZURE_SUBSCRIPTION_ID }}
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
       - name: Comment on the PR

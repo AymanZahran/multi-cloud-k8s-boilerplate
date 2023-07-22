@@ -34,6 +34,7 @@ jspm_packages/
 .DS_Store
 .idea
 .vscode
+.env
 *.d.ts
 *.js,
 cdktf.log
@@ -65,9 +66,9 @@ junit.xml
 !/.eslintrc.json
 !/.github/workflows/upgrade-packages.yml
 !/.github/workflows/upgrade-charts.yml
-!/.github/workflows/k8s-validate-dev.yml
-!/.github/workflows/k8s-validate-staging.yml
-!/.github/workflows/k8s-validate-prod.yml
+!/.github/workflows/k8svalidate-dev-build.yml
+!/.github/workflows/k8svalidate-staging-build.yml
+!/.github/workflows/k8svalidate-prod-build.yml
 !/.github/workflows/cdktf-dev-build.yml
 !/.github/workflows/cdktf-staging-build.yml
 !/.github/workflows/cdktf-prod-build.yml

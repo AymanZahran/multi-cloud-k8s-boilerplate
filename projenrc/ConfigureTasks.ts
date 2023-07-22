@@ -29,11 +29,11 @@ export function ConfigureTasks(project: typescript.TypeScriptAppProject) {
 
   project.compileTask.reset();
   const compile_tasks = [
-    tasks["cdktf-get"],
-    tasks["cdktf-synth"],
     tasks["cdk8s-add-helm-repos"],
     tasks["cdk8s-synth"],
     tasks["cdk8s-get"],
+    tasks["cdktf-get"],
+    tasks["cdktf-synth"],
   ];
   for (const task of compile_tasks) project.compileTask.spawn(task);
 }

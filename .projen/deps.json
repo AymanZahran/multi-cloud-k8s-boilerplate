@@ -85,27 +85,27 @@
     },
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^16.0.3",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-azurerm",
-      "version": "^8.0.0",
+      "version": "^9.0.3",
       "type": "runtime"
     },
     {
-      "name": "@cdktf/provider-google",
-      "version": "^7.0.11",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-kubernetes",
+      "name": "@cdktf/provider-helm",
       "version": "^7.0.0",
       "type": "runtime"
     },
     {
+      "name": "@cdktf/provider-kubernetes",
+      "version": "^8.0.0",
+      "type": "runtime"
+    },
+    {
       "name": "cdk8s-cli",
-      "version": "^2.2.110",
+      "version": "^2.3.0",
       "type": "runtime"
     },
     {
@@ -125,7 +125,7 @@
     },
     {
       "name": "cdktf",
-      "version": "^0.17.0",
+      "version": "^0.17.1",
       "type": "runtime"
     },
     {

@@ -1,7 +1,7 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
-export class SecretStoreDriver extends Chart {
+export class AwsFsxCsiDriver extends Chart {
   constructor(
     scope: Construct,
     id: string,
@@ -11,10 +11,10 @@ export class SecretStoreDriver extends Chart {
   ) {
     super(scope, id, props);
 
-    new Helm(this, "secret-store", {
-      chart: "secrets-store-csi-driver/secrets-store-csi-driver",
-      releaseName: "secret-store",
-      namespace: "secret-store",
+    new Helm(this, "aws-fsx-csi-driver", {
+      chart: "eks/aws-fsx-csi-driver",
+      releaseName: "aws-fsx-csi-driver",
+      namespace: "aws-fsx-csi-driver",
       version: version,
       values: values,
     });

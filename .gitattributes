@@ -11,9 +11,9 @@
 /.github/workflows/cdktf-prod-deploy.yml linguist-generated
 /.github/workflows/cdktf-staging-build.yml linguist-generated
 /.github/workflows/cdktf-staging-deploy.yml linguist-generated
-/.github/workflows/k8s-validate-dev.yml linguist-generated
-/.github/workflows/k8s-validate-prod.yml linguist-generated
-/.github/workflows/k8s-validate-staging.yml linguist-generated
+/.github/workflows/k8svalidate-dev-build.yml linguist-generated
+/.github/workflows/k8svalidate-prod-build.yml linguist-generated
+/.github/workflows/k8svalidate-staging-build.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated
 /.github/workflows/upgrade-charts.yml linguist-generated

@@ -1,11 +1,17 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { CI_Versions } from "../../src/const";
+import { CI_Versions, Environment } from "../../src/const";
+
+const environments: any = [
+  Environment.dev,
+  Environment.staging,
+  Environment.prod,
+];
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
-    for (const env of ["dev", "staging", "prod"]) {
+    for (const env of environments) {
       const cdktf_workflow = new GithubWorkflow(
         project.github!,
         "cdktf-" + env + "-" + context,
@@ -24,14 +30,21 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         });
       }
       cdktf_workflow.addJob("build", {
+        name: "cdktf-" + env + "-" + context,
         runsOn: ["ubuntu-latest"],
         permissions: {
           contents: JobPermission.READ,
         },
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
-          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}",
-          AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}",
+          AWS_ACCESS_KEY_ID: "${{ secrets." + env + "_AWS_ACCESS_KEY_ID }}",
+          AWS_SECRET_ACCESS_KEY:
+            "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
+          ARM_CLIENT_ID: "${{ secrets." + env + "_AZURE_CLIENT_ID }}",
+          ARM_CLIENT_SECRET: "${{ secrets." + env + "_AZURE_CLIENT_SECRET }}",
+          ARM_TENANT_ID: "${{ secrets." + env + "_AZURE_TENANT_ID }}",
+          ARM_SUBSCRIPTION_ID:
+            "${{ secrets." + env + "_AZURE_SUBSCRIPTION_ID }}",
           stack: env,
           context: context,
         },
@@ -61,7 +74,11 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           },
           {
             name: "Install dependencies",
-            run: "yarn install",
+            run: "npx projen install:ci",
+          },
+          {
+            name: "Install Terraform Providers and Modules",
+            run: "npx projen cdktf-get",
           },
           {
             name: "Set Terraform Token",
@@ -74,6 +91,26 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
               "    }\n" +
               "  }\n" +
               "}' > ~/.terraform.d/credentials.tfrc.json",
+          },
+          {
+            name: "AZ Login",
+            run:
+              "az login --service-principal -u " +
+              "${{ secrets." +
+              env +
+              "_AZURE_CLIENT_ID }}" +
+              " -p " +
+              "${{ secrets." +
+              env +
+              "_AZURE_CLIENT_SECRET }}" +
+              " --tenant " +
+              "${{ secrets." +
+              env +
+              "_AZURE_TENANT_ID }}\n" +
+              "az account set --subscription " +
+              "${{ secrets." +
+              env +
+              "_AZURE_SUBSCRIPTION_ID }}",
           },
           {
             name: "Terraform Plan",
