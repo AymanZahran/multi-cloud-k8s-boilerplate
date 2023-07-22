@@ -30,6 +30,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         });
       }
       cdktf_workflow.addJob("build", {
+        name: "cdktf-" + env + "-" + context,
         runsOn: ["ubuntu-latest"],
         permissions: {
           contents: JobPermission.READ,

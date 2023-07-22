@@ -1,7 +1,7 @@
 import { typescript } from "projen";
 import { ConfigureTasks } from "./projenrc/ConfigureTasks";
 import { CdktfWorkflows } from "./projenrc/workflows/CdktfWorkflows";
-import { K8sValidate } from "./projenrc/workflows/K8sValidate";
+import { K8sValidateWorkflows } from "./projenrc/workflows/K8sValidate";
 import { UpgradeCharts } from "./projenrc/workflows/UpgradeCharts";
 import { Upgradepackages } from "./projenrc/workflows/UpgradePackages";
 import { PackageVersions, CI_Versions } from "./src/const";
@@ -110,7 +110,7 @@ ConfigureTasks(project);
 // Add workflows
 Upgradepackages(project);
 UpgradeCharts(project);
-K8sValidate(project);
+K8sValidateWorkflows(project);
 CdktfWorkflows(project);
 
 project.synth();
