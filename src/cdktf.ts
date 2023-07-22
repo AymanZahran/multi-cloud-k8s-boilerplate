@@ -133,6 +133,7 @@ class MyStack extends TerraformStack {
         clusterCaCertificate: Fn.base64decode(
           eksCluster.getEksCertificateAutothority,
         ),
+        token: eksCluster.getEksClusterToken,
         alias: "eks_kubernetes",
       },
     );

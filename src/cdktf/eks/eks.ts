@@ -1,4 +1,4 @@
-import { ITerraformDependable } from "cdktf";
+import {ITerraformDependable} from "cdktf";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
@@ -93,5 +93,8 @@ export class EksCluster extends Construct {
 
   public get getEksCertificateAutothority(): string {
     return this.eks?.clusterCertificateAuthorityDataOutput as string;
+  }
+  public get getEksClusterToken(): string {
+    return this.eks?.toMetadata().token as string;
   }
 }
