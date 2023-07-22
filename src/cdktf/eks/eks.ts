@@ -1,4 +1,4 @@
-import {ITerraformDependable} from "cdktf";
+import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
