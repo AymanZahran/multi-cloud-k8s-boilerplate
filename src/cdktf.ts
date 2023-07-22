@@ -141,7 +141,9 @@ class MyStack extends TerraformStack {
       "AKS_KUBERNETES",
       {
         host: aksCluster.getAksEndpoint,
-        clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
+        clusterCaCertificate: aksCluster.getAksAdminClusterCaCertificateOutput,
+        clientCertificate: aksCluster.getAksAdminClientCertificateOutput,
+        clientKey: aksCluster.getAksAdminClientKeyOutput,
         alias: "aks_kubernetes",
       },
     );
@@ -159,7 +161,9 @@ class MyStack extends TerraformStack {
     const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
       kubernetes: {
         host: aksCluster.getAksEndpoint,
-        clusterCaCertificate: aksCluster.getAksKubeAdminConfigRawOutput,
+        clusterCaCertificate: aksCluster.getAksAdminClusterCaCertificateOutput,
+        clientCertificate: aksCluster.getAksAdminClientCertificateOutput,
+        clientKey: aksCluster.getAksAdminClientKeyOutput,
       },
       alias: "aks_helm",
     });

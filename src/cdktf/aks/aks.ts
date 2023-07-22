@@ -105,7 +105,13 @@ export class AksCluster extends Construct {
     return this.aks?.hostOutput as string | undefined;
   }
 
-  public get getAksKubeAdminConfigRawOutput(): string {
-    return this.aks?.kubeAdminConfigRawOutput as string;
+  public get getAksAdminClusterCaCertificateOutput(): string {
+    return this.aks?.adminClusterCaCertificateOutput as string;
+  }
+  public get getAksAdminClientCertificateOutput(): string {
+    return this.aks?.adminClientCertificateOutput as string;
+  }
+  public get getAksAdminClientKeyOutput(): string {
+    return this.aks?.adminClientKeyOutput as string;
   }
 }
