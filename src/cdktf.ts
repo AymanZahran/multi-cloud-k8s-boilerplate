@@ -265,15 +265,10 @@ class MyStack extends TerraformStack {
 
 const app = new App();
 
-const environments: any = [
-  Environment.dev,
-  Environment.staging,
-  Environment.prod,
-];
 const aws_region: AwsRegion = AwsRegion.us_east_1;
 const azure_region: AzureRegion = AzureRegion.east_us;
 
-for (const env of environments) {
+for (const env of Object.values(Environment)) {
   const stack = new MyStack(app, `${env}`, {
     environment: env,
     region: {

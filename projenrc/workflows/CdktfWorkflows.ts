@@ -3,15 +3,9 @@ import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
 import { CI_Versions, Environment } from "../../src/const";
 
-const environments: any = [
-  Environment.dev,
-  Environment.staging,
-  Environment.prod,
-];
-
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
-    for (const env of environments) {
+    for (const env of Object.values(Environment)) {
       const cdktf_workflow = new GithubWorkflow(
         project.github!,
         "cdktf-" + env + "-" + context,
