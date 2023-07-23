@@ -4,7 +4,7 @@ export class CertManager extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps = {},
+    props: ChartProps,
     version: string,
     values: any,
   ) {
@@ -16,6 +16,7 @@ export class CertManager extends Chart {
       namespace: "cert-manager",
       version: version,
       values: values,
+      helmFlags: ["--create-namespace"],
     });
   }
 }

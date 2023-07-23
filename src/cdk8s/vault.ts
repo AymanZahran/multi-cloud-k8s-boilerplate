@@ -5,7 +5,7 @@ export class Vault extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps = {},
+    props: ChartProps,
     version: string,
     values: any,
   ) {
@@ -18,6 +18,7 @@ export class Vault extends Chart {
       namespace: "consul",
       version: version,
       values: values,
+      helmFlags: ["--create-namespace"],
     });
 
     // Vault
@@ -27,6 +28,7 @@ export class Vault extends Chart {
       namespace: "vault",
       version: version,
       values: values,
+      helmFlags: ["--create-namespace"],
     });
   }
 }

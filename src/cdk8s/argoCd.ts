@@ -5,7 +5,7 @@ export class ArgoCd extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps = {},
+    props: ChartProps,
     version: string,
     values: any,
   ) {
@@ -17,6 +17,7 @@ export class ArgoCd extends Chart {
       namespace: "argocd",
       version: version,
       values: values,
+      helmFlags: ["--create-namespace"],
     });
   }
 }
