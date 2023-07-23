@@ -15,9 +15,9 @@ export class ArgoCd extends Chart {
       chart: "argo/argo-cd",
       releaseName: "argocd",
       namespace: "argocd",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

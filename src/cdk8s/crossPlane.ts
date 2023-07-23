@@ -15,9 +15,9 @@ export class CrossPlane extends Chart {
       chart: "crossplane-stable/crossplane",
       releaseName: "crossplane",
       namespace: "crossplane-system",
+      helmFlags: ["--create-namespace", "--set", "installCRDs=true"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

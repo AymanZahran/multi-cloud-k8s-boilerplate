@@ -15,9 +15,9 @@ export class AwsCloudWatchAgent extends Chart {
       chart: "eks/aws-cloudwatch-metrics",
       releaseName: "amazon-cloudwatch",
       namespace: "amazon-cloudwatch",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

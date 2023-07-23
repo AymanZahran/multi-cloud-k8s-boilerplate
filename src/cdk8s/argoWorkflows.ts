@@ -15,9 +15,9 @@ export class ArgoWorkflows extends Chart {
       chart: "argo/argo-workflows",
       releaseName: "argocd-workflows",
       namespace: "argocd-workflows",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

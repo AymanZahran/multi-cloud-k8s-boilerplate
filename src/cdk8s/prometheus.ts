@@ -15,9 +15,9 @@ export class Prometheus extends Chart {
       chart: "prometheus-community/kube-prometheus-stack",
       releaseName: "prometheus",
       namespace: "observability",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

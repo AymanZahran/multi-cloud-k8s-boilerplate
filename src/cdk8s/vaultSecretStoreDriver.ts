@@ -15,9 +15,9 @@ export class VaultSecretStoreDriver extends Chart {
       chart: "secrets-store-csi-driver/secrets-store-csi-driver",
       releaseName: "secret-store",
       namespace: "secret-store",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

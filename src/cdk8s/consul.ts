@@ -15,9 +15,9 @@ export class Consul extends Chart {
       chart: "hashicorp/consul",
       releaseName: "consul",
       namespace: "consul",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

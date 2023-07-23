@@ -15,9 +15,9 @@ export class AwsLoadBalancerController extends Chart {
       chart: "eks/aws-load-balancer-controller",
       releaseName: "aws-load-balancer-controller",
       namespace: "aws-load-balancer-controller",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

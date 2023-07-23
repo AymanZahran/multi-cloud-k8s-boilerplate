@@ -15,9 +15,9 @@ export class AwsFsxCsiDriver extends Chart {
       chart: "eks/aws-fsx-csi-driver",
       releaseName: "aws-fsx-csi-driver",
       namespace: "aws-fsx-csi-driver",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

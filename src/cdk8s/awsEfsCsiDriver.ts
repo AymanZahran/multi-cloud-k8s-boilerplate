@@ -15,9 +15,9 @@ export class AwsEfsCsiDriver extends Chart {
       chart: "eks/aws-efs-csi-driver",
       releaseName: "aws-efs-csi-driver",
       namespace: "aws-efs-csi-driver",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

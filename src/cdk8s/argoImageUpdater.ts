@@ -15,9 +15,9 @@ export class ArgoImageUpdater extends Chart {
       chart: "argo/argocd-image-updater",
       releaseName: "argo-image-updater",
       namespace: "argo-image-updater",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

@@ -15,9 +15,9 @@ export class MetricsServer extends Chart {
       chart: "metrics-server/metrics-server",
       releaseName: "metrics-server",
       namespace: "observability",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

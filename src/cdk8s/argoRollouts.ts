@@ -15,9 +15,9 @@ export class ArgoRollouts extends Chart {
       chart: "argo/argo-rollouts",
       releaseName: "argocd-rollouts",
       namespace: "argocd-rollouts",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

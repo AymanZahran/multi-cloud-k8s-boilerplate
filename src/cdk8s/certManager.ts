@@ -14,9 +14,9 @@ export class CertManager extends Chart {
       chart: "jetstack/cert-manager",
       releaseName: "cert-manager",
       namespace: "cert-manager",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

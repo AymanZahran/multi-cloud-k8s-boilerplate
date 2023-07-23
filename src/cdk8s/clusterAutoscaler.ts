@@ -15,9 +15,9 @@ export class ClusterAutoscaler extends Chart {
       chart: "autoscaler/cluster-autoscaler",
       releaseName: "cluster-autoscaler",
       namespace: "cluster-autoscaler",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

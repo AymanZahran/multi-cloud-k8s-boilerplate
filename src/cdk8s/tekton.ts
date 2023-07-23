@@ -14,9 +14,9 @@ export class Tekton extends Chart {
       chart: "cdf/tekton-pipeline",
       releaseName: "tekton",
       namespace: "tekton-pipelines",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

@@ -16,9 +16,9 @@ export class Vault extends Chart {
       chart: "hashicorp/consul",
       releaseName: "consul",
       namespace: "consul",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
 
     // Vault
@@ -26,9 +26,9 @@ export class Vault extends Chart {
       chart: "hashicorp/vault",
       releaseName: "vault",
       namespace: "vault",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

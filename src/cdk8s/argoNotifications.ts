@@ -15,9 +15,9 @@ export class ArgoNotifications extends Chart {
       chart: "argo/argocd-notifications",
       releaseName: "argocd-notifications",
       namespace: "argocd",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }

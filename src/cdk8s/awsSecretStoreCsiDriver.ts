@@ -15,9 +15,9 @@ export class AwsSecretStoreCsiDriver extends Chart {
       chart: "eks/csi-secrets-store-provider-aws",
       releaseName: "aws-secret-store-csi-driver",
       namespace: "aws-secret-store-csi-driver",
+      helmFlags: ["--create-namespace"],
       version: version,
       values: values,
-      helmFlags: ["--create-namespace"],
     });
   }
 }
