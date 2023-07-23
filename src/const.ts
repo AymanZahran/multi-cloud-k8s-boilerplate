@@ -42,8 +42,8 @@ export enum Providers {
 
 export enum Environment {
   dev = "dev",
-  staging = "staging",
-  prod = "prod",
+  // staging = "staging",
+  // prod = "prod",
 }
 
 export enum AwsRegion {
