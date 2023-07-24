@@ -1,12 +1,7 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 
-import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
-import { Release } from "@cdktf/provider-helm/lib/release";
-// TODO Uncomment when we have argocd application
-// import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
-import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
-import { App, Fn, RemoteBackend, TerraformStack } from "cdktf";
+import { App, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
 import { AksCluster } from "./cdktf/aks/aks";
@@ -19,14 +14,13 @@ import {
   AzureRegion,
   Environment,
   StackConfig,
-  // TODO Uncomment when we have argocd application
-  // RepoURL,
-  // KubernetesDir,
+  TerraformRemoteBackendHostName,
+  TerraformRemoteBackendOrganization,
 } from "./const";
 
 config(); // Load the values from the .env file into process.env
 
-class MyStack extends TerraformStack {
+class MultiCloudBoilerPlate extends TerraformStack {
   constructor(scope: Construct, id: string, configuration: StackConfig) {
     super(scope, id);
 
@@ -48,7 +42,7 @@ class MyStack extends TerraformStack {
 
     // Create EKS Cluster
     const EksVariables = DefineEksVariables(this, configuration.environment);
-    const eksCluster = new EksCluster(this, "eks", {
+    new EksCluster(this, "eks", {
       eksRegion: configuration.region.aws,
       eksCreateVpc: EksVariables.eksCreateVpc.value,
       eksCreateIgw: EksVariables.eksCreateIgw.value,
@@ -76,11 +70,23 @@ class MyStack extends TerraformStack {
       eksManagedNodeGroupDesiredSize:
         EksVariables.eksManagedNodeGroupDesiredSize.value,
       eksTags: EksVariables.eksTags.value,
+      eksInstallArgoCd: EksVariables.eksInstallArgoCd.value,
+      eksArgoCdNamespace: EksVariables.eksArgoCdNamespace.value,
+      eksArgoCdCreateNamespace: EksVariables.eksArgoCdCreateNamespace.value,
+      eksArgoCdReleaseName: EksVariables.eksArgoCdReleaseName.value,
+      eksArgoCdChartVersion: EksVariables.eksArgoCdChartVersion.value,
+      eksArgoCdTargetRepoUrl: EksVariables.eksArgoCdTargetRepoUrl.value,
+      eksArgoCdProjectName: EksVariables.eksArgoCdProjectName.value,
+      eksArgoCdApplicationName: EksVariables.eksArgoCdApplicationName.value,
+      eksArgoCdApplicationNamespace:
+        EksVariables.eksArgoCdApplicationNamespace.value,
+      eksArgoCdApplicationSourcePath:
+        EksVariables.eksArgoCdApplicationSourcePath.value,
     });
 
     // Create AKS Cluster
     const AksVariables = DefineAksVariables(this, configuration.environment);
-    const aksCluster = new AksCluster(this, "aks", {
+    new AksCluster(this, "aks", {
       aksLocation: configuration.region.azure,
       aksPrefix: AksVariables.aksPrefix.value,
       aksVnetName: AksVariables.aksVnetName.value,
@@ -124,142 +130,19 @@ class MyStack extends TerraformStack {
       aksIngressApplicationGatewaySubnetCidr:
         AksVariables.aksIngressApplicationGatewaySubnetCidr.value,
       aksTags: AksVariables.aksTags.value,
+      aksInstallArgoCd: AksVariables.aksInstallArgoCd.value,
+      aksArgoCdNamespace: AksVariables.aksArgoCdNamespace.value,
+      aksArgoCdCreateNamespace: AksVariables.aksArgoCdCreateNamespace.value,
+      aksArgoCdReleaseName: AksVariables.aksArgoCdReleaseName.value,
+      aksArgoCdChartVersion: AksVariables.aksArgoCdChartVersion.value,
+      aksArgoCdTargetRepoUrl: AksVariables.aksArgoCdTargetRepoUrl.value,
+      aksArgoCdProjectName: AksVariables.aksArgoCdProjectName.value,
+      aksArgoCdApplicationName: AksVariables.aksArgoCdApplicationName.value,
+      aksArgoCdApplicationNamespace:
+        AksVariables.aksArgoCdApplicationNamespace.value,
+      aksArgoCdApplicationSourcePath:
+        AksVariables.aksArgoCdApplicationSourcePath.value,
     });
-
-    // Create EKS Kubernetes Provider
-    // TODO Add const for eks_kubernetes_provider
-    // const eks_kubernetes_provider = new KubernetesProvider(
-    new KubernetesProvider(this, "EKS_KUBERNETES", {
-      host: eksCluster.getEksEndpoint,
-      clusterCaCertificate: Fn.base64decode(
-        eksCluster.getEksCertificateAutothority,
-      ),
-      token: eksCluster.getEksClusterToken,
-      alias: "eks_kubernetes",
-    });
-
-    // Create AKS Kubernetes Provider
-    // TODO Add const for aks_kubernetes_provider
-    // const aks_kubernetes_provider = new KubernetesProvider(
-    new KubernetesProvider(this, "AKS_KUBERNETES", {
-      host: aksCluster.getAksEndpoint,
-      clusterCaCertificate: Fn.base64decode(
-        aksCluster.getAksAdminClusterCaCertificateOutput,
-      ),
-      clientCertificate: Fn.base64decode(
-        aksCluster.getAksAdminClientCertificateOutput,
-      ),
-      clientKey: Fn.base64decode(aksCluster.getAksAdminClientKeyOutput),
-      alias: "aks_kubernetes",
-    });
-
-    // Create EKS Helm Provider
-    const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
-      kubernetes: {
-        host: eksCluster.getEksEndpoint,
-        clusterCaCertificate: Fn.base64decode(
-          eksCluster.getEksCertificateAutothority,
-        ),
-      },
-      alias: "eks_helm",
-    });
-
-    // Create AKS Helm Provider
-    const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
-      kubernetes: {
-        host: aksCluster.getAksEndpoint,
-        clusterCaCertificate: Fn.base64decode(
-          aksCluster.getAksAdminClusterCaCertificateOutput,
-        ),
-        clientCertificate: Fn.base64decode(
-          aksCluster.getAksAdminClientCertificateOutput,
-        ),
-        clientKey: Fn.base64decode(aksCluster.getAksAdminClientKeyOutput),
-      },
-      alias: "aks_helm",
-    });
-
-    // Install ArgoCD on EKS Cluster
-    // TODO Uncomment when we have argocd application
-    // const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
-    new Release(this, "argo-cd-eks-install", {
-      dependsOn: [eksCluster.getEksCluster],
-      provider: eks_helm_provider,
-      chart: "argo/argo-cd",
-      repository: "https://argoproj.github.io/argo-helm",
-      name: "argocd",
-      namespace: "argocd",
-      createNamespace: true,
-      version: "5.39.0",
-    });
-
-    // Install ArgoCD on AKS Cluster
-    // TODO Uncomment when we have argocd application
-    // const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
-    new Release(this, "argo-cd-aks-install", {
-      dependsOn: [aksCluster.getAksCluster],
-      provider: aks_helm_provider,
-      chart: "argo/argo-cd",
-      repository: "https://argoproj.github.io/argo-helm",
-      name: "argocd",
-      namespace: "argocd",
-      createNamespace: true,
-      version: "5.39.0",
-    });
-
-    // Create EKS ArgoCD Application
-    // new Manifest(this, "argo-cd-eks-application", {
-    //   dependsOn: [eks_argocd_install],
-    //   provider: eks_kubernetes_provider,
-    //   manifest: {
-    //     apiVersion: "argoproj.io/v1alpha1",
-    //     kind: "Application",
-    //     metadata: {
-    //       name: "argocd-application",
-    //       namespace: "argocd",
-    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
-    //     },
-    //     spec: {
-    //       destination: {
-    //         namespace: "argocd",
-    //         server: "https://kubernetes.default.svc",
-    //       },
-    //       project: "default",
-    //       source: {
-    //         path: KubernetesDir + "/eks/" + configuration.environment,
-    //         repoURL: RepoURL,
-    //         targetRevision: "HEAD",
-    //       },
-    //     },
-    //   },
-    // });
-    //
-    // // Create AKS ArgoCD Application
-    // new Manifest(this, "argo-cd-aks-application", {
-    //   dependsOn: [aks_argocd_install],
-    //   provider: aks_kubernetes_provider,
-    //   manifest: {
-    //     apiVersion: "argoproj.io/v1alpha1",
-    //     kind: "Application",
-    //     metadata: {
-    //       name: "argocd-application",
-    //       namespace: "argocd",
-    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
-    //     },
-    //     spec: {
-    //       destination: {
-    //         namespace: "argocd",
-    //         server: "https://kubernetes.default.svc",
-    //       },
-    //       project: "default",
-    //       source: {
-    //         path: KubernetesDir + "/aks/" + configuration.environment,
-    //         repoURL: RepoURL,
-    //         targetRevision: "HEAD",
-    //       },
-    //     },
-    //   },
-    // });
   }
 }
 
@@ -269,7 +152,7 @@ const aws_region: AwsRegion = AwsRegion.us_east_1;
 const azure_region: AzureRegion = AzureRegion.east_us;
 
 for (const env of Object.values(Environment)) {
-  const stack = new MyStack(app, `${env}`, {
+  const stack = new MultiCloudBoilerPlate(app, `${env}`, {
     environment: env,
     region: {
       aws: aws_region,
@@ -277,8 +160,8 @@ for (const env of Object.values(Environment)) {
     },
   });
   new RemoteBackend(stack, {
-    hostname: "app.terraform.io",
-    organization: "multi-cloud-pipelines",
+    hostname: TerraformRemoteBackendHostName,
+    organization: TerraformRemoteBackendOrganization,
     workspaces: {
       name: env,
     },

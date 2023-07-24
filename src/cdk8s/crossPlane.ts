@@ -15,7 +15,11 @@ export class CrossPlane extends Chart {
       chart: "crossplane-stable/crossplane",
       releaseName: "crossplane",
       namespace: "crossplane-system",
-      helmFlags: ["--create-namespace", "--set", "installCRDs=true"],
+      helmFlags: [
+        "--create-namespace",
+        "--set",
+        "provider.packages={xpkg.upbound.io/crossplane-contrib/provider-aws:v0.39.0}",
+      ],
       version: version,
       values: values,
     });

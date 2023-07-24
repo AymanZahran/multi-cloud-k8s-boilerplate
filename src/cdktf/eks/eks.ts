@@ -1,4 +1,8 @@
-import { ITerraformDependable } from "cdktf";
+import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
+import { Release } from "@cdktf/provider-helm/lib/release";
+import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
+import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
@@ -28,6 +32,16 @@ export interface EksClusterProps {
   readonly eksManagedNodeGroupMaxSize: number;
   readonly eksManagedNodeGroupDesiredSize: number;
   readonly eksTags: { [key: string]: string };
+  readonly eksInstallArgoCd: boolean;
+  readonly eksArgoCdNamespace: string;
+  readonly eksArgoCdCreateNamespace: boolean;
+  readonly eksArgoCdReleaseName: string;
+  readonly eksArgoCdChartVersion: string;
+  readonly eksArgoCdTargetRepoUrl: string;
+  readonly eksArgoCdProjectName: string;
+  readonly eksArgoCdApplicationName: string;
+  readonly eksArgoCdApplicationNamespace: string;
+  readonly eksArgoCdApplicationSourcePath: string;
 }
 
 export class EksCluster extends Construct {
@@ -81,20 +95,68 @@ export class EksCluster extends Construct {
       clusterTags: props.eksTags,
       tags: props.eksTags,
     });
-  }
 
-  public get getEksCluster(): ITerraformDependable {
-    return this.eks as ITerraformDependable;
-  }
+    if (props.eksInstallArgoCd) {
+      const eks_kubernetes_provider = new KubernetesProvider(
+        this,
+        "EKS_KUBERNETES",
+        {
+          host: this.eks.clusterEndpointOutput,
+          clusterCaCertificate: Fn.base64decode(
+            this.eks.clusterCertificateAuthorityDataOutput,
+          ),
+          token: this.eks.toMetadata().token,
+          alias: "eks_kubernetes",
+        },
+      );
 
-  public get getEksEndpoint(): string | undefined {
-    return this.eks?.clusterEndpointOutput as string | undefined;
-  }
+      // Create EKS Helm Provider
+      const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
+        kubernetes: {
+          host: this.eks.clusterEndpointOutput,
+          clusterCaCertificate: Fn.base64decode(
+            this.eks.clusterCertificateAuthorityDataOutput,
+          ),
+        },
+        alias: "eks_helm",
+      });
 
-  public get getEksCertificateAutothority(): string {
-    return this.eks?.clusterCertificateAuthorityDataOutput as string;
-  }
-  public get getEksClusterToken(): string {
-    return this.eks?.toMetadata().token as string;
+      const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
+        dependsOn: [this.eks],
+        provider: eks_helm_provider,
+        chart: "argo/argo-cd",
+        repository: "https://argoproj.github.io/argo-helm",
+        name: props.eksArgoCdReleaseName,
+        namespace: props.eksArgoCdNamespace,
+        createNamespace: props.eksArgoCdCreateNamespace,
+        version: props.eksArgoCdChartVersion,
+      });
+
+      new Manifest(this, "argo-cd-eks-application", {
+        dependsOn: [eks_argocd_install],
+        provider: eks_kubernetes_provider,
+        manifest: {
+          apiVersion: "argoproj.io/v1alpha1",
+          kind: "Application",
+          metadata: {
+            name: props.eksArgoCdApplicationName,
+            namespace: props.eksArgoCdApplicationNamespace,
+            finalizers: ["resources-finalizer.argocd.argoproj.io"],
+          },
+          spec: {
+            destination: {
+              namespace: props.eksArgoCdNamespace,
+              server: "https://kubernetes.default.svc",
+            },
+            project: props.eksArgoCdProjectName,
+            source: {
+              path: props.eksArgoCdApplicationSourcePath,
+              repoURL: props.eksArgoCdTargetRepoUrl,
+              targetRevision: "HEAD",
+            },
+          },
+        },
+      });
+    }
   }
 }

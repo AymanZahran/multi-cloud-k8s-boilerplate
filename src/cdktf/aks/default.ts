@@ -1,3 +1,5 @@
+import { KubernetesDir, RepoURL } from "../../const";
+
 export const AksTerraformVariables: any = {
   aksResource_group_name: {
     dev: "dev-aks-rg",
@@ -163,5 +165,55 @@ export const AksTerraformVariables: any = {
       provider: "azure",
       cluster: "dev-aks-cluster",
     },
+  },
+  aksInstallArgoCd: {
+    dev: true,
+    staging: true,
+    prod: true,
+  },
+  aksArgoCdNamespace: {
+    dev: "argocd",
+    staging: "argocd",
+    prod: "argocd",
+  },
+  aksArgoCdCreateNamespace: {
+    dev: true,
+    staging: true,
+    prod: true,
+  },
+  aksArgoCdReleaseName: {
+    dev: "argocd",
+    staging: "argocd",
+    prod: "argocd",
+  },
+  aksArgoCdChartVersion: {
+    dev: "5.39.0",
+    staging: "5.39.0",
+    prod: "5.39.0",
+  },
+  aksArgoCdTargetRepoUrl: {
+    dev: RepoURL,
+    staging: RepoURL,
+    prod: RepoURL,
+  },
+  aksArgoCdProjectName: {
+    dev: "default",
+    staging: "default",
+    prod: "default",
+  },
+  aksArgoCdApplicationName: {
+    dev: "dev-aks-argocd",
+    staging: "staging-aks-argocd",
+    prod: "prod-aks-argocd",
+  },
+  aksArgoCdApplicationNamespace: {
+    dev: "dev-aks-argocd",
+    staging: "staging-aks-argocd",
+    prod: "prod-aks-argocd",
+  },
+  aksArgoCdApplicationSourcePath: {
+    dev: KubernetesDir + "/aks/" + "dev",
+    staging: KubernetesDir + "/aks/" + "staging",
+    prod: KubernetesDir + "/aks/" + "prod",
   },
 };

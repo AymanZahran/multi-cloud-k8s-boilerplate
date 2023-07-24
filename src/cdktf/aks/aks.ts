@@ -1,4 +1,8 @@
-import { ITerraformDependable } from "cdktf/lib";
+import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
+import { Release } from "@cdktf/provider-helm/lib/release";
+import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
+import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
@@ -36,6 +40,16 @@ export interface AksClusterProps {
   readonly aksIngressApplicationGatewayName: string;
   readonly aksIngressApplicationGatewaySubnetCidr: string;
   readonly aksTags?: { [key: string]: string };
+  readonly aksInstallArgoCd: boolean;
+  readonly aksArgoCdNamespace: string;
+  readonly aksArgoCdCreateNamespace: boolean;
+  readonly aksArgoCdReleaseName: string;
+  readonly aksArgoCdChartVersion: string;
+  readonly aksArgoCdTargetRepoUrl: string;
+  readonly aksArgoCdProjectName: string;
+  readonly aksArgoCdApplicationName: string;
+  readonly aksArgoCdApplicationNamespace: string;
+  readonly aksArgoCdApplicationSourcePath: string;
 }
 
 export class AksCluster extends Construct {
@@ -95,23 +109,74 @@ export class AksCluster extends Construct {
       agentsTags: props.aksTags,
       tags: props.aksTags,
     });
-  }
 
-  public get getAksCluster(): ITerraformDependable {
-    return this.aks as ITerraformDependable;
-  }
+    // Create AKS Kubernetes Provider
+    const aks_kubernetes_provider = new KubernetesProvider(
+      this,
+      "AKS_KUBERNETES",
+      {
+        host: this.aks.hostOutput,
+        clusterCaCertificate: Fn.base64decode(
+          this.aks.adminClusterCaCertificateOutput,
+        ),
+        clientCertificate: Fn.base64decode(
+          this.aks.adminClientCertificateOutput,
+        ),
+        clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
+        alias: "aks_kubernetes",
+      },
+    );
 
-  public get getAksEndpoint(): string | undefined {
-    return this.aks?.hostOutput as string | undefined;
-  }
+    // Create AKS Helm Provider
+    const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
+      kubernetes: {
+        host: this.aks.hostOutput,
+        clusterCaCertificate: Fn.base64decode(
+          this.aks.adminClusterCaCertificateOutput,
+        ),
+        clientCertificate: Fn.base64decode(
+          this.aks.adminClientCertificateOutput,
+        ),
+        clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
+      },
+      alias: "aks_helm",
+    });
 
-  public get getAksAdminClusterCaCertificateOutput(): string {
-    return this.aks?.adminClusterCaCertificateOutput as string;
-  }
-  public get getAksAdminClientCertificateOutput(): string {
-    return this.aks?.adminClientCertificateOutput as string;
-  }
-  public get getAksAdminClientKeyOutput(): string {
-    return this.aks?.adminClientKeyOutput as string;
+    const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
+      dependsOn: [this.aks],
+      provider: aks_helm_provider,
+      chart: "argo/argo-cd",
+      repository: "https://argoproj.github.io/argo-helm",
+      name: props.aksArgoCdReleaseName,
+      namespace: props.aksArgoCdNamespace,
+      createNamespace: props.aksArgoCdCreateNamespace,
+      version: props.aksArgoCdChartVersion,
+    });
+
+    new Manifest(this, "argo-cd-aks-application", {
+      dependsOn: [aks_argocd_install],
+      provider: aks_kubernetes_provider,
+      manifest: {
+        apiVersion: "argoproj.io/v1alpha1",
+        kind: "Application",
+        metadata: {
+          name: props.aksArgoCdApplicationName,
+          namespace: props.aksArgoCdApplicationNamespace,
+          finalizers: ["resources-finalizer.argocd.argoproj.io"],
+        },
+        spec: {
+          destination: {
+            namespace: props.aksArgoCdNamespace,
+            server: "https://kubernetes.default.svc",
+          },
+          project: props.aksArgoCdProjectName,
+          source: {
+            path: props.aksArgoCdApplicationSourcePath,
+            repoURL: props.aksArgoCdTargetRepoUrl,
+            targetRevision: "HEAD",
+          },
+        },
+      },
+    });
   }
 }

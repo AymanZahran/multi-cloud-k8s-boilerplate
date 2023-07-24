@@ -842,6 +842,8 @@ spec:
         - args:
             - core
             - init
+            - --provider
+            - xpkg.upbound.io/crossplane-contrib/provider-aws:v0.39.0
           env:
             - name: GOMAXPROCS
               valueFrom:
