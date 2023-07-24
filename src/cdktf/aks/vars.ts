@@ -333,7 +333,8 @@ export function DefineAksVariables(
     "aks_argo_cd_application_chart",
     {
       type: "string",
-      default: AksTerraformVariables.aksArgoCdApplicationSourcePath[environment],
+      default:
+        AksTerraformVariables.aksArgoCdApplicationSourcePath[environment],
       description: "The application chart for Argo CD",
     },
   );

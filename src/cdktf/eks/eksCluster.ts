@@ -51,6 +51,7 @@ export class EksCluster extends Construct {
   constructor(scope: Construct, name: string, props: EksClusterProps) {
     super(scope, name);
 
+    // Create VPC
     this.vpc = new Vpc(this, "vpc", {
       name: props.eksVpcName,
       createVpc: props.eksCreateVpc,
@@ -69,6 +70,7 @@ export class EksCluster extends Construct {
       privateSubnetTags: props.eksTags,
     });
 
+    // Create EKS Cluster
     this.eks = new Eks(this, "eks", {
       dependsOn: [this.vpc],
       clusterName: props.eksClusterName,
@@ -96,6 +98,7 @@ export class EksCluster extends Construct {
       tags: props.eksTags,
     });
 
+    // Install ArgoCD on EKS Cluster
     if (props.eksInstallArgoCd) {
       const eks_kubernetes_provider = new KubernetesProvider(
         this,
@@ -121,6 +124,7 @@ export class EksCluster extends Construct {
         alias: "eks_helm",
       });
 
+      // Install ArgoCD on EKS Cluster
       const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
         dependsOn: [this.eks],
         provider: eks_helm_provider,
@@ -132,6 +136,7 @@ export class EksCluster extends Construct {
         version: props.eksArgoCdChartVersion,
       });
 
+      // Create ArgoCD Application
       new Manifest(this, "argo-cd-eks-application", {
         dependsOn: [eks_argocd_install],
         provider: eks_kubernetes_provider,

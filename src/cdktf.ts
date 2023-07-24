@@ -4,10 +4,9 @@ import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { App, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
-import { AksCluster } from "./cdktf/aks/aks";
-
+import { AksCluster } from "./cdktf/aks/aksCluster";
 import { DefineAksVariables } from "./cdktf/aks/vars";
-import { EksCluster } from "./cdktf/eks/eks";
+import { EksCluster } from "./cdktf/eks/eksCluster";
 import { DefineEksVariables } from "./cdktf/eks/vars";
 import {
   AwsRegion,

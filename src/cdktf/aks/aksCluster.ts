@@ -59,6 +59,7 @@ export class AksCluster extends Construct {
   constructor(scope: Construct, name: string, props: AksClusterProps) {
     super(scope, name);
 
+    // Create Vnet
     this.vnet = new Vnet(this, "vnet", {
       vnetName: props.aksVnetName,
       resourceGroupName: props.aksResourceGroupName,
@@ -70,6 +71,7 @@ export class AksCluster extends Construct {
       tags: props.aksTags,
     });
 
+    // Create AKS cluster
     this.aks = new Aks(this, "aks", {
       dependsOn: [this.vnet],
       location: props.aksLocation,
@@ -142,6 +144,7 @@ export class AksCluster extends Construct {
       alias: "aks_helm",
     });
 
+    // Install ArgoCD on AKS Cluster
     const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
       dependsOn: [this.aks],
       provider: aks_helm_provider,
@@ -153,6 +156,7 @@ export class AksCluster extends Construct {
       version: props.aksArgoCdChartVersion,
     });
 
+    // Create ArgoCD Application
     new Manifest(this, "argo-cd-aks-application", {
       dependsOn: [aks_argocd_install],
       provider: aks_kubernetes_provider,
