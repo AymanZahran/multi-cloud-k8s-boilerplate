@@ -1,4 +1,4 @@
-import { KubernetesDir, RepoURL } from "../../const";
+import { KubernetesManagementDir, RepoURL } from "../../const";
 
 export const AksTerraformVariables: any = {
   aksResource_group_name: {
@@ -212,8 +212,8 @@ export const AksTerraformVariables: any = {
     prod: "prod-aks-argocd",
   },
   aksArgoCdApplicationSourcePath: {
-    dev: KubernetesDir + "/aks/" + "dev",
-    staging: KubernetesDir + "/aks/" + "staging",
-    prod: KubernetesDir + "/aks/" + "prod",
+    dev: KubernetesManagementDir + "aks/" + "dev",
+    staging: KubernetesManagementDir + "aks/" + "staging",
+    prod: KubernetesManagementDir + "aks/" + "prod",
   },
 };

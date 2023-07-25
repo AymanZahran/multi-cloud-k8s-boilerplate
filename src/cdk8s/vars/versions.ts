@@ -54,17 +54,17 @@ export const HelmChartVersions: any = {
     staging: "3.10.0",
     prod: "3.10.0",
   },
-  kube_prometheus_stack: {
+  prometheus: {
     dev: "48.1.1",
     staging: "48.1.1",
     prod: "48.1.1",
   },
-  vault_secrets_store_csi_driver: {
+  vault_secret_store_driver: {
     dev: "1.3.4",
     staging: "1.3.4",
     prod: "1.3.4",
   },
-  tekton_pipeline: {
+  tekton: {
     dev: "0.6.4",
     staging: "0.6.4",
     prod: "0.6.4",

@@ -3,7 +3,7 @@
     "metadata": {
       "backend": "remote",
       "cloud": "tfc",
-      "stackName": "dev",
+      "stackName": "staging",
       "version": "0.17.1"
     },
     "outputs": {
@@ -13,7 +13,7 @@
     "aks_BAB83E91": {
       "//": {
         "metadata": {
-          "path": "dev/aks/aks",
+          "path": "staging/aks/aks",
           "uniqueId": "aks_BAB83E91"
         }
       },
@@ -56,7 +56,7 @@
     "aks_vnet_CD5E95BE": {
       "//": {
         "metadata": {
-          "path": "dev/aks/vnet",
+          "path": "staging/aks/vnet",
           "uniqueId": "aks_vnet_CD5E95BE"
         }
       },
@@ -74,7 +74,7 @@
     "eks_B1A34D59": {
       "//": {
         "metadata": {
-          "path": "dev/eks/eks",
+          "path": "staging/eks/eks",
           "uniqueId": "eks_B1A34D59"
         }
       },
@@ -110,7 +110,7 @@
     "eks_vpc_924ECCC8": {
       "//": {
         "metadata": {
-          "path": "dev/eks/vpc",
+          "path": "staging/eks/vpc",
           "uniqueId": "eks_vpc_924ECCC8"
         }
       },
@@ -189,7 +189,7 @@
       "aks_argo-cd-aks-install_93782B8D": {
         "//": {
           "metadata": {
-            "path": "dev/aks/argo-cd-aks-install",
+            "path": "staging/aks/argo-cd-aks-install",
             "uniqueId": "aks_argo-cd-aks-install_93782B8D"
           }
         },
@@ -207,7 +207,7 @@
       "eks_argo-cd-eks-install_895ADF16": {
         "//": {
           "metadata": {
-            "path": "dev/eks/argo-cd-eks-install",
+            "path": "staging/eks/argo-cd-eks-install",
             "uniqueId": "eks_argo-cd-eks-install_895ADF16"
           }
         },
@@ -227,7 +227,7 @@
       "aks_argo-cd-aks-application_E9389D27": {
         "//": {
           "metadata": {
-            "path": "dev/aks/argo-cd-aks-application",
+            "path": "staging/aks/argo-cd-aks-application",
             "uniqueId": "aks_argo-cd-aks-application_E9389D27"
           }
         },
@@ -262,7 +262,7 @@
       "eks_argo-cd-eks-application_667DC04C": {
         "//": {
           "metadata": {
-            "path": "dev/eks/argo-cd-eks-application",
+            "path": "staging/eks/argo-cd-eks-application",
             "uniqueId": "eks_argo-cd-eks-application_667DC04C"
           }
         },
@@ -302,7 +302,7 @@
         "hostname": "app.terraform.io",
         "organization": "multi-cloud-pipelines",
         "workspaces": {
-          "name": "dev"
+          "name": "staging"
         }
       }
     },
@@ -349,7 +349,7 @@
       "type": "number"
     },
     "aks_agents_pool_name": {
-      "default": "dev",
+      "default": "staging",
       "description": "The name of the AKS agents pool",
       "type": "string"
     },
@@ -364,17 +364,17 @@
       "type": "string"
     },
     "aks_argo_cd_application_chart": {
-      "default": "kubernetes/management/aks/dev",
+      "default": "kubernetes/management/aks/staging",
       "description": "The application chart for Argo CD",
       "type": "string"
     },
     "aks_argo_cd_application_name": {
-      "default": "dev-aks-argocd",
+      "default": "staging-aks-argocd",
       "description": "The application name for Argo CD",
       "type": "string"
     },
     "aks_argo_cd_application_namespace": {
-      "default": "dev-aks-argocd",
+      "default": "staging-aks-argocd",
       "description": "The application namespace for Argo CD",
       "type": "string"
     },
@@ -414,7 +414,7 @@
       "type": "bool"
     },
     "aks_cluster_name": {
-      "default": "dev-aks-cluster",
+      "default": "staging-aks-cluster",
       "description": "The name of the AKS cluster",
       "type": "string"
     },
@@ -429,7 +429,7 @@
       "type": "bool"
     },
     "aks_ingress_application_gateway_name": {
-      "default": "dev-aks-ingress",
+      "default": "staging-aks-ingress",
       "description": "The name of the application gateway for AKS",
       "type": "string"
     },
@@ -454,7 +454,7 @@
       "type": "bool"
     },
     "aks_log_analytics_workspace_name": {
-      "default": "dev-aks-log-analytics",
+      "default": "staging-aks-log-analytics",
       "description": "The name of the log analytics workspace for AKS",
       "type": "string"
     },
@@ -464,7 +464,7 @@
       "type": "string"
     },
     "aks_prefix": {
-      "default": "dev",
+      "default": "staging",
       "description": "The prefix for the AKS resources",
       "type": "string"
     },
@@ -474,7 +474,7 @@
       "type": "bool"
     },
     "aks_resource_group_name": {
-      "default": "dev-aks-rg",
+      "default": "staging-aks-rg",
       "description": "The name of the AKS resource group",
       "type": "string"
     },
@@ -510,7 +510,7 @@
     },
     "aks_subnet_names": {
       "default": [
-        "dev-aks-subnet"
+        "staging-aks-subnet"
       ],
       "description": "The names of the AKS subnets",
       "type": "list(string)"
@@ -525,7 +525,7 @@
     "aks_tags": {
       "default": {
         "cluster": "dev-aks-cluster",
-        "environment": "dev",
+        "environment": "staging",
         "managed_by": "cdktf",
         "provider": "azure"
       },
@@ -533,22 +533,22 @@
       "type": "map(string)"
     },
     "aks_vnet_name": {
-      "default": "dev-aks-vnet",
+      "default": "staging-aks-vnet",
       "description": "The name of the AKS VNet",
       "type": "string"
     },
     "eks_argo_cd_application_name": {
-      "default": "dev-eks-argocd",
+      "default": "staging-eks-argocd",
       "description": "The application name for Argo CD",
       "type": "string"
     },
     "eks_argo_cd_application_namespace": {
-      "default": "dev-eks-argocd",
+      "default": "staging-eks-argocd",
       "description": "The application namespace for Argo CD",
       "type": "string"
     },
     "eks_argo_cd_application_source_path": {
-      "default": "kubernetes/management/eks/dev",
+      "default": "kubernetes/management/eks/staging",
       "description": "The application source path for Argo CD",
       "type": "string"
     },
@@ -597,7 +597,7 @@
       "type": "string"
     },
     "eks_cluster_name": {
-      "default": "dev-eks-cluster",
+      "default": "staging-eks-cluster",
       "description": "The name of the EKS cluster",
       "type": "string"
     },
@@ -637,7 +637,7 @@
       "type": "bool"
     },
     "eks_iam_role_name": {
-      "default": "dev-eks-iam-role",
+      "default": "staging-eks-iam-role",
       "description": "The name of the IAM role",
       "type": "string"
     },
@@ -672,32 +672,32 @@
       "type": "number"
     },
     "eks_managed_node_group_name": {
-      "default": "dev-eks-managed-node-group",
+      "default": "staging-eks-managed-node-group",
       "description": "The name of the managed node group",
       "type": "string"
     },
     "eks_private_subnet_names": {
       "default": [
-        "dev-eks-private-subnet-1",
-        "dev-eks-private-subnet-2",
-        "dev-eks-private-subnet-3"
+        "staging-eks-private-subnet-1",
+        "staging-eks-private-subnet-2",
+        "staging-eks-private-subnet-3"
       ],
       "description": "A list of private subnet names",
       "type": "list(string)"
     },
     "eks_public_subnet_names": {
       "default": [
-        "dev-eks-public-subnet-1",
-        "dev-eks-public-subnet-2",
-        "dev-eks-public-subnet-3"
+        "staging-eks-public-subnet-1",
+        "staging-eks-public-subnet-2",
+        "staging-eks-public-subnet-3"
       ],
       "description": "A list of public subnet names",
       "type": "list(string)"
     },
     "eks_tags": {
       "default": {
-        "cluster": "dev-eks-cluster",
-        "environment": "dev",
+        "cluster": "staging-eks-cluster",
+        "environment": "staging",
         "managed_by": "cdktf",
         "provider": "aws"
       },
@@ -705,7 +705,7 @@
       "type": "map(string)"
     },
     "eks_vpc_name": {
-      "default": "dev-eks-vpc",
+      "default": "staging-eks-vpc",
       "description": "The name of the VPC",
       "type": "string"
     },

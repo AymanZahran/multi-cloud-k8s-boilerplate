@@ -45,8 +45,8 @@ export enum Providers {
 
 export enum Environment {
   dev = "dev",
-  // staging = "staging",
-  // prod = "prod",
+  staging = "staging",
+  prod = "prod",
 }
 
 export enum AwsRegion {
@@ -68,4 +68,5 @@ export interface StackConfig {
 }
 
 export const RepoURL = "https://github.com/AymanZahran/multi-cloud-boilerplate";
-export const KubernetesDir = "kubernetes";
+const KubernetesDir = "kubernetes";
+export const KubernetesManagementDir = KubernetesDir + "/management/";

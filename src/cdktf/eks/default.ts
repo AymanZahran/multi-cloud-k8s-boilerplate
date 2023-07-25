@@ -1,4 +1,4 @@
-import { KubernetesDir, RepoURL } from "../../const";
+import { KubernetesManagementDir, RepoURL } from "../../const";
 
 export const EksTerraformVariables: any = {
   eksCreateVpc: {
@@ -196,8 +196,8 @@ export const EksTerraformVariables: any = {
     prod: "prod-eks-argocd",
   },
   eksArgoCdApplicationSourcePath: {
-    dev: KubernetesDir + "/eks/" + "dev",
-    staging: KubernetesDir + "/eks/" + "staging",
-    prod: KubernetesDir + "/eks/" + "prod",
+    dev: KubernetesManagementDir + "eks/" + "dev",
+    staging: KubernetesManagementDir + "eks/" + "staging",
+    prod: KubernetesManagementDir + "eks/" + "prod",
   },
 };
