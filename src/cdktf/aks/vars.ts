@@ -251,6 +251,93 @@ export function DefineAksVariables(
     default: AksTerraformVariables.aksTags[environment],
     description: "The tags to apply to AKS",
   });
+  const aksInstallArgoCd = new TerraformVariable(stack, "aks_install_argo_cd", {
+    type: "bool",
+    default: AksTerraformVariables.aksInstallArgoCd[environment],
+    description: "A boolean flag to install Argo CD",
+  });
+  const aksArgoCdNamespace = new TerraformVariable(
+    stack,
+    "aks_argo_cd_namespace",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdNamespace[environment],
+      description: "The namespace for Argo CD",
+    },
+  );
+  const aksArgoCdCreateNamespace = new TerraformVariable(
+    stack,
+    "aks_argo_cd_create_namespace",
+    {
+      type: "bool",
+      default: AksTerraformVariables.aksArgoCdCreateNamespace[environment],
+      description: "A boolean flag to create Argo CD namespace",
+    },
+  );
+  const aksArgoCdReleaseName = new TerraformVariable(
+    stack,
+    "aks_argo_cd_release_name",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdReleaseName[environment],
+      description: "The release name for Argo CD",
+    },
+  );
+  const aksArgoCdChartVersion = new TerraformVariable(
+    stack,
+    "aks_argo_cd_chart_version",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdChartVersion[environment],
+      description: "The chart version for Argo CD",
+    },
+  );
+  const aksArgoCdTargetRepoUrl = new TerraformVariable(
+    stack,
+    "aks_argo_cd_target_repo_url",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdTargetRepoUrl[environment],
+      description: "The target repo url for Argo CD",
+    },
+  );
+  const aksArgoCdProjectName = new TerraformVariable(
+    stack,
+    "aks_argo_cd_project_name",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdProjectName[environment],
+      description: "The project name for Argo CD",
+    },
+  );
+  const aksArgoCdApplicationName = new TerraformVariable(
+    stack,
+    "aks_argo_cd_application_name",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdApplicationName[environment],
+      description: "The application name for Argo CD",
+    },
+  );
+  const aksArgoCdApplicationNamespace = new TerraformVariable(
+    stack,
+    "aks_argo_cd_application_namespace",
+    {
+      type: "string",
+      default: AksTerraformVariables.aksArgoCdApplicationNamespace[environment],
+      description: "The application namespace for Argo CD",
+    },
+  );
+  const aksArgoCdApplicationSourcePath = new TerraformVariable(
+    stack,
+    "aks_argo_cd_application_chart",
+    {
+      type: "string",
+      default:
+        AksTerraformVariables.aksArgoCdApplicationSourcePath[environment],
+      description: "The application chart for Argo CD",
+    },
+  );
 
   return {
     aksResourceGroupName,
@@ -283,5 +370,15 @@ export function DefineAksVariables(
     aksIngressApplicationGatewayName,
     aksIngressApplicationGatewaySubnetCidr,
     aksTags,
+    aksInstallArgoCd,
+    aksArgoCdNamespace,
+    aksArgoCdCreateNamespace,
+    aksArgoCdReleaseName,
+    aksArgoCdChartVersion,
+    aksArgoCdTargetRepoUrl,
+    aksArgoCdProjectName,
+    aksArgoCdApplicationName,
+    aksArgoCdApplicationNamespace,
+    aksArgoCdApplicationSourcePath,
   };
 }

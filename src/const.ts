@@ -35,6 +35,9 @@ export const CI_Versions: any = {
   cdk8s_cli: "2.3.0",
 };
 
+export const TerraformRemoteBackendHostName = "app.terraform.io";
+export const TerraformRemoteBackendOrganization = "multi-cloud-pipelines";
+
 export enum Providers {
   eks = "eks",
   aks = "aks",
@@ -53,7 +56,7 @@ export enum AwsRegion {
 
 export enum AzureRegion {
   east_us = "eastus",
-  east_us_2 = "eastus2",
+  west_us = "westus",
 }
 
 export interface StackConfig {
@@ -65,4 +68,5 @@ export interface StackConfig {
 }
 
 export const RepoURL = "https://github.com/AymanZahran/multi-cloud-boilerplate";
-export const KubernetesDir = "kubernetes";
+const KubernetesDir = "kubernetes";
+export const KubernetesManagementDir = KubernetesDir + "/management/";

@@ -1,4 +1,4 @@
-export const HelmChartValues: any = {
+export const HelmChartLabels: any = {
   argo_cd: {
     dev: {},
     staging: {},

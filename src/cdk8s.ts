@@ -1,227 +1,196 @@
 import { App, YamlOutputType } from "cdk8s";
-import { ArgoCd } from "./cdk8s/argoCd";
-import { ArgoImageUpdater } from "./cdk8s/argoImageUpdater";
-import { ArgoNotifications } from "./cdk8s/argoNotifications";
-import { ArgoRollouts } from "./cdk8s/argoRollouts";
-import { ArgoWorkflows } from "./cdk8s/argoWorkflows";
-import { AwsCloudWatchAgent } from "./cdk8s/awsCloudWatchAgent";
-import { AwsEbsCsiDriver } from "./cdk8s/awsEbsCsiDriver";
-import { AwsEfsCsiDriver } from "./cdk8s/awsEfsCsiDriver";
-import { AwsFsxCsiDriver } from "./cdk8s/awsFsxCsiDriver";
-import { AwsLoadBalancerController } from "./cdk8s/awsLoadBalancerController";
-import { AwsSecretStoreCsiDriver } from "./cdk8s/awsSecretStoreCsiDriver";
-import { CertManager } from "./cdk8s/certManager";
-import { ClusterAutoscaler } from "./cdk8s/clusterAutoscaler";
-import { Consul } from "./cdk8s/consul";
-import { CrossPlane } from "./cdk8s/crossPlane";
-import { KubeStateMetrics } from "./cdk8s/kubeStateMetrics";
-import { MetricsServer } from "./cdk8s/metricsServer";
-import { Prometheus } from "./cdk8s/prometheus";
-import { Tekton } from "./cdk8s/tekton";
-import { HelmChartFeatureFlags } from "./cdk8s/vars/feature";
+import { ManagementCluster } from "./cdk8s/managementCluster";
+import { HelmChartFlags } from "./cdk8s/vars/flags";
+import { HelmChartLabels } from "./cdk8s/vars/labels";
 import { HelmChartValues } from "./cdk8s/vars/values";
 import { HelmChartVersions } from "./cdk8s/vars/versions";
-import { Vault } from "./cdk8s/vault";
-import { VaultSecretStoreDriver } from "./cdk8s/vaultSecretStoreDriver";
-import { Environment, Providers } from "./const";
+import { WorkloadCluster } from "./cdk8s/workloadCluster";
+import { Environment } from "./const";
 
-// Loop on values "eks" and "aks"
-for (const provider of Object.values(Providers)) {
-  for (const env of Object.values(Environment)) {
-    const app = new App({
-      outdir: "dist/" + provider + "/" + env,
-      outputFileExtension: ".yaml",
-      yamlOutputType: YamlOutputType.FILE_PER_CHART,
-    });
-    if (HelmChartFeatureFlags.argo_cd) {
-      new ArgoCd(
-        app,
-        "argo-cd",
-        {},
-        HelmChartVersions.argo_cd[env],
-        HelmChartValues.argo_cd[env],
-      );
-    }
-    if (HelmChartFeatureFlags.argo_image_updater) {
-      new ArgoImageUpdater(
-        app,
-        "argo-image-updater",
-        {},
-        HelmChartVersions.argocd_image_updater[env],
-        HelmChartValues.argocd_image_updater[env],
-      );
-    }
-    if (HelmChartFeatureFlags.argo_notifications) {
-      new ArgoNotifications(
-        app,
-        "argo-notifications",
-        {},
-        HelmChartVersions.argo_notifications[env],
-        HelmChartValues.argo_notifications[env],
-      );
-    }
-    if (HelmChartFeatureFlags.argo_rollouts) {
-      new ArgoRollouts(
-        app,
-        "argo-rollouts",
-        {},
-        HelmChartVersions.argo_rollouts[env],
-        HelmChartValues.argo_rollouts[env],
-      );
-    }
-    if (HelmChartFeatureFlags.argo_workflows) {
-      new ArgoWorkflows(
-        app,
-        "argo-workflows",
-        {},
-        HelmChartVersions.argo_workflows[env],
-        HelmChartValues.argo_workflows[env],
-      );
-    }
-    if (HelmChartFeatureFlags.cert_manager) {
-      new CertManager(
-        app,
-        "cert-manager",
-        {},
-        HelmChartVersions.cert_manager[env],
-        HelmChartValues.cluster_autoscaler[env],
-      );
-    }
-    if (HelmChartFeatureFlags.cluster_autoscaler) {
-      new ClusterAutoscaler(
-        app,
-        "cluster-autoscaler",
-        {},
-        HelmChartVersions.cluster_autoscaler[env],
-        HelmChartValues.cluster_autoscaler[env],
-      );
-    }
-    if (HelmChartFeatureFlags.consul) {
-      new Consul(
-        app,
-        "consul",
-        {},
-        HelmChartVersions.consul[env],
-        HelmChartValues.consul[env],
-      );
-    }
-    if (HelmChartFeatureFlags.crossplane) {
-      new CrossPlane(
-        app,
-        "crossplane",
-        {},
-        HelmChartVersions.crossplane[env],
-        HelmChartValues.crossplane[env],
-      );
-    }
-    if (HelmChartFeatureFlags.kube_state_metrics) {
-      new KubeStateMetrics(
-        app,
-        "kube-state-metrics",
-        {},
-        HelmChartVersions.kube_state_metrics[env],
-        HelmChartValues.kube_state_metrics[env],
-      );
-    }
-    if (HelmChartFeatureFlags.metrics_server) {
-      new MetricsServer(
-        app,
-        "metrics-server",
-        {},
-        HelmChartVersions.metrics_server[env],
-        HelmChartValues.metrics_server[env],
-      );
-    }
-    if (HelmChartFeatureFlags.kube_prometheus_stack) {
-      new Prometheus(
-        app,
-        "prometheus",
-        {},
-        HelmChartVersions.kube_prometheus_stack[env],
-        HelmChartValues.kube_prometheus_stack[env],
-      );
-    }
-    if (HelmChartFeatureFlags.vault_secrets_store_csi_driver) {
-      new VaultSecretStoreDriver(
-        app,
-        "secret-store-driver",
-        {},
-        HelmChartVersions.vault_secrets_store_csi_driver[env],
-        HelmChartValues.vault_secrets_store_csi_driver[env],
-      );
-    }
-    if (HelmChartFeatureFlags.tekton_pipeline) {
-      new Tekton(
-        app,
-        "tekton",
-        {},
-        HelmChartVersions.tekton_pipeline[env],
-        HelmChartValues.tekton_pipeline[env],
-      );
-    }
-    if (HelmChartFeatureFlags.vault) {
-      new Vault(
-        app,
-        "vault",
-        {},
-        HelmChartVersions.vault[env],
-        HelmChartValues.vault[env],
-      );
-    }
-    if (HelmChartFeatureFlags.aws_cloudwatch_agent) {
-      new AwsCloudWatchAgent(
-        app,
-        "aws-cloudwatch-agent",
-        {},
-        HelmChartVersions.aws_cloudwatch_agent[env],
-        HelmChartValues.aws_cloudwatch_agent[env],
-      );
-    }
-    if (HelmChartFeatureFlags.aws_ebs_csi_driver) {
-      new AwsEbsCsiDriver(
-        app,
-        "aws-ebs-csi-driver",
-        {},
-        HelmChartVersions.aws_ebs_csi_driver[env],
-        HelmChartValues.aws_ebs_csi_driver[env],
-      );
-    }
-    if (HelmChartFeatureFlags.aws_efs_csi_driver) {
-      new AwsEfsCsiDriver(
-        app,
-        "aws-efs-csi-driver",
-        {},
-        HelmChartVersions.aws_efs_csi_driver[env],
-        HelmChartValues.aws_efs_csi_driver[env],
-      );
-    }
-    if (HelmChartFeatureFlags.aws_fsx_csi_driver) {
-      new AwsFsxCsiDriver(
-        app,
-        "aws-fsx-csi-driver",
-        {},
-        HelmChartVersions.aws_fsx_csi_driver[env],
-        HelmChartValues.aws_fsx_csi_driver[env],
-      );
-    }
-    if (HelmChartFeatureFlags.secrets_store_csi_driver) {
-      new AwsSecretStoreCsiDriver(
-        app,
-        "secrets-store-csi-driver",
-        {},
-        HelmChartVersions.secrets_store_csi_driver[env],
-        HelmChartValues.secrets_store_csi_driver[env],
-      );
-    }
-    if (HelmChartFeatureFlags.aws_load_balancer_controller) {
-      new AwsLoadBalancerController(
-        app,
-        "aws-load-balancer-controller",
-        {},
-        HelmChartVersions.aws_load_balancer_controller[env],
-        HelmChartValues.aws_load_balancer_controller[env],
-      );
-    }
-    app.synth();
-  }
+for (const env of Object.values(Environment)) {
+  const eksManagementApp = new App({
+    outdir: "dist/management/eks/" + env,
+    outputFileExtension: ".yaml",
+    yamlOutputType: YamlOutputType.FILE_PER_CHART,
+  });
+
+  new ManagementCluster(eksManagementApp, "management-eks-cluster", {
+    app: eksManagementApp,
+    CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
+    CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
+    CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
+    CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+  });
+
+  eksManagementApp.synth();
+
+  const aksManagementApp = new App({
+    outdir: "dist/management/aks/" + env,
+    outputFileExtension: ".yaml",
+    yamlOutputType: YamlOutputType.FILE_PER_CHART,
+  });
+
+  new ManagementCluster(aksManagementApp, "management-aks-cluster", {
+    app: aksManagementApp,
+    CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
+    CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
+    CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
+    CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+  });
+
+  aksManagementApp.synth();
+
+  const eksWorkloadApp = new App({
+    outdir: "dist/workload/eks/" + env,
+    outputFileExtension: ".yaml",
+    yamlOutputType: YamlOutputType.FILE_PER_CHART,
+  });
+
+  new WorkloadCluster(eksWorkloadApp, "management-eks-cluster", {
+    app: eksWorkloadApp,
+    EnableArgoImageUpdater: true,
+    ArgoImageUpdaterHelmChartLabels: HelmChartLabels.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartsFlags: HelmChartFlags.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartVersion:
+      HelmChartVersions.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartValues: HelmChartValues.argocd_image_updater[env],
+    EnableArgoNotifications: true,
+    ArgoNotificationsHelmChartLabels: HelmChartLabels.argo_notifications[env],
+    ArgoNotificationsHelmChartsFlags: HelmChartFlags.argo_notifications[env],
+    ArgoNotificationsHelmChartVersion:
+      HelmChartVersions.argo_notifications[env],
+    ArgoNotificationsHelmChartValues: HelmChartValues.argo_notifications[env],
+    EnableArgoRollouts: true,
+    ArgoRolloutsHelmChartLabels: HelmChartLabels.argo_rollouts[env],
+    ArgoRolloutsHelmChartsFlags: HelmChartFlags.argo_rollouts[env],
+    ArgoRolloutsHelmChartVersion: HelmChartVersions.argo_rollouts[env],
+    ArgoRolloutsHelmChartValues: HelmChartValues.argo_rollouts[env],
+    EnableArgoWorkflows: true,
+    ArgoWorkflowsHelmChartLabels: HelmChartLabels.argo_workflows[env],
+    ArgoWorkflowsHelmChartsFlags: HelmChartFlags.argo_workflows[env],
+    ArgoWorkflowsHelmChartVersion: HelmChartVersions.argo_workflows[env],
+    ArgoWorkflowsHelmChartValues: HelmChartValues.argo_workflows[env],
+    EnableAwsCloudWatchAgent: false,
+    AwsCloudWatchAgentHelmChartLabels:
+      HelmChartLabels.aws_cloudwatch_agent[env],
+    AwsCloudWatchAgentHelmChartsFlags: HelmChartFlags.aws_cloudwatch_agent[env],
+    AwsCloudWatchAgentHelmChartVersion:
+      HelmChartVersions.aws_cloudwatch_agent[env],
+    AwsCloudWatchAgentHelmChartValues:
+      HelmChartValues.aws_cloudwatch_agent[env],
+    EnableAwsEbsCsiDriver: false,
+    AwsEbsCsiDriverHelmChartLabels: HelmChartLabels.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartsFlags: HelmChartFlags.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartVersion: HelmChartVersions.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartValues: HelmChartValues.aws_ebs_csi_driver[env],
+    EnableAwsEfsCsiDriver: false,
+    AwsEfsCsiDriverHelmChartLabels: HelmChartLabels.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartsFlags: HelmChartFlags.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartVersion: HelmChartVersions.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartValues: HelmChartValues.aws_efs_csi_driver[env],
+    EnableAwsFsxCsiDriver: false,
+    AwsFsxCsiDriverHelmChartLabels: HelmChartLabels.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartsFlags: HelmChartFlags.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartVersion: HelmChartVersions.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartValues: HelmChartValues.aws_fsx_csi_driver[env],
+    EnableAwsLoadBalancerController: false,
+    AwsLoadBalancerControllerHelmChartLabels:
+      HelmChartLabels.aws_load_balancer_controller[env],
+    AwsLoadBalancerControllerHelmChartsFlags:
+      HelmChartFlags.aws_load_balancer_controller[env],
+    AwsLoadBalancerControllerHelmChartVersion:
+      HelmChartVersions.aws_load_balancer_controller[env],
+    AwsLoadBalancerControllerHelmChartValues:
+      HelmChartValues.aws_load_balancer_controller[env],
+    EnableAwsSecretStoreCsiDriver: false,
+    AwsSecretStoreCsiDriverHelmChartLabels:
+      HelmChartLabels.aws_secret_store_csi_driver[env],
+    AwsSecretStoreCsiDriverHelmChartsFlags:
+      HelmChartFlags.aws_secret_store_csi_driver[env],
+    AwsSecretStoreCsiDriverHelmChartVersion:
+      HelmChartVersions.aws_secret_store_csi_driver[env],
+    AwsSecretStoreCsiDriverHelmChartValues:
+      HelmChartValues.aws_secret_store_csi_driver[env],
+    EnableCertManager: true,
+    CertManagerHelmChartLabels: HelmChartLabels.cert_manager[env],
+    CertManagerHelmChartsFlags: HelmChartFlags.cert_manager[env],
+    CertManagerHelmChartVersion: HelmChartVersions.cert_manager[env],
+    CertManagerHelmChartValues: HelmChartValues.cert_manager[env],
+    EnableClusterAutoscaler: true,
+    ClusterAutoscalerHelmChartLabels: HelmChartLabels.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartsFlags: HelmChartFlags.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartVersion:
+      HelmChartVersions.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartValues: HelmChartValues.cluster_autoscaler[env],
+    EnableConsul: true,
+    ConsulHelmChartLabels: HelmChartLabels.consul[env],
+    ConsulHelmChartsFlags: HelmChartFlags.consul[env],
+    ConsulHelmChartVersion: HelmChartVersions.consul[env],
+    ConsulHelmChartValues: HelmChartValues.consul[env],
+    EnableKubeStateMetrics: true,
+    KubeStateMetricsHelmChartLabels: HelmChartLabels.kube_state_metrics[env],
+    KubeStateMetricsHelmChartsFlags: HelmChartFlags.kube_state_metrics[env],
+    KubeStateMetricsHelmChartVersion: HelmChartVersions.kube_state_metrics[env],
+    KubeStateMetricsHelmChartValues: HelmChartValues.kube_state_metrics[env],
+    EnableMetricsServer: true,
+    MetricsServerHelmChartLabels: HelmChartLabels.metrics_server[env],
+    MetricsServerHelmChartsFlags: HelmChartFlags.metrics_server[env],
+    MetricsServerHelmChartVersion: HelmChartVersions.metrics_server[env],
+    MetricsServerHelmChartValues: HelmChartValues.metrics_server[env],
+    EnablePrometheus: true,
+    PrometheusHelmChartLabels: HelmChartLabels.prometheus[env],
+    PrometheusHelmChartsFlags: HelmChartFlags.prometheus[env],
+    PrometheusHelmChartVersion: HelmChartVersions.prometheus[env],
+    PrometheusHelmChartValues: HelmChartValues.prometheus[env],
+    EnableTekton: true,
+    TektonHelmChartLabels: HelmChartLabels.tekton[env],
+    TektonHelmChartsFlags: HelmChartFlags.tekton[env],
+    TektonHelmChartVersion: HelmChartVersions.tekton[env],
+    TektonHelmChartValues: HelmChartValues.tekton[env],
+    EnableVault: true,
+    VaultHelmChartLabels: HelmChartLabels.vault[env],
+    VaultHelmChartsFlags: HelmChartFlags.vault[env],
+    VaultHelmChartVersion: HelmChartVersions.vault[env],
+    VaultHelmChartValues: HelmChartValues.vault[env],
+    EnableVaultSecretStoreDriver: true,
+    VaultSecretStoreDriverHelmChartLabels:
+      HelmChartLabels.vault_secret_store_driver[env],
+    VaultSecretStoreDriverHelmChartsFlags:
+      HelmChartFlags.vault_secret_store_driver[env],
+    VaultSecretStoreDriverHelmChartVersion:
+      HelmChartVersions.vault_secret_store_driver[env],
+    VaultSecretStoreDriverHelmChartValues:
+      HelmChartValues.vault_secret_store_driver[env],
+  });
+
+  const aksWorkloadApp = new App({
+    outdir: "dist/workload/aks/" + env,
+    outputFileExtension: ".yaml",
+    yamlOutputType: YamlOutputType.FILE_PER_CHART,
+  });
+
+  new WorkloadCluster(aksWorkloadApp, "management-aks-cluster", {
+    app: aksWorkloadApp,
+    EnableArgoImageUpdater: true,
+    EnableArgoNotifications: true,
+    EnableArgoRollouts: true,
+    EnableArgoWorkflows: true,
+    EnableAwsCloudWatchAgent: false,
+    EnableAwsEbsCsiDriver: false,
+    EnableAwsEfsCsiDriver: false,
+    EnableAwsFsxCsiDriver: false,
+    EnableAwsLoadBalancerController: false,
+    EnableAwsSecretStoreCsiDriver: false,
+    EnableCertManager: true,
+    EnableClusterAutoscaler: true,
+    EnableConsul: true,
+    EnableKubeStateMetrics: true,
+    EnableMetricsServer: true,
+    EnablePrometheus: true,
+    EnableTekton: true,
+    EnableVault: true,
+    EnableVaultSecretStoreDriver: true,
+  });
+
+  eksWorkloadApp.synth();
 }
