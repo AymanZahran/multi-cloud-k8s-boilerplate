@@ -42,7 +42,7 @@ export function K8sValidateWorkflows(project: typescript.TypeScriptAppProject) {
             "  echo 'Error: kubeval is not installed.' >&2\n" +
             "  exit 1\n" +
             "fi\n" +
-            "if kubeval --ignore-missing-schemas kubernetes/*/${{ env.stack }}/*; then\n" +
+            "if kubeval --ignore-missing-schemas kubernetes/*/*/${{ env.stack }}/*; then\n" +
             '  echo "Static analysis found no problems."\n' +
             "  exit 0\n" +
             "else\n" +
