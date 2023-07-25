@@ -137,28 +137,53 @@ export class EksCluster extends Construct {
       });
 
       // Create ArgoCD Application
-      new Manifest(this, "argo-cd-eks-application", {
+      // new Manifest(this, "argo-cd-eks-application", {
+      //   dependsOn: [eks_argocd_install],
+      //   provider: eks_kubernetes_provider,
+      //   manifest: {
+      //     apiVersion: "argoproj.io/v1alpha1",
+      //     kind: "Application",
+      //     metadata: {
+      //       name: props.eksArgoCdApplicationName,
+      //       namespace: props.eksArgoCdApplicationNamespace,
+      //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
+      //     },
+      //     spec: {
+      //       destination: {
+      //         namespace: props.eksArgoCdNamespace,
+      //         server: "https://kubernetes.default.svc",
+      //       },
+      //       project: props.eksArgoCdProjectName,
+      //       source: {
+      //         path: props.eksArgoCdApplicationSourcePath,
+      //         repoURL: props.eksArgoCdTargetRepoUrl,
+      //         targetRevision: "HEAD",
+      //       },
+      //     },
+      //   },
+      // });
+      new Manifest(this, "test-eks-pod", {
         dependsOn: [eks_argocd_install],
         provider: eks_kubernetes_provider,
         manifest: {
-          apiVersion: "argoproj.io/v1alpha1",
-          kind: "Application",
+          apiVersion: "v1",
+          kind: "Pod",
           metadata: {
-            name: props.eksArgoCdApplicationName,
-            namespace: props.eksArgoCdApplicationNamespace,
-            finalizers: ["resources-finalizer.argocd.argoproj.io"],
+            name: "test-pod",
+            namespace: "default",
           },
           spec: {
-            destination: {
-              namespace: props.eksArgoCdNamespace,
-              server: "https://kubernetes.default.svc",
-            },
-            project: props.eksArgoCdProjectName,
-            source: {
-              path: props.eksArgoCdApplicationSourcePath,
-              repoURL: props.eksArgoCdTargetRepoUrl,
-              targetRevision: "HEAD",
-            },
+            containers: [
+              {
+                name: "test-pod",
+                image: "nginx",
+                ports: [
+                  {
+                    containerPort: 80,
+                  },
+                ],
+              },
+            ],
           },
         },
       });

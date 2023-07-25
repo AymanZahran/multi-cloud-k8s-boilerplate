@@ -224,72 +224,68 @@
       }
     },
     "kubernetes_manifest": {
-      "aks_argo-cd-aks-application_E9389D27": {
+      "aks_test-aks-pod_D448E136": {
         "//": {
           "metadata": {
-            "path": "prod/aks/argo-cd-aks-application",
-            "uniqueId": "aks_argo-cd-aks-application_E9389D27"
+            "path": "prod/aks/test-aks-pod",
+            "uniqueId": "aks_test-aks-pod_D448E136"
           }
         },
         "depends_on": [
           "helm_release.aks_argo-cd-aks-install_93782B8D"
         ],
         "manifest": {
-          "apiVersion": "argoproj.io/v1alpha1",
-          "kind": "Application",
+          "apiVersion": "v1",
+          "kind": "Pod",
           "metadata": {
-            "finalizers": [
-              "resources-finalizer.argocd.argoproj.io"
-            ],
-            "name": "${var.aks_argo_cd_application_name}",
-            "namespace": "${var.aks_argo_cd_application_namespace}"
+            "name": "test-pod",
+            "namespace": "default"
           },
           "spec": {
-            "destination": {
-              "namespace": "${var.aks_argo_cd_namespace}",
-              "server": "https://kubernetes.default.svc"
-            },
-            "project": "${var.aks_argo_cd_project_name}",
-            "source": {
-              "path": "${var.aks_argo_cd_application_chart}",
-              "repoURL": "${var.aks_argo_cd_target_repo_url}",
-              "targetRevision": "HEAD"
-            }
+            "containers": [
+              {
+                "image": "nginx",
+                "name": "test-pod",
+                "ports": [
+                  {
+                    "containerPort": 80
+                  }
+                ]
+              }
+            ]
           }
         },
         "provider": "kubernetes.aks_kubernetes"
       },
-      "eks_argo-cd-eks-application_667DC04C": {
+      "eks_test-eks-pod_324168D7": {
         "//": {
           "metadata": {
-            "path": "prod/eks/argo-cd-eks-application",
-            "uniqueId": "eks_argo-cd-eks-application_667DC04C"
+            "path": "prod/eks/test-eks-pod",
+            "uniqueId": "eks_test-eks-pod_324168D7"
           }
         },
         "depends_on": [
           "helm_release.eks_argo-cd-eks-install_895ADF16"
         ],
         "manifest": {
-          "apiVersion": "argoproj.io/v1alpha1",
-          "kind": "Application",
+          "apiVersion": "v1",
+          "kind": "Pod",
           "metadata": {
-            "finalizers": [
-              "resources-finalizer.argocd.argoproj.io"
-            ],
-            "name": "${var.eks_argo_cd_application_name}",
-            "namespace": "${var.eks_argo_cd_application_namespace}"
+            "name": "test-pod",
+            "namespace": "default"
           },
           "spec": {
-            "destination": {
-              "namespace": "${var.eks_argo_cd_namespace}",
-              "server": "https://kubernetes.default.svc"
-            },
-            "project": "${var.eks_argo_cd_project_name}",
-            "source": {
-              "path": "${var.eks_argo_cd_application_source_path}",
-              "repoURL": "${var.eks_argo_cd_target_repo_url}",
-              "targetRevision": "HEAD"
-            }
+            "containers": [
+              {
+                "image": "nginx",
+                "name": "test-pod",
+                "ports": [
+                  {
+                    "containerPort": 80
+                  }
+                ]
+              }
+            ]
           }
         },
         "provider": "kubernetes.eks_kubernetes"

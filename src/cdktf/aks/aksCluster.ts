@@ -157,28 +157,53 @@ export class AksCluster extends Construct {
     });
 
     // Create ArgoCD Application
-    new Manifest(this, "argo-cd-aks-application", {
+    // new Manifest(this, "argo-cd-aks-application", {
+    //   dependsOn: [aks_argocd_install],
+    //   provider: aks_kubernetes_provider,
+    //   manifest: {
+    //     apiVersion: "argoproj.io/v1alpha1",
+    //     kind: "Application",
+    //     metadata: {
+    //       name: props.aksArgoCdApplicationName,
+    //       namespace: props.aksArgoCdApplicationNamespace,
+    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
+    //     },
+    //     spec: {
+    //       destination: {
+    //         namespace: props.aksArgoCdNamespace,
+    //         server: "https://kubernetes.default.svc",
+    //       },
+    //       project: props.aksArgoCdProjectName,
+    //       source: {
+    //         path: props.aksArgoCdApplicationSourcePath,
+    //         repoURL: props.aksArgoCdTargetRepoUrl,
+    //         targetRevision: "HEAD",
+    //       },
+    //     },
+    //   },
+    // });
+    new Manifest(this, "test-aks-pod", {
       dependsOn: [aks_argocd_install],
       provider: aks_kubernetes_provider,
       manifest: {
-        apiVersion: "argoproj.io/v1alpha1",
-        kind: "Application",
+        apiVersion: "v1",
+        kind: "Pod",
         metadata: {
-          name: props.aksArgoCdApplicationName,
-          namespace: props.aksArgoCdApplicationNamespace,
-          finalizers: ["resources-finalizer.argocd.argoproj.io"],
+          name: "test-pod",
+          namespace: "default",
         },
         spec: {
-          destination: {
-            namespace: props.aksArgoCdNamespace,
-            server: "https://kubernetes.default.svc",
-          },
-          project: props.aksArgoCdProjectName,
-          source: {
-            path: props.aksArgoCdApplicationSourcePath,
-            repoURL: props.aksArgoCdTargetRepoUrl,
-            targetRevision: "HEAD",
-          },
+          containers: [
+            {
+              name: "test-pod",
+              image: "nginx",
+              ports: [
+                {
+                  containerPort: 80,
+                },
+              ],
+            },
+          ],
         },
       },
     });
