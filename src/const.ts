@@ -67,6 +67,6 @@ export interface StackConfig {
   };
 }
 
-export const RepoURL = "https://github.com/AymanZahran/multi-cloud-boilerplate";
+export const RepoURL = "https://github.com/AymanZahran/multi-cloud-k8s-boilerplate";
 const KubernetesDir = "kubernetes";
 export const KubernetesManagementDir = KubernetesDir + "/management/";

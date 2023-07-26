@@ -5,6 +5,7 @@
 !/.projen/files.json
 !/.github/workflows/pull-request-lint.yml
 !/.gitpod.yml
+!/.github/workflows/auto-approve.yml
 !/package.json
 !/LICENSE
 !/.npmignore
@@ -51,10 +52,7 @@ tsconfig.tsbuildinfo
 junit.xml
 /coverage/
 !/.github/workflows/build.yml
-/dist/changelog.md
-/dist/version.txt
-!/.github/workflows/release.yml
-!/.github/workflows/upgrade-master.yml
+!/.github/workflows/upgrade.yml
 !/.github/pull_request_template.md
 !/.npmrc
 !/test/
