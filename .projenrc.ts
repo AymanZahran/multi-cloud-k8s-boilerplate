@@ -80,6 +80,7 @@ const project = new typescript.TypeScriptAppProject({
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
     "@cdktf/provider-helm@^" + PackageVersions.provider_helm,
+    "@cdktf/provider-null@^" + PackageVersions.provider_null,
     "cdk8s@^" + PackageVersions.cdk8s,
     "cdk8s-cli@^" + CI_Versions.cdk8s_cli,
     "cdk8s-plus@^" + PackageVersions.cdk8s_plus,

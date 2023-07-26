@@ -99,6 +99,11 @@
       "type": "runtime"
     },
     {
+      "name": "@cdktf/provider-null",
+      "version": "^7.0.0",
+      "type": "runtime"
+    },
+    {
       "name": "cdk8s-cli",
       "version": "^2.3.0",
       "type": "runtime"
