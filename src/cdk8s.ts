@@ -1,9 +1,9 @@
 import { App, YamlOutputType } from "cdk8s";
 import { ManagementCluster } from "./cdk8s/managementCluster";
-import { HelmChartFlags } from "./cdk8s/vars/flags";
-import { HelmChartLabels } from "./cdk8s/vars/labels";
-import { HelmChartValues } from "./cdk8s/vars/values";
-import { HelmChartVersions } from "./cdk8s/vars/versions";
+import { HelmChartFlags } from "./cdk8s/properties/flags";
+import { HelmChartLabels } from "./cdk8s/properties/labels";
+import { HelmChartValues } from "./cdk8s/properties/values";
+import { HelmChartVersions } from "./cdk8s/properties/versions";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
 import { Environment } from "./const";
 
