@@ -1,4 +1,4 @@
-import {Helm, Chart, ChartProps, ApiObject} from "cdk8s";
+import { Helm, Chart, ChartProps, ApiObject } from "cdk8s";
 import { Construct } from "constructs";
 
 export class ArgoCd extends Chart {
@@ -36,9 +36,9 @@ export class ArgoCd extends Chart {
         project: "default",
         source: {
           path: "kubernetes/management/aks/dev",
-          repoURL: "https://github.com/AymanZahran/multi-cloud-k8s-boilerplate"
-        }
-      }
+          repoURL: "https://github.com/AymanZahran/multi-cloud-k8s-boilerplate",
+        },
+      },
     });
   }
 }
