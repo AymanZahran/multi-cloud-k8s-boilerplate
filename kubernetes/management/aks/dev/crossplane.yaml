@@ -998,3 +998,15 @@ spec:
             runAsUser: 65532
       securityContext: {}
       serviceAccountName: rbac-manager
+---
+apiVersion: aws.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source:
+      secretRef:
+        key: admin-secret-key
+        name: admin-key
+        namespace: crossplane-system
