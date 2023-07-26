@@ -4,7 +4,7 @@
       "backend": "remote",
       "cloud": "tfc",
       "stackName": "dev",
-      "version": "0.17.1"
+      "version": "0.17.3"
     },
     "outputs": {
     }
@@ -239,11 +239,11 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "5.8.0"
+        "version": "5.9.0"
       },
       "azurerm": {
         "source": "azurerm",
-        "version": "3.65.0"
+        "version": "3.66.0"
       },
       "null": {
         "source": "null",
