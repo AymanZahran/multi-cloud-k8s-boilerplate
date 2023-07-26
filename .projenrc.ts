@@ -1,7 +1,7 @@
 import { typescript } from "projen";
 import { ConfigureTasks } from "./projenrc/ConfigureTasks";
 import { CdktfWorkflows } from "./projenrc/workflows/CdktfWorkflows";
-import { K8sValidate } from "./projenrc/workflows/K8sValidate";
+import { K8sValidateWorkflows } from "./projenrc/workflows/K8sValidate";
 import { UpgradeCharts } from "./projenrc/workflows/UpgradeCharts";
 import { Upgradepackages } from "./projenrc/workflows/UpgradePackages";
 import { PackageVersions, CI_Versions } from "./src/const";
@@ -13,11 +13,17 @@ const project = new typescript.TypeScriptAppProject({
   authorName: "Ayman Zahran",
   authorEmail: "ayman@aymanzahran.com",
   gitpod: true,
-  release: true,
-  releaseToNpm: true,
-  npmRegistryUrl: "https://www.npmjs.com/~ayman.zahran",
+  licensed: true,
+  license: "Apache-2.0",
+  readme: {
+    filename: "README.md",
+  },
+  release: false,
   vscode: true,
   depsUpgrade: true,
+  autoApproveOptions: {
+    label: "auto-approve",
+  },
   autoApproveUpgrades: false, // Set false to manually approve upgrades
   buildWorkflow: true, // Enable build workflow
   mutableBuild: true, // Automatically update files modified by build
@@ -40,6 +46,12 @@ const project = new typescript.TypeScriptAppProject({
     "- [ ] I have read the **CONTRIBUTING** document.",
     "",
   ],
+
+  tsconfig: {
+    compilerOptions: {
+      rootDir: ".",
+    },
+  },
 
   githubOptions: {
     mergify: false,
@@ -66,8 +78,9 @@ const project = new typescript.TypeScriptAppProject({
     "cdktf-cli@^" + CI_Versions.cdktf_cli,
     "@cdktf/provider-aws@^" + PackageVersions.provider_aws,
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
-    "@cdktf/provider-google@^" + PackageVersions.provider_google,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
+    "@cdktf/provider-helm@^" + PackageVersions.provider_helm,
+    "@cdktf/provider-null@^" + PackageVersions.provider_null,
     "cdk8s@^" + PackageVersions.cdk8s,
     "cdk8s-cli@^" + CI_Versions.cdk8s_cli,
     "cdk8s-plus@^" + PackageVersions.cdk8s_plus,
@@ -80,6 +93,7 @@ const project = new typescript.TypeScriptAppProject({
     ".DS_Store",
     ".idea",
     ".vscode",
+    ".env",
     "*.d.ts",
     "*.js,",
     "cdktf.log",
@@ -103,7 +117,7 @@ ConfigureTasks(project);
 // Add workflows
 Upgradepackages(project);
 UpgradeCharts(project);
-K8sValidate(project);
+K8sValidateWorkflows(project);
 CdktfWorkflows(project);
 
 project.synth();

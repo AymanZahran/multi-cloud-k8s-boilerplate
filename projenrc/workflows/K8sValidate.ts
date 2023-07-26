@@ -2,11 +2,11 @@ import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
 
-export function K8sValidate(project: typescript.TypeScriptAppProject) {
+export function K8sValidateWorkflows(project: typescript.TypeScriptAppProject) {
   for (const env of ["dev", "staging", "prod"]) {
     const k8s_validate = new GithubWorkflow(
       project.github!,
-      "k8s-validate-" + env,
+      "k8svalidate-" + env + "-build",
     );
     k8s_validate.on({
       pullRequest: {
@@ -14,6 +14,7 @@ export function K8sValidate(project: typescript.TypeScriptAppProject) {
       },
     });
     k8s_validate.addJob("build", {
+      name: "k8svalidate-" + env + "-build",
       runsOn: ["ubuntu-latest"],
       permissions: {
         contents: JobPermission.READ,
@@ -41,7 +42,7 @@ export function K8sValidate(project: typescript.TypeScriptAppProject) {
             "  echo 'Error: kubeval is not installed.' >&2\n" +
             "  exit 1\n" +
             "fi\n" +
-            "if kubeval --ignore-missing-schemas kubernetes/${{ env.stack }}/*; then\n" +
+            "if kubeval --ignore-missing-schemas kubernetes/*/*/${{ env.stack }}/*; then\n" +
             '  echo "Static analysis found no problems."\n' +
             "  exit 0\n" +
             "else\n" +
