@@ -168,20 +168,6 @@
           "host": "${module.aks_BAB83E91.host}"
         }
       }
-    ],
-    "kubernetes": [
-      {
-        "alias": "eks_kubernetes",
-        "cluster_ca_certificate": "${base64decode(module.eks_B1A34D59.cluster_certificate_authority_data)}",
-        "host": "${module.eks_B1A34D59.cluster_endpoint}"
-      },
-      {
-        "alias": "aks_kubernetes",
-        "client_certificate": "${base64decode(module.aks_BAB83E91.admin_client_certificate)}",
-        "client_key": "${base64decode(module.aks_BAB83E91.admin_client_key)}",
-        "cluster_ca_certificate": "${base64decode(module.aks_BAB83E91.admin_cluster_ca_certificate)}",
-        "host": "${module.aks_BAB83E91.host}"
-      }
     ]
   },
   "resource": {
@@ -222,74 +208,6 @@
         "repository": "https://argoproj.github.io/argo-helm",
         "version": "${var.eks_argo_cd_chart_version}"
       }
-    },
-    "kubernetes_manifest": {
-      "aks_test-aks-pod_D448E136": {
-        "//": {
-          "metadata": {
-            "path": "staging/aks/test-aks-pod",
-            "uniqueId": "aks_test-aks-pod_D448E136"
-          }
-        },
-        "depends_on": [
-          "helm_release.aks_argo-cd-aks-install_93782B8D"
-        ],
-        "manifest": {
-          "apiVersion": "v1",
-          "kind": "Pod",
-          "metadata": {
-            "name": "test-pod",
-            "namespace": "default"
-          },
-          "spec": {
-            "containers": [
-              {
-                "image": "nginx",
-                "name": "test-pod",
-                "ports": [
-                  {
-                    "containerPort": 80
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "provider": "kubernetes.aks_kubernetes"
-      },
-      "eks_test-eks-pod_324168D7": {
-        "//": {
-          "metadata": {
-            "path": "staging/eks/test-eks-pod",
-            "uniqueId": "eks_test-eks-pod_324168D7"
-          }
-        },
-        "depends_on": [
-          "helm_release.eks_argo-cd-eks-install_895ADF16"
-        ],
-        "manifest": {
-          "apiVersion": "v1",
-          "kind": "Pod",
-          "metadata": {
-            "name": "test-pod",
-            "namespace": "default"
-          },
-          "spec": {
-            "containers": [
-              {
-                "image": "nginx",
-                "name": "test-pod",
-                "ports": [
-                  {
-                    "containerPort": 80
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "provider": "kubernetes.eks_kubernetes"
-      }
     }
   },
   "terraform": {
@@ -314,10 +232,6 @@
       "helm": {
         "source": "helm",
         "version": "2.10.1"
-      },
-      "kubernetes": {
-        "source": "kubernetes",
-        "version": "2.22.0"
       }
     }
   },

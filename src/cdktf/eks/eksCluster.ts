@@ -1,7 +1,7 @@
 import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release } from "@cdktf/provider-helm/lib/release";
-import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
-import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
+// import {Manifest} from "@cdktf/provider-kubernetes/lib/manifest";
+// import {KubernetesProvider} from "@cdktf/provider-kubernetes/lib/provider";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
@@ -100,18 +100,18 @@ export class EksCluster extends Construct {
 
     // Install ArgoCD on EKS Cluster
     if (props.eksInstallArgoCd) {
-      const eks_kubernetes_provider = new KubernetesProvider(
-        this,
-        "EKS_KUBERNETES",
-        {
-          host: this.eks.clusterEndpointOutput,
-          clusterCaCertificate: Fn.base64decode(
-            this.eks.clusterCertificateAuthorityDataOutput,
-          ),
-          token: this.eks.toMetadata().token,
-          alias: "eks_kubernetes",
-        },
-      );
+      // const eks_kubernetes_provider = new KubernetesProvider(
+      //     this,
+      //     "EKS_KUBERNETES",
+      //     {
+      //         host: this.eks.clusterEndpointOutput,
+      //         clusterCaCertificate: Fn.base64decode(
+      //             this.eks.clusterCertificateAuthorityDataOutput,
+      //         ),
+      //         token: this.eks.toMetadata().token,
+      //         alias: "eks_kubernetes",
+      //     },
+      // );
 
       // Create EKS Helm Provider
       const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
@@ -125,7 +125,8 @@ export class EksCluster extends Construct {
       });
 
       // Install ArgoCD on EKS Cluster
-      const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
+      // const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
+      new Release(this, "argo-cd-eks-install", {
         dependsOn: [this.eks],
         provider: eks_helm_provider,
         chart: "argo/argo-cd",
@@ -162,31 +163,6 @@ export class EksCluster extends Construct {
       //     },
       //   },
       // });
-      new Manifest(this, "test-eks-pod", {
-        dependsOn: [eks_argocd_install],
-        provider: eks_kubernetes_provider,
-        manifest: {
-          apiVersion: "v1",
-          kind: "Pod",
-          metadata: {
-            name: "test-pod",
-            namespace: "default",
-          },
-          spec: {
-            containers: [
-              {
-                name: "test-pod",
-                image: "nginx",
-                ports: [
-                  {
-                    containerPort: 80,
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      });
     }
   }
 }

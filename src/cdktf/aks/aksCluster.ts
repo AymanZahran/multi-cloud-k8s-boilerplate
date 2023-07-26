@@ -1,7 +1,7 @@
 import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release } from "@cdktf/provider-helm/lib/release";
-import { Manifest } from "@cdktf/provider-kubernetes/lib/manifest";
-import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
+// import {Manifest} from "@cdktf/provider-kubernetes/lib/manifest";
+// import {KubernetesProvider} from "@cdktf/provider-kubernetes/lib/provider";
 import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
@@ -112,100 +112,79 @@ export class AksCluster extends Construct {
       tags: props.aksTags,
     });
 
-    // Create AKS Kubernetes Provider
-    const aks_kubernetes_provider = new KubernetesProvider(
-      this,
-      "AKS_KUBERNETES",
-      {
-        host: this.aks.hostOutput,
-        clusterCaCertificate: Fn.base64decode(
-          this.aks.adminClusterCaCertificateOutput,
-        ),
-        clientCertificate: Fn.base64decode(
-          this.aks.adminClientCertificateOutput,
-        ),
-        clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
-        alias: "aks_kubernetes",
-      },
-    );
+    // Install ArgoCD on EKS Cluster
+    if (props.aksInstallArgoCd) {
+      // Create AKS Kubernetes Provider
+      // const aks_kubernetes_provider = new KubernetesProvider(
+      //     this,
+      //     "AKS_KUBERNETES",
+      //     {
+      //         host: this.aks.hostOutput,
+      //         clusterCaCertificate: Fn.base64decode(
+      //             this.aks.adminClusterCaCertificateOutput,
+      //         ),
+      //         clientCertificate: Fn.base64decode(
+      //             this.aks.adminClientCertificateOutput,
+      //         ),
+      //         clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
+      //         alias: "aks_kubernetes",
+      //     },
+      // );
 
-    // Create AKS Helm Provider
-    const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
-      kubernetes: {
-        host: this.aks.hostOutput,
-        clusterCaCertificate: Fn.base64decode(
-          this.aks.adminClusterCaCertificateOutput,
-        ),
-        clientCertificate: Fn.base64decode(
-          this.aks.adminClientCertificateOutput,
-        ),
-        clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
-      },
-      alias: "aks_helm",
-    });
-
-    // Install ArgoCD on AKS Cluster
-    const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
-      dependsOn: [this.aks],
-      provider: aks_helm_provider,
-      chart: "argo/argo-cd",
-      repository: "https://argoproj.github.io/argo-helm",
-      name: props.aksArgoCdReleaseName,
-      namespace: props.aksArgoCdNamespace,
-      createNamespace: props.aksArgoCdCreateNamespace,
-      version: props.aksArgoCdChartVersion,
-    });
-
-    // Create ArgoCD Application
-    // new Manifest(this, "argo-cd-aks-application", {
-    //   dependsOn: [aks_argocd_install],
-    //   provider: aks_kubernetes_provider,
-    //   manifest: {
-    //     apiVersion: "argoproj.io/v1alpha1",
-    //     kind: "Application",
-    //     metadata: {
-    //       name: props.aksArgoCdApplicationName,
-    //       namespace: props.aksArgoCdApplicationNamespace,
-    //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
-    //     },
-    //     spec: {
-    //       destination: {
-    //         namespace: props.aksArgoCdNamespace,
-    //         server: "https://kubernetes.default.svc",
-    //       },
-    //       project: props.aksArgoCdProjectName,
-    //       source: {
-    //         path: props.aksArgoCdApplicationSourcePath,
-    //         repoURL: props.aksArgoCdTargetRepoUrl,
-    //         targetRevision: "HEAD",
-    //       },
-    //     },
-    //   },
-    // });
-    new Manifest(this, "test-aks-pod", {
-      dependsOn: [aks_argocd_install],
-      provider: aks_kubernetes_provider,
-      manifest: {
-        apiVersion: "v1",
-        kind: "Pod",
-        metadata: {
-          name: "test-pod",
-          namespace: "default",
+      // Create AKS Helm Provider
+      const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
+        kubernetes: {
+          host: this.aks.hostOutput,
+          clusterCaCertificate: Fn.base64decode(
+            this.aks.adminClusterCaCertificateOutput,
+          ),
+          clientCertificate: Fn.base64decode(
+            this.aks.adminClientCertificateOutput,
+          ),
+          clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
         },
-        spec: {
-          containers: [
-            {
-              name: "test-pod",
-              image: "nginx",
-              ports: [
-                {
-                  containerPort: 80,
-                },
-              ],
-            },
-          ],
-        },
-      },
-    });
+        alias: "aks_helm",
+      });
+
+      // Install ArgoCD on AKS Cluster
+      // const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
+      new Release(this, "argo-cd-aks-install", {
+        dependsOn: [this.aks],
+        provider: aks_helm_provider,
+        chart: "argo/argo-cd",
+        repository: "https://argoproj.github.io/argo-helm",
+        name: props.aksArgoCdReleaseName,
+        namespace: props.aksArgoCdNamespace,
+        createNamespace: props.aksArgoCdCreateNamespace,
+        version: props.aksArgoCdChartVersion,
+      });
+
+      // Create ArgoCD Application
+      // new Manifest(this, "argo-cd-aks-application", {
+      //   dependsOn: [aks_argocd_install],
+      //   provider: aks_kubernetes_provider,
+      //   manifest: {
+      //     apiVersion: "argoproj.io/v1alpha1",
+      //     kind: "Application",
+      //     metadata: {
+      //       name: props.aksArgoCdApplicationName,
+      //       namespace: props.aksArgoCdApplicationNamespace,
+      //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
+      //     },
+      //     spec: {
+      //       destination: {
+      //         namespace: props.aksArgoCdNamespace,
+      //         server: "https://kubernetes.default.svc",
+      //       },
+      //       project: props.aksArgoCdProjectName,
+      //       source: {
+      //         path: props.aksArgoCdApplicationSourcePath,
+      //         repoURL: props.aksArgoCdTargetRepoUrl,
+      //         targetRevision: "HEAD",
+      //       },
+      //     },
+      //   },
+      // });
+    }
   }
 }
