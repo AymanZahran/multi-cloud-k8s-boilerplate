@@ -70,17 +70,7 @@ class MultiCloudBoilerPlate extends TerraformStack {
         EksVariables.eksManagedNodeGroupDesiredSize.value,
       eksTags: EksVariables.eksTags.value,
       eksInstallArgoCd: EksVariables.eksInstallArgoCd.value,
-      eksArgoCdNamespace: EksVariables.eksArgoCdNamespace.value,
-      eksArgoCdCreateNamespace: EksVariables.eksArgoCdCreateNamespace.value,
-      eksArgoCdReleaseName: EksVariables.eksArgoCdReleaseName.value,
-      eksArgoCdChartVersion: EksVariables.eksArgoCdChartVersion.value,
-      eksArgoCdTargetRepoUrl: EksVariables.eksArgoCdTargetRepoUrl.value,
-      eksArgoCdProjectName: EksVariables.eksArgoCdProjectName.value,
-      eksArgoCdApplicationName: EksVariables.eksArgoCdApplicationName.value,
-      eksArgoCdApplicationNamespace:
-        EksVariables.eksArgoCdApplicationNamespace.value,
-      eksArgoCdApplicationSourcePath:
-        EksVariables.eksArgoCdApplicationSourcePath.value,
+      eksInstallArgoCdPath: EksVariables.eksInstallArgoCdPath.value,
     });
 
     // Create AKS Cluster
@@ -130,17 +120,7 @@ class MultiCloudBoilerPlate extends TerraformStack {
         AksVariables.aksIngressApplicationGatewaySubnetCidr.value,
       aksTags: AksVariables.aksTags.value,
       aksInstallArgoCd: AksVariables.aksInstallArgoCd.value,
-      aksArgoCdNamespace: AksVariables.aksArgoCdNamespace.value,
-      aksArgoCdCreateNamespace: AksVariables.aksArgoCdCreateNamespace.value,
-      aksArgoCdReleaseName: AksVariables.aksArgoCdReleaseName.value,
-      aksArgoCdChartVersion: AksVariables.aksArgoCdChartVersion.value,
-      aksArgoCdTargetRepoUrl: AksVariables.aksArgoCdTargetRepoUrl.value,
-      aksArgoCdProjectName: AksVariables.aksArgoCdProjectName.value,
-      aksArgoCdApplicationName: AksVariables.aksArgoCdApplicationName.value,
-      aksArgoCdApplicationNamespace:
-        AksVariables.aksArgoCdApplicationNamespace.value,
-      aksArgoCdApplicationSourcePath:
-        AksVariables.aksArgoCdApplicationSourcePath.value,
+      aksInstallArgoCdPath: AksVariables.aksInstallArgoCdPath.value,
     });
   }
 }

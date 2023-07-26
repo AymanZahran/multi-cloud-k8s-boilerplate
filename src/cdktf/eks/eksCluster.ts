@@ -1,8 +1,5 @@
-import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
-import { Release } from "@cdktf/provider-helm/lib/release";
-// import {Manifest} from "@cdktf/provider-kubernetes/lib/manifest";
-// import {KubernetesProvider} from "@cdktf/provider-kubernetes/lib/provider";
-import { Fn } from "cdktf";
+import { NullProvider } from "@cdktf/provider-null/lib/provider";
+import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
@@ -33,15 +30,7 @@ export interface EksClusterProps {
   readonly eksManagedNodeGroupDesiredSize: number;
   readonly eksTags: { [key: string]: string };
   readonly eksInstallArgoCd: boolean;
-  readonly eksArgoCdNamespace: string;
-  readonly eksArgoCdCreateNamespace: boolean;
-  readonly eksArgoCdReleaseName: string;
-  readonly eksArgoCdChartVersion: string;
-  readonly eksArgoCdTargetRepoUrl: string;
-  readonly eksArgoCdProjectName: string;
-  readonly eksArgoCdApplicationName: string;
-  readonly eksArgoCdApplicationNamespace: string;
-  readonly eksArgoCdApplicationSourcePath: string;
+  readonly eksInstallArgoCdPath: string;
 }
 
 export class EksCluster extends Construct {
@@ -100,69 +89,33 @@ export class EksCluster extends Construct {
 
     // Install ArgoCD on EKS Cluster
     if (props.eksInstallArgoCd) {
-      // const eks_kubernetes_provider = new KubernetesProvider(
-      //     this,
-      //     "EKS_KUBERNETES",
-      //     {
-      //         host: this.eks.clusterEndpointOutput,
-      //         clusterCaCertificate: Fn.base64decode(
-      //             this.eks.clusterCertificateAuthorityDataOutput,
-      //         ),
-      //         token: this.eks.toMetadata().token,
-      //         alias: "eks_kubernetes",
-      //     },
-      // );
-
-      // Create EKS Helm Provider
-      const eks_helm_provider = new HelmProvider(this, "EKS_HELM", {
-        kubernetes: {
-          host: this.eks.clusterEndpointOutput,
-          clusterCaCertificate: Fn.base64decode(
-            this.eks.clusterCertificateAuthorityDataOutput,
-          ),
-        },
-        alias: "eks_helm",
+      // TODO Currently, we are using null provider to install ArgoCD on Kubernetes Cluster
+      //  Use Terraform Kubernetes Provider or cdktf Kubernetes Provider when there is a version
+      //  which supports applying mainifests on Kubernetes Cluster that's not exists
+      //  To avoid the `Cannot create REST client: no client config` error during the terraform plan
+      //  OR Use kubectl terraform provider when it is officially trusted by Hashicorp'
+      const eks_null_provider = new NullProvider(this, "eks-null-provider", {
+        alias: "eks_null",
       });
-
-      // Install ArgoCD on EKS Cluster
-      // const eks_argocd_install = new Release(this, "argo-cd-eks-install", {
-      new Release(this, "argo-cd-eks-install", {
+      new Resource(this, "argo-cd-eks-install-null", {
         dependsOn: [this.eks],
-        provider: eks_helm_provider,
-        chart: "argo/argo-cd",
-        repository: "https://argoproj.github.io/argo-helm",
-        name: props.eksArgoCdReleaseName,
-        namespace: props.eksArgoCdNamespace,
-        createNamespace: props.eksArgoCdCreateNamespace,
-        version: props.eksArgoCdChartVersion,
+        provider: eks_null_provider,
+        provisioners: [
+          {
+            type: "local-exec",
+            when: "create",
+            interpreter: ["bash", "-c"],
+            workingDir: "./",
+            environment: {
+              CLUSTER_PROVIDER: "aks",
+              CLUSTER_NAME: props.eksClusterName,
+              EKS_REGION: props.eksRegion as string,
+              MANIFEST_PATH: props.eksInstallArgoCdPath,
+            },
+            command: "./scripts/InstallConfigureArgoCD.sh",
+          },
+        ],
       });
-
-      // Create ArgoCD Application
-      // new Manifest(this, "argo-cd-eks-application", {
-      //   dependsOn: [eks_argocd_install],
-      //   provider: eks_kubernetes_provider,
-      //   manifest: {
-      //     apiVersion: "argoproj.io/v1alpha1",
-      //     kind: "Application",
-      //     metadata: {
-      //       name: props.eksArgoCdApplicationName,
-      //       namespace: props.eksArgoCdApplicationNamespace,
-      //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
-      //     },
-      //     spec: {
-      //       destination: {
-      //         namespace: props.eksArgoCdNamespace,
-      //         server: "https://kubernetes.default.svc",
-      //       },
-      //       project: props.eksArgoCdProjectName,
-      //       source: {
-      //         path: props.eksArgoCdApplicationSourcePath,
-      //         repoURL: props.eksArgoCdTargetRepoUrl,
-      //         targetRevision: "HEAD",
-      //       },
-      //     },
-      //   },
-      // });
     }
   }
 }

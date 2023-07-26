@@ -1,4 +1,4 @@
-import { KubernetesManagementDir, RepoURL } from "../../const";
+import { KubernetesManagementDir } from "../../const";
 
 export const EksTerraformVariables: any = {
   eksCreateVpc: {
@@ -155,47 +155,7 @@ export const EksTerraformVariables: any = {
     staging: true,
     prod: true,
   },
-  eksArgoCdNamespace: {
-    dev: "argocd",
-    staging: "argocd",
-    prod: "argocd",
-  },
-  eksArgoCdCreateNamespace: {
-    dev: true,
-    staging: true,
-    prod: true,
-  },
-  eksArgoCdReleaseName: {
-    dev: "argocd",
-    staging: "argocd",
-    prod: "argocd",
-  },
-  eksArgoCdChartVersion: {
-    dev: "5.39.0",
-    staging: "5.39.0",
-    prod: "5.39.0",
-  },
-  eksArgoCdTargetRepoUrl: {
-    dev: RepoURL,
-    staging: RepoURL,
-    prod: RepoURL,
-  },
-  eksArgoCdProjectName: {
-    dev: "default",
-    staging: "default",
-    prod: "default",
-  },
-  eksArgoCdApplicationName: {
-    dev: "dev-eks-argocd",
-    staging: "staging-eks-argocd",
-    prod: "prod-eks-argocd",
-  },
-  eksArgoCdApplicationNamespace: {
-    dev: "dev-eks-argocd",
-    staging: "staging-eks-argocd",
-    prod: "prod-eks-argocd",
-  },
-  eksArgoCdApplicationSourcePath: {
+  eksInstallArgoCdPath: {
     dev: KubernetesManagementDir + "eks/" + "dev",
     staging: KubernetesManagementDir + "eks/" + "staging",
     prod: KubernetesManagementDir + "eks/" + "prod",

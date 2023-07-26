@@ -1,8 +1,5 @@
-import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
-import { Release } from "@cdktf/provider-helm/lib/release";
-// import {Manifest} from "@cdktf/provider-kubernetes/lib/manifest";
-// import {KubernetesProvider} from "@cdktf/provider-kubernetes/lib/provider";
-import { Fn } from "cdktf";
+import { NullProvider } from "@cdktf/provider-null/lib/provider";
+import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
@@ -41,15 +38,7 @@ export interface AksClusterProps {
   readonly aksIngressApplicationGatewaySubnetCidr: string;
   readonly aksTags?: { [key: string]: string };
   readonly aksInstallArgoCd: boolean;
-  readonly aksArgoCdNamespace: string;
-  readonly aksArgoCdCreateNamespace: boolean;
-  readonly aksArgoCdReleaseName: string;
-  readonly aksArgoCdChartVersion: string;
-  readonly aksArgoCdTargetRepoUrl: string;
-  readonly aksArgoCdProjectName: string;
-  readonly aksArgoCdApplicationName: string;
-  readonly aksArgoCdApplicationNamespace: string;
-  readonly aksArgoCdApplicationSourcePath: string;
+  readonly aksInstallArgoCdPath: string;
 }
 
 export class AksCluster extends Construct {
@@ -114,77 +103,33 @@ export class AksCluster extends Construct {
 
     // Install ArgoCD on EKS Cluster
     if (props.aksInstallArgoCd) {
-      // Create AKS Kubernetes Provider
-      // const aks_kubernetes_provider = new KubernetesProvider(
-      //     this,
-      //     "AKS_KUBERNETES",
-      //     {
-      //         host: this.aks.hostOutput,
-      //         clusterCaCertificate: Fn.base64decode(
-      //             this.aks.adminClusterCaCertificateOutput,
-      //         ),
-      //         clientCertificate: Fn.base64decode(
-      //             this.aks.adminClientCertificateOutput,
-      //         ),
-      //         clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
-      //         alias: "aks_kubernetes",
-      //     },
-      // );
-
-      // Create AKS Helm Provider
-      const aks_helm_provider = new HelmProvider(this, "AKS_HELM", {
-        kubernetes: {
-          host: this.aks.hostOutput,
-          clusterCaCertificate: Fn.base64decode(
-            this.aks.adminClusterCaCertificateOutput,
-          ),
-          clientCertificate: Fn.base64decode(
-            this.aks.adminClientCertificateOutput,
-          ),
-          clientKey: Fn.base64decode(this.aks.adminClientKeyOutput),
-        },
-        alias: "aks_helm",
+      // TODO Currently, we are using null provider to install ArgoCD on Kubernetes Cluster
+      //  Use Terraform Kubernetes Provider or cdktf Kubernetes Provider when there is a version
+      //  which supports applying mainifests on Kubernetes Cluster that's not exists
+      //  To avoid the `Cannot create REST client: no client config` error during the terraform plan
+      //  OR Use kubectl terraform provider when it is officially trusted by Hashicorp'
+      const aks_null_provider = new NullProvider(this, "aks-null-provider", {
+        alias: "aks_null",
       });
-
-      // Install ArgoCD on AKS Cluster
-      // const aks_argocd_install = new Release(this, "argo-cd-aks-install", {
-      new Release(this, "argo-cd-aks-install", {
+      new Resource(this, "argo-cd-aks-install-null", {
         dependsOn: [this.aks],
-        provider: aks_helm_provider,
-        chart: "argo/argo-cd",
-        repository: "https://argoproj.github.io/argo-helm",
-        name: props.aksArgoCdReleaseName,
-        namespace: props.aksArgoCdNamespace,
-        createNamespace: props.aksArgoCdCreateNamespace,
-        version: props.aksArgoCdChartVersion,
+        provider: aks_null_provider,
+        provisioners: [
+          {
+            type: "local-exec",
+            when: "create",
+            interpreter: ["bash", "-c"],
+            workingDir: "./",
+            environment: {
+              CLUSTER_PROVIDER: "aks",
+              AKS_CLUSTER_NAME: props.aksClusterName,
+              AKS_RESOURCE_GROUP_NAME: props.aksResourceGroupName,
+              MANIFEST_PATH: props.aksInstallArgoCdPath,
+            },
+            command: "./scripts/InstallConfigureArgoCD.sh",
+          },
+        ],
       });
-
-      // Create ArgoCD Application
-      // new Manifest(this, "argo-cd-aks-application", {
-      //   dependsOn: [aks_argocd_install],
-      //   provider: aks_kubernetes_provider,
-      //   manifest: {
-      //     apiVersion: "argoproj.io/v1alpha1",
-      //     kind: "Application",
-      //     metadata: {
-      //       name: props.aksArgoCdApplicationName,
-      //       namespace: props.aksArgoCdApplicationNamespace,
-      //       finalizers: ["resources-finalizer.argocd.argoproj.io"],
-      //     },
-      //     spec: {
-      //       destination: {
-      //         namespace: props.aksArgoCdNamespace,
-      //         server: "https://kubernetes.default.svc",
-      //       },
-      //       project: props.aksArgoCdProjectName,
-      //       source: {
-      //         path: props.aksArgoCdApplicationSourcePath,
-      //         repoURL: props.aksArgoCdTargetRepoUrl,
-      //         targetRevision: "HEAD",
-      //       },
-      //     },
-      //   },
-      // });
     }
   }
 }

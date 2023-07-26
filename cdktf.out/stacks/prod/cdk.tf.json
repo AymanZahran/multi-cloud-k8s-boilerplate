@@ -4,7 +4,7 @@
       "backend": "remote",
       "cloud": "tfc",
       "stackName": "prod",
-      "version": "0.17.1"
+      "version": "0.17.3"
     },
     "outputs": {
     }
@@ -151,62 +151,78 @@
         "tenant_id": ""
       }
     ],
-    "helm": [
+    "null": [
       {
-        "alias": "eks_helm",
-        "kubernetes": {
-          "cluster_ca_certificate": "${base64decode(module.eks_B1A34D59.cluster_certificate_authority_data)}",
-          "host": "${module.eks_B1A34D59.cluster_endpoint}"
-        }
+        "alias": "eks_null"
       },
       {
-        "alias": "aks_helm",
-        "kubernetes": {
-          "client_certificate": "${base64decode(module.aks_BAB83E91.admin_client_certificate)}",
-          "client_key": "${base64decode(module.aks_BAB83E91.admin_client_key)}",
-          "cluster_ca_certificate": "${base64decode(module.aks_BAB83E91.admin_cluster_ca_certificate)}",
-          "host": "${module.aks_BAB83E91.host}"
-        }
+        "alias": "aks_null"
       }
     ]
   },
   "resource": {
-    "helm_release": {
-      "aks_argo-cd-aks-install_93782B8D": {
+    "null_resource": {
+      "aks_argo-cd-aks-install-null_A56F49F3": {
         "//": {
           "metadata": {
-            "path": "prod/aks/argo-cd-aks-install",
-            "uniqueId": "aks_argo-cd-aks-install_93782B8D"
+            "path": "prod/aks/argo-cd-aks-install-null",
+            "uniqueId": "aks_argo-cd-aks-install-null_A56F49F3"
           }
         },
-        "chart": "argo/argo-cd",
-        "create_namespace": "${var.aks_argo_cd_create_namespace}",
         "depends_on": [
           "module.aks_BAB83E91"
         ],
-        "name": "${var.aks_argo_cd_release_name}",
-        "namespace": "${var.aks_argo_cd_namespace}",
-        "provider": "helm.aks_helm",
-        "repository": "https://argoproj.github.io/argo-helm",
-        "version": "${var.aks_argo_cd_chart_version}"
+        "provider": "null.aks_null",
+        "provisioner": [
+          {
+            "local-exec": {
+              "command": "./scripts/InstallConfigureArgoCD.sh",
+              "environment": {
+                "AKS_CLUSTER_NAME": "${var.aks_cluster_name}",
+                "AKS_RESOURCE_GROUP_NAME": "${var.aks_resource_group_name}",
+                "CLUSTER_PROVIDER": "aks",
+                "MANIFEST_PATH": "${var.aks_install_argo_cd_path}"
+              },
+              "interpreter": [
+                "bash",
+                "-c"
+              ],
+              "when": "create",
+              "working_dir": "./"
+            }
+          }
+        ]
       },
-      "eks_argo-cd-eks-install_895ADF16": {
+      "eks_argo-cd-eks-install-null_F3907BA3": {
         "//": {
           "metadata": {
-            "path": "prod/eks/argo-cd-eks-install",
-            "uniqueId": "eks_argo-cd-eks-install_895ADF16"
+            "path": "prod/eks/argo-cd-eks-install-null",
+            "uniqueId": "eks_argo-cd-eks-install-null_F3907BA3"
           }
         },
-        "chart": "argo/argo-cd",
-        "create_namespace": "${var.eks_argo_cd_create_namespace}",
         "depends_on": [
           "module.eks_B1A34D59"
         ],
-        "name": "${var.eks_argo_cd_release_name}",
-        "namespace": "${var.eks_argo_cd_namespace}",
-        "provider": "helm.eks_helm",
-        "repository": "https://argoproj.github.io/argo-helm",
-        "version": "${var.eks_argo_cd_chart_version}"
+        "provider": "null.eks_null",
+        "provisioner": [
+          {
+            "local-exec": {
+              "command": "./scripts/InstallConfigureArgoCD.sh",
+              "environment": {
+                "CLUSTER_NAME": "${var.eks_cluster_name}",
+                "CLUSTER_PROVIDER": "aks",
+                "EKS_REGION": "us-east-1",
+                "MANIFEST_PATH": "${var.eks_install_argo_cd_path}"
+              },
+              "interpreter": [
+                "bash",
+                "-c"
+              ],
+              "when": "create",
+              "working_dir": "./"
+            }
+          }
+        ]
       }
     }
   },
@@ -223,15 +239,15 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "5.8.0"
+        "version": "5.9.0"
       },
       "azurerm": {
         "source": "azurerm",
-        "version": "3.65.0"
+        "version": "3.66.0"
       },
-      "helm": {
-        "source": "helm",
-        "version": "2.10.1"
+      "null": {
+        "source": "null",
+        "version": "3.2.1"
       }
     }
   },
@@ -273,51 +289,6 @@
       "description": "The type of AKS agents",
       "type": "string"
     },
-    "aks_argo_cd_application_chart": {
-      "default": "kubernetes/management/aks/prod",
-      "description": "The application chart for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_application_name": {
-      "default": "prod-aks-argocd",
-      "description": "The application name for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_application_namespace": {
-      "default": "prod-aks-argocd",
-      "description": "The application namespace for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_chart_version": {
-      "default": "5.39.0",
-      "description": "The chart version for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_create_namespace": {
-      "default": true,
-      "description": "A boolean flag to create Argo CD namespace",
-      "type": "bool"
-    },
-    "aks_argo_cd_namespace": {
-      "default": "argocd",
-      "description": "The namespace for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_project_name": {
-      "default": "default",
-      "description": "The project name for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_release_name": {
-      "default": "argocd",
-      "description": "The release name for Argo CD",
-      "type": "string"
-    },
-    "aks_argo_cd_target_repo_url": {
-      "default": "https://github.com/AymanZahran/multi-cloud-boilerplate",
-      "description": "The target repo url for Argo CD",
-      "type": "string"
-    },
     "aks_auto_scaler_profile_enabled": {
       "default": true,
       "description": "Whether to enable auto scaler profile for AKS agents",
@@ -352,6 +323,11 @@
       "default": true,
       "description": "A boolean flag to install Argo CD",
       "type": "bool"
+    },
+    "aks_install_argo_cd_path": {
+      "default": "kubernetes/management/aks/prod",
+      "description": "The path to the Argo CD installation",
+      "type": "string"
     },
     "aks_key_vault_secrets_provider_enabled": {
       "default": true,
@@ -447,51 +423,6 @@
       "description": "The name of the AKS VNet",
       "type": "string"
     },
-    "eks_argo_cd_application_name": {
-      "default": "prod-eks-argocd",
-      "description": "The application name for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_application_namespace": {
-      "default": "prod-eks-argocd",
-      "description": "The application namespace for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_application_source_path": {
-      "default": "kubernetes/management/eks/prod",
-      "description": "The application source path for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_chart_version": {
-      "default": "5.39.0",
-      "description": "The chart version for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_create_namespace": {
-      "default": true,
-      "description": "A boolean flag to create Argo CD namespace",
-      "type": "bool"
-    },
-    "eks_argo_cd_namespace": {
-      "default": "argocd",
-      "description": "The namespace for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_project_name": {
-      "default": "default",
-      "description": "The project name for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_release_name": {
-      "default": "argocd",
-      "description": "The release name for Argo CD",
-      "type": "string"
-    },
-    "eks_argo_cd_target_repo_url": {
-      "default": "https://github.com/AymanZahran/multi-cloud-boilerplate",
-      "description": "The target repo url for Argo CD",
-      "type": "string"
-    },
     "eks_azs": {
       "default": [
         "us-east-1a",
@@ -555,6 +486,11 @@
       "default": true,
       "description": "A boolean flag to install Argo CD",
       "type": "bool"
+    },
+    "eks_install_argo_cd_path": {
+      "default": "kubernetes/management/eks/prod",
+      "description": "The path to the Argo CD installation",
+      "type": "string"
     },
     "eks_manage_aws_auth_configmap": {
       "default": true,

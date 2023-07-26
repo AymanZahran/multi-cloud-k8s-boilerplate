@@ -13,11 +13,17 @@ const project = new typescript.TypeScriptAppProject({
   authorName: "Ayman Zahran",
   authorEmail: "ayman@aymanzahran.com",
   gitpod: true,
-  release: true,
-  releaseToNpm: true,
-  npmRegistryUrl: "https://www.npmjs.com/~ayman.zahran",
+  licensed: true,
+  license: "Apache-2.0",
+  readme: {
+    filename: "README.md",
+  },
+  release: false,
   vscode: true,
   depsUpgrade: true,
+  autoApproveOptions: {
+    label: "auto-approve",
+  },
   autoApproveUpgrades: false, // Set false to manually approve upgrades
   buildWorkflow: true, // Enable build workflow
   mutableBuild: true, // Automatically update files modified by build
@@ -74,6 +80,7 @@ const project = new typescript.TypeScriptAppProject({
     "@cdktf/provider-azurerm@^" + PackageVersions.provider_azurerm,
     "@cdktf/provider-kubernetes@^" + PackageVersions.provider_kubernetes,
     "@cdktf/provider-helm@^" + PackageVersions.provider_helm,
+    "@cdktf/provider-null@^" + PackageVersions.provider_null,
     "cdk8s@^" + PackageVersions.cdk8s,
     "cdk8s-cli@^" + CI_Versions.cdk8s_cli,
     "cdk8s-plus@^" + PackageVersions.cdk8s_plus,

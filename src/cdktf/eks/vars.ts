@@ -175,86 +175,13 @@ export function DefineEksVariables(
     default: EksTerraformVariables.eksInstallArgoCd[environment],
     description: "A boolean flag to install Argo CD",
   });
-  const eksArgoCdNamespace = new TerraformVariable(
+  const eksInstallArgoCdPath = new TerraformVariable(
     stack,
-    "eks_argo_cd_namespace",
+    "eks_install_argo_cd_path",
     {
       type: "string",
-      default: EksTerraformVariables.eksArgoCdNamespace[environment],
-      description: "The namespace for Argo CD",
-    },
-  );
-  const eksArgoCdCreateNamespace = new TerraformVariable(
-    stack,
-    "eks_argo_cd_create_namespace",
-    {
-      type: "bool",
-      default: EksTerraformVariables.eksArgoCdCreateNamespace[environment],
-      description: "A boolean flag to create Argo CD namespace",
-    },
-  );
-  const eksArgoCdReleaseName = new TerraformVariable(
-    stack,
-    "eks_argo_cd_release_name",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdReleaseName[environment],
-      description: "The release name for Argo CD",
-    },
-  );
-  const eksArgoCdChartVersion = new TerraformVariable(
-    stack,
-    "eks_argo_cd_chart_version",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdChartVersion[environment],
-      description: "The chart version for Argo CD",
-    },
-  );
-  const eksArgoCdTargetRepoUrl = new TerraformVariable(
-    stack,
-    "eks_argo_cd_target_repo_url",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdTargetRepoUrl[environment],
-      description: "The target repo url for Argo CD",
-    },
-  );
-  const eksArgoCdProjectName = new TerraformVariable(
-    stack,
-    "eks_argo_cd_project_name",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdProjectName[environment],
-      description: "The project name for Argo CD",
-    },
-  );
-  const eksArgoCdApplicationName = new TerraformVariable(
-    stack,
-    "eks_argo_cd_application_name",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdApplicationName[environment],
-      description: "The application name for Argo CD",
-    },
-  );
-  const eksArgoCdApplicationNamespace = new TerraformVariable(
-    stack,
-    "eks_argo_cd_application_namespace",
-    {
-      type: "string",
-      default: EksTerraformVariables.eksArgoCdApplicationNamespace[environment],
-      description: "The application namespace for Argo CD",
-    },
-  );
-  const eksArgoCdApplicationSourcePath = new TerraformVariable(
-    stack,
-    "eks_argo_cd_application_source_path",
-    {
-      type: "string",
-      default:
-        EksTerraformVariables.eksArgoCdApplicationSourcePath[environment],
-      description: "The application source path for Argo CD",
+      default: EksTerraformVariables.eksInstallArgoCdPath[environment],
+      description: "The path to the Argo CD installation",
     },
   );
 
@@ -282,14 +209,6 @@ export function DefineEksVariables(
     eksManagedNodeGroupDesiredSize,
     eksTags,
     eksInstallArgoCd,
-    eksArgoCdNamespace,
-    eksArgoCdCreateNamespace,
-    eksArgoCdReleaseName,
-    eksArgoCdChartVersion,
-    eksArgoCdTargetRepoUrl,
-    eksArgoCdProjectName,
-    eksArgoCdApplicationName,
-    eksArgoCdApplicationNamespace,
-    eksArgoCdApplicationSourcePath,
+    eksInstallArgoCdPath,
   };
 }

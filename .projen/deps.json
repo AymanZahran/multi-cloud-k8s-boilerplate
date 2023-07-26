@@ -67,11 +67,6 @@
       "type": "build"
     },
     {
-      "name": "standard-version",
-      "version": "^9",
-      "type": "build"
-    },
-    {
       "name": "ts-jest",
       "type": "build"
     },
@@ -101,6 +96,11 @@
     {
       "name": "@cdktf/provider-kubernetes",
       "version": "^8.0.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-null",
+      "version": "^7.0.0",
       "type": "runtime"
     },
     {

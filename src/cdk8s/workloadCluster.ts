@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { ArgoCd } from "./charts/argoCd";
 import { ArgoImageUpdater } from "./charts/argoImageUpdater";
 import { ArgoNotifications } from "./charts/argoNotifications";
 import { ArgoRollouts } from "./charts/argoRollouts";
@@ -21,6 +22,10 @@ import { VaultSecretStoreDriver } from "./charts/vaultSecretStoreDriver";
 
 export interface WorklaodClusterProps {
   readonly app: any;
+  readonly ArgoCdHelmChartLabels?: any;
+  readonly ArgoCdHelmChartsFlags?: string[];
+  readonly ArgoCdHelmChartVersion?: string;
+  readonly ArgoCdHelmChartValues?: any;
   readonly EnableArgoImageUpdater: boolean;
   readonly ArgoImageUpdaterHelmChartLabels?: any;
   readonly ArgoImageUpdaterHelmChartsFlags?: string[];
@@ -121,6 +126,16 @@ export interface WorklaodClusterProps {
 export class WorkloadCluster extends Construct {
   constructor(scope: Construct, name: string, props: WorklaodClusterProps) {
     super(scope, name);
+    new ArgoCd(
+      props.app,
+      "argo-cd",
+      {
+        labels: props.ArgoCdHelmChartLabels,
+      },
+      props.ArgoCdHelmChartsFlags,
+      props.ArgoCdHelmChartVersion,
+      props.ArgoCdHelmChartValues,
+    );
     if (props.EnableArgoImageUpdater) {
       new ArgoImageUpdater(
         props.app,
