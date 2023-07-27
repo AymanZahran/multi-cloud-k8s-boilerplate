@@ -179,6 +179,8 @@ for (const env of Object.values(Environment)) {
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
 
+  eksWorkloadApp.synth();
+
   new WorkloadCluster(aksWorkloadApp, "management-aks-cluster", {
     app: aksWorkloadApp,
     provider: "aks",
