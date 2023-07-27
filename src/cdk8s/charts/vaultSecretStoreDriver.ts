@@ -1,14 +1,16 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface VaultSecretStoreDriverProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
 export class VaultSecretStoreDriver extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
+    props: VaultSecretStoreDriverProps,
   ) {
     super(scope, id, props);
 
@@ -16,9 +18,9 @@ export class VaultSecretStoreDriver extends Chart {
       chart: "secrets-store-csi-driver/secrets-store-csi-driver",
       releaseName: "secret-store",
       namespace: "secret-store",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }

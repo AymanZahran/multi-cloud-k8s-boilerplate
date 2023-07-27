@@ -22,6 +22,8 @@ import { VaultSecretStoreDriver } from "./charts/vaultSecretStoreDriver";
 
 export interface WorklaodClusterProps {
   readonly app: any;
+  readonly environment: string;
+  readonly provider: string;
   readonly ArgoCdHelmChartLabels?: any;
   readonly ArgoCdHelmChartsFlags?: string[];
   readonly ArgoCdHelmChartVersion?: string;
@@ -126,243 +128,166 @@ export interface WorklaodClusterProps {
 export class WorkloadCluster extends Construct {
   constructor(scope: Construct, name: string, props: WorklaodClusterProps) {
     super(scope, name);
-    new ArgoCd(
-      props.app,
-      "argo-cd",
-      {
-        labels: props.ArgoCdHelmChartLabels,
-      },
-      props.ArgoCdHelmChartsFlags,
-      props.ArgoCdHelmChartVersion,
-      props.ArgoCdHelmChartValues,
-    );
+    new ArgoCd(props.app, "argo-cd", {
+      clusterType: "workload",
+      provider: props.provider,
+      environment: props.environment,
+      helmFlags: props.ArgoCdHelmChartsFlags,
+      version: props.ArgoCdHelmChartVersion,
+      values: props.ArgoCdHelmChartValues,
+      labels: props.ArgoCdHelmChartLabels,
+    });
     if (props.EnableArgoImageUpdater) {
-      new ArgoImageUpdater(
-        props.app,
-        "argo-image-updater",
-        {
-          labels: props.ArgoImageUpdaterHelmChartLabels,
-        },
-        props.ArgoImageUpdaterHelmChartsFlags,
-        props.ArgoImageUpdaterHelmChartVersion,
-        props.ArgoImageUpdaterHelmChartValues,
-      );
+      new ArgoImageUpdater(props.app, "argo-image-updater", {
+        helmFlags: props.ArgoImageUpdaterHelmChartsFlags,
+        version: props.ArgoImageUpdaterHelmChartVersion,
+        values: props.ArgoImageUpdaterHelmChartValues,
+        labels: props.ArgoImageUpdaterHelmChartLabels,
+      });
     }
     if (props.EnableArgoNotifications) {
-      new ArgoNotifications(
-        props.app,
-        "argo-notifications",
-        {
-          labels: props.ArgoNotificationsHelmChartLabels,
-        },
-        props.ArgoNotificationsHelmChartsFlags,
-        props.ArgoNotificationsHelmChartVersion,
-        props.ArgoNotificationsHelmChartValues,
-      );
+      new ArgoNotifications(props.app, "argo-notifications", {
+        helmFlags: props.ArgoNotificationsHelmChartsFlags,
+        version: props.ArgoNotificationsHelmChartVersion,
+        values: props.ArgoNotificationsHelmChartValues,
+        labels: props.ArgoNotificationsHelmChartLabels,
+      });
     }
     if (props.EnableArgoRollouts) {
-      new ArgoRollouts(
-        props.app,
-        "argo-rollouts",
-        {
-          labels: props.ArgoRolloutsHelmChartLabels,
-        },
-        props.ArgoRolloutsHelmChartsFlags,
-        props.ArgoRolloutsHelmChartVersion,
-        props.ArgoRolloutsHelmChartValues,
-      );
+      new ArgoRollouts(props.app, "argo-rollouts", {
+        helmFlags: props.ArgoRolloutsHelmChartsFlags,
+        version: props.ArgoRolloutsHelmChartVersion,
+        values: props.ArgoRolloutsHelmChartValues,
+        labels: props.ArgoRolloutsHelmChartLabels,
+      });
     }
     if (props.EnableArgoWorkflows) {
-      new ArgoWorkflows(
-        props.app,
-        "argo-workflows",
-        {
-          labels: props.ArgoWorkflowsHelmChartLabels,
-        },
-        props.ArgoWorkflowsHelmChartsFlags,
-        props.ArgoWorkflowsHelmChartVersion,
-        props.ArgoWorkflowsHelmChartValues,
-      );
+      new ArgoWorkflows(props.app, "argo-workflows", {
+        helmFlags: props.ArgoWorkflowsHelmChartsFlags,
+        version: props.ArgoWorkflowsHelmChartVersion,
+        values: props.ArgoWorkflowsHelmChartValues,
+        labels: props.ArgoWorkflowsHelmChartLabels,
+      });
     }
     if (props.EnableAwsCloudWatchAgent) {
-      new AwsCloudWatchAgent(
-        props.app,
-        "aws-cloudwatch-agent",
-        {
-          labels: props.AwsCloudWatchAgentHelmChartLabels,
-        },
-        props.AwsCloudWatchAgentHelmChartsFlags,
-        props.AwsCloudWatchAgentHelmChartVersion,
-        props.AwsCloudWatchAgentHelmChartValues,
-      );
+      new AwsCloudWatchAgent(props.app, "aws-cloudwatch-agent", {
+        helmFlags: props.AwsCloudWatchAgentHelmChartsFlags,
+        version: props.AwsCloudWatchAgentHelmChartVersion,
+        values: props.AwsCloudWatchAgentHelmChartValues,
+        labels: props.AwsCloudWatchAgentHelmChartLabels,
+      });
     }
     if (props.EnableAwsEbsCsiDriver) {
-      new AwsEbsCsiDriver(
-        props.app,
-        "aws-ebs-csi-driver",
-        {
-          labels: props.AwsEbsCsiDriverHelmChartLabels,
-        },
-        props.AwsEbsCsiDriverHelmChartsFlags,
-        props.AwsEbsCsiDriverHelmChartVersion,
-        props.AwsEbsCsiDriverHelmChartValues,
-      );
+      new AwsEbsCsiDriver(props.app, "aws-ebs-csi-driver", {
+        helmFlags: props.AwsEbsCsiDriverHelmChartsFlags,
+        version: props.AwsEbsCsiDriverHelmChartVersion,
+        values: props.AwsEbsCsiDriverHelmChartValues,
+        labels: props.AwsEbsCsiDriverHelmChartLabels,
+      });
     }
     if (props.EnableAwsEfsCsiDriver) {
-      new AwsEfsCsiDriver(
-        props.app,
-        "aws-efs-csi-driver",
-        {
-          labels: props.AwsEfsCsiDriverHelmChartLabels,
-        },
-        props.AwsEfsCsiDriverHelmChartsFlags,
-        props.AwsEfsCsiDriverHelmChartVersion,
-        props.AwsEfsCsiDriverHelmChartValues,
-      );
+      new AwsEfsCsiDriver(props.app, "aws-efs-csi-driver", {
+        helmFlags: props.AwsEfsCsiDriverHelmChartsFlags,
+        version: props.AwsEfsCsiDriverHelmChartVersion,
+        values: props.AwsEfsCsiDriverHelmChartValues,
+        labels: props.AwsEfsCsiDriverHelmChartLabels,
+      });
     }
     if (props.EnableAwsFsxCsiDriver) {
-      new AwsFsxCsiDriver(
-        props.app,
-        "aws-fsx-csi-driver",
-        {
-          labels: props.AwsFsxCsiDriverHelmChartLabels,
-        },
-        props.AwsFsxCsiDriverHelmChartsFlags,
-        props.AwsFsxCsiDriverHelmChartVersion,
-        props.AwsFsxCsiDriverHelmChartValues,
-      );
+      new AwsFsxCsiDriver(props.app, "aws-fsx-csi-driver", {
+        helmFlags: props.AwsFsxCsiDriverHelmChartsFlags,
+        version: props.AwsFsxCsiDriverHelmChartVersion,
+        values: props.AwsFsxCsiDriverHelmChartValues,
+        labels: props.AwsFsxCsiDriverHelmChartLabels,
+      });
     }
     if (props.EnableAwsLoadBalancerController) {
-      new AwsLoadBalancerController(
-        props.app,
-        "aws-load-balancer-controller",
-        {
-          labels: props.AwsLoadBalancerControllerHelmChartLabels,
-        },
-        props.AwsLoadBalancerControllerHelmChartsFlags,
-        props.AwsLoadBalancerControllerHelmChartVersion,
-        props.AwsLoadBalancerControllerHelmChartValues,
-      );
+      new AwsLoadBalancerController(props.app, "aws-load-balancer-controller", {
+        helmFlags: props.AwsLoadBalancerControllerHelmChartsFlags,
+        version: props.AwsLoadBalancerControllerHelmChartVersion,
+        values: props.AwsLoadBalancerControllerHelmChartValues,
+        labels: props.AwsLoadBalancerControllerHelmChartLabels,
+      });
     }
     if (props.EnableAwsSecretStoreCsiDriver) {
-      new AwsSecretStoreCsiDriver(
-        props.app,
-        "aws-secret-store-csi-driver",
-        {
-          labels: props.AwsSecretStoreCsiDriverHelmChartLabels,
-        },
-        props.AwsSecretStoreCsiDriverHelmChartsFlags,
-        props.AwsSecretStoreCsiDriverHelmChartVersion,
-        props.AwsSecretStoreCsiDriverHelmChartValues,
-      );
+      new AwsSecretStoreCsiDriver(props.app, "aws-secret-store-csi-driver", {
+        helmFlags: props.AwsSecretStoreCsiDriverHelmChartsFlags,
+        version: props.AwsSecretStoreCsiDriverHelmChartVersion,
+        values: props.AwsSecretStoreCsiDriverHelmChartValues,
+        labels: props.AwsSecretStoreCsiDriverHelmChartLabels,
+      });
     }
     if (props.EnableCertManager) {
-      new CertManager(
-        props.app,
-        "cert-manager",
-        {
-          labels: props.CertManagerHelmChartLabels,
-        },
-        props.CertManagerHelmChartsFlags,
-        props.CertManagerHelmChartVersion,
-        props.CertManagerHelmChartValues,
-      );
+      new CertManager(props.app, "cert-manager", {
+        helmFlags: props.CertManagerHelmChartsFlags,
+        version: props.CertManagerHelmChartVersion,
+        values: props.CertManagerHelmChartValues,
+        labels: props.CertManagerHelmChartLabels,
+      });
     }
     if (props.EnableClusterAutoscaler) {
-      new ClusterAutoscaler(
-        props.app,
-        "cluster-autoscaler",
-        {
-          labels: props.ClusterAutoscalerHelmChartLabels,
-        },
-        props.ClusterAutoscalerHelmChartsFlags,
-        props.ClusterAutoscalerHelmChartVersion,
-        props.ClusterAutoscalerHelmChartValues,
-      );
+      new ClusterAutoscaler(props.app, "cluster-autoscaler", {
+        helmFlags: props.ClusterAutoscalerHelmChartsFlags,
+        version: props.ClusterAutoscalerHelmChartVersion,
+        values: props.ClusterAutoscalerHelmChartValues,
+        labels: props.ClusterAutoscalerHelmChartLabels,
+      });
     }
     if (props.EnableConsul) {
-      new Consul(
-        props.app,
-        "consul",
-        {
-          labels: props.ConsulHelmChartLabels,
-        },
-        props.ConsulHelmChartsFlags,
-        props.ConsulHelmChartVersion,
-        props.ConsulHelmChartValues,
-      );
+      new Consul(props.app, "consul", {
+        helmFlags: props.ConsulHelmChartsFlags,
+        version: props.ConsulHelmChartVersion,
+        values: props.ConsulHelmChartValues,
+        labels: props.ConsulHelmChartLabels,
+      });
     }
     if (props.EnableKubeStateMetrics) {
-      new KubeStateMetrics(
-        props.app,
-        "kube-state-metrics",
-        {
-          labels: props.KubeStateMetricsHelmChartLabels,
-        },
-        props.KubeStateMetricsHelmChartsFlags,
-        props.KubeStateMetricsHelmChartVersion,
-        props.KubeStateMetricsHelmChartValues,
-      );
+      new KubeStateMetrics(props.app, "kube-state-metrics", {
+        helmFlags: props.KubeStateMetricsHelmChartsFlags,
+        version: props.KubeStateMetricsHelmChartVersion,
+        values: props.KubeStateMetricsHelmChartValues,
+        labels: props.KubeStateMetricsHelmChartLabels,
+      });
     }
     if (props.EnableMetricsServer) {
-      new MetricsServer(
-        props.app,
-        "metrics-server",
-        {
-          labels: props.MetricsServerHelmChartLabels,
-        },
-        props.MetricsServerHelmChartsFlags,
-        props.MetricsServerHelmChartVersion,
-        props.MetricsServerHelmChartValues,
-      );
+      new MetricsServer(props.app, "metrics-server", {
+        helmFlags: props.MetricsServerHelmChartsFlags,
+        version: props.MetricsServerHelmChartVersion,
+        values: props.MetricsServerHelmChartValues,
+        labels: props.MetricsServerHelmChartLabels,
+      });
     }
     if (props.EnablePrometheus) {
-      new Prometheus(
-        props.app,
-        "prometheus",
-        {
-          labels: props.PrometheusHelmChartLabels,
-        },
-        props.PrometheusHelmChartsFlags,
-        props.PrometheusHelmChartVersion,
-        props.PrometheusHelmChartValues,
-      );
+      new Prometheus(props.app, "prometheus", {
+        helmFlags: props.PrometheusHelmChartsFlags,
+        version: props.PrometheusHelmChartVersion,
+        values: props.PrometheusHelmChartValues,
+        labels: props.PrometheusHelmChartLabels,
+      });
     }
     if (props.EnableTekton) {
-      new Tekton(
-        props.app,
-        "tekton",
-        {
-          labels: props.TektonHelmChartLabels,
-        },
-        props.TektonHelmChartsFlags,
-        props.TektonHelmChartVersion,
-        props.TektonHelmChartValues,
-      );
+      new Tekton(props.app, "tekton", {
+        helmFlags: props.TektonHelmChartsFlags,
+        version: props.TektonHelmChartVersion,
+        values: props.TektonHelmChartValues,
+        labels: props.TektonHelmChartLabels,
+      });
     }
     if (props.EnableVault) {
-      new Vault(
-        props.app,
-        "vault",
-        {
-          labels: props.VaultHelmChartLabels,
-        },
-        props.VaultHelmChartsFlags,
-        props.VaultHelmChartVersion,
-        props.VaultHelmChartValues,
-      );
+      new Vault(props.app, "vault", {
+        helmFlags: props.VaultHelmChartsFlags,
+        version: props.VaultHelmChartVersion,
+        values: props.VaultHelmChartValues,
+        labels: props.VaultHelmChartLabels,
+      });
     }
     if (props.EnableVaultSecretStoreDriver) {
-      new VaultSecretStoreDriver(
-        props.app,
-        "vault-secret-store-driver",
-        {
-          labels: props.VaultSecretStoreDriverHelmChartLabels,
-        },
-        props.VaultSecretStoreDriverHelmChartsFlags,
-        props.VaultSecretStoreDriverHelmChartVersion,
-        props.VaultSecretStoreDriverHelmChartValues,
-      );
+      new VaultSecretStoreDriver(props.app, "vault-secret-store-driver", {
+        helmFlags: props.VaultSecretStoreDriverHelmChartsFlags,
+        version: props.VaultSecretStoreDriverHelmChartVersion,
+        values: props.VaultSecretStoreDriverHelmChartValues,
+        labels: props.VaultSecretStoreDriverHelmChartLabels,
+      });
     }
   }
 }

@@ -1,24 +1,23 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface AwsFsxCsiDriverProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
+
 export class AwsFsxCsiDriver extends Chart {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
-  ) {
+  constructor(scope: Construct, id: string, props: AwsFsxCsiDriverProps) {
     super(scope, id, props);
 
     new Helm(this, "aws-fsx-csi-driver", {
       chart: "eks/aws-fsx-csi-driver",
       releaseName: "aws-fsx-csi-driver",
       namespace: "aws-fsx-csi-driver",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }
