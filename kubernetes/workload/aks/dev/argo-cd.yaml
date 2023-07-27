@@ -17628,6 +17628,6 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: kubernetes/workload/eks/staging
+    path: kubernetes/workload/aks/dev
     repoURL: https://github.com/AymanZahran/multi-cloud-k8s-boilerplate
     targetRevision: HEAD
