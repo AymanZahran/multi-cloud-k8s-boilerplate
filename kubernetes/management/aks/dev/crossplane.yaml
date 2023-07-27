@@ -999,14 +999,20 @@ spec:
       securityContext: {}
       serviceAccountName: rbac-manager
 ---
-apiVersion: aws.crossplane.io/v1beta1
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-azure
+spec:
+  package: xpkg.upbound.io/upbound/provider-azure:v0.34.0
+---
+apiVersion: azure.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: default
 spec:
+  clientID: "12345678901234567890123456789012"
   credentials:
-    source:
-      secretRef:
-        key: admin-secret-key
-        name: admin-key
-        namespace: crossplane-system
+    source: UserAssignedIdentity
+  subscriptionID: 12345678-9012-3456-7890-123456789012
+  tenantID: 12345678-9012-3456-7890-123456789012

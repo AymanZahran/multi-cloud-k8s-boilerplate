@@ -999,14 +999,39 @@ spec:
       securityContext: {}
       serviceAccountName: rbac-manager
 ---
-apiVersion: aws.crossplane.io/v1beta1
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eks-crossplane-role
+  name: crossplane-aws-sa
+  namespace: crossplane-system
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eks-crossplane-role
+  name: irsa-controllerconfig
+spec:
+  podSecurityContext:
+    fsGroup: 2000
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws
+spec:
+  controllerConfigRef:
+    name: irsa-controllerconfig
+  package: xpkg.upbound.io/upbound/provider-aws:v0.37.0
+  packagePullSecrets:
+    name: package-pull-secret
+---
+apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: default
+  name: irsa
 spec:
   credentials:
-    source:
-      secretRef:
-        key: admin-secret-key
-        name: admin-key
-        namespace: crossplane-system
+    source: IRSA

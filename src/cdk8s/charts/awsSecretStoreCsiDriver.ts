@@ -1,14 +1,17 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface AwsSecretStoreCsiDriverProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
+
 export class AwsSecretStoreCsiDriver extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
+    props: AwsSecretStoreCsiDriverProps,
   ) {
     super(scope, id, props);
 
@@ -16,9 +19,9 @@ export class AwsSecretStoreCsiDriver extends Chart {
       chart: "eks/csi-secrets-store-provider-aws",
       releaseName: "aws-secret-store-csi-driver",
       namespace: "aws-secret-store-csi-driver",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }

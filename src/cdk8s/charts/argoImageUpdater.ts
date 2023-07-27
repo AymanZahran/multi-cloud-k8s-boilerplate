@@ -1,24 +1,23 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+export interface ArgoImageUpdaterProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
+
 export class ArgoImageUpdater extends Chart {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
-  ) {
+  constructor(scope: Construct, id: string, props: ArgoImageUpdaterProps) {
     super(scope, id, props);
 
     new Helm(this, "argo-image-updater", {
       chart: "argo/argocd-image-updater",
       releaseName: "argo-image-updater",
       namespace: "argo-image-updater",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }

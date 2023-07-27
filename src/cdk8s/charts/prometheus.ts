@@ -1,24 +1,22 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface PrometheusProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
 export class Prometheus extends Chart {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
-  ) {
+  constructor(scope: Construct, id: string, props: PrometheusProps) {
     super(scope, id, props);
 
     new Helm(this, "prometheus", {
       chart: "prometheus-community/kube-prometheus-stack",
       releaseName: "prometheus",
       namespace: "observability",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }
