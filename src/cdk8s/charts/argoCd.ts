@@ -1,6 +1,6 @@
-import {Helm, Chart, ChartProps, ApiObject} from "cdk8s";
+import { Helm, Chart, ChartProps, ApiObject } from "cdk8s";
 import { Construct } from "constructs";
-import {KubernetesDir, RepoURL} from "../../const";
+import { KubernetesDir, RepoURL } from "../../const";
 
 export interface ArgoCdProps extends ChartProps {
   clusterType: string;
@@ -25,25 +25,32 @@ export class ArgoCd extends Chart {
     });
 
     new ApiObject(this, "argo-cd-application", {
-        apiVersion: "argoproj.io/v1alpha1",
-        kind: "Application",
-        metadata: {
-            name: "argo-cd-application",
-            namespace: "argocd",
-            finalizers: ["resources-finalizer.argocd.argoproj.io"],
+      apiVersion: "argoproj.io/v1alpha1",
+      kind: "Application",
+      metadata: {
+        name: "argo-cd-application",
+        namespace: "argocd",
+        finalizers: ["resources-finalizer.argocd.argoproj.io"],
+      },
+      spec: {
+        destination: {
+          namespace: "argocd",
+          server: "https://kubernetes.default.svc",
         },
-        spec: {
-            destination: {
-                namespace: "argocd",
-                server: "https://kubernetes.default.svc",
-            },
-            project: "default",
-            source: {
-                path: KubernetesDir + "/" + props.clusterType + "/" + props.provider + "/" + props.environment,
-                repoURL: RepoURL,
-                targetRevision: "HEAD",
-            }
-        }
+        project: "default",
+        source: {
+          path:
+            KubernetesDir +
+            "/" +
+            props.clusterType +
+            "/" +
+            props.provider +
+            "/" +
+            props.environment,
+          repoURL: RepoURL,
+          targetRevision: "HEAD",
+        },
+      },
     });
   }
 }
