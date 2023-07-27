@@ -42,7 +42,7 @@ export class CrossPlane extends Chart {
         apiVersion: "pkg.crossplane.io/v1alpha1",
         kind: "ControllerConfig",
         metadata: {
-          name: "irsa-controllerconfig",
+          name: "crossplane-aws-controller-config",
           annotations: {
             "eks.amazonaws.com/role-arn": props.iamRoleArn as string,
           },
@@ -57,7 +57,7 @@ export class CrossPlane extends Chart {
         apiVersion: "pkg.crossplane.io/v1",
         kind: "Provider",
         metadata: {
-          name: "provider-aws",
+          name: "crossplane-aws-provider",
         },
         spec: {
           package: "xpkg.upbound.io/upbound/provider-aws:v0.37.0",
@@ -65,7 +65,7 @@ export class CrossPlane extends Chart {
             name: "package-pull-secret",
           },
           controllerConfigRef: {
-            name: "irsa-controllerconfig",
+            name: "crossplane-aws-controller-config",
           },
         },
       });
@@ -73,7 +73,7 @@ export class CrossPlane extends Chart {
         apiVersion: "aws.upbound.io/v1beta1",
         kind: "ProviderConfig",
         metadata: {
-          name: "irsa",
+          name: "crossplane-aws-provider-config",
         },
         spec: {
           credentials: {
@@ -86,7 +86,7 @@ export class CrossPlane extends Chart {
         apiVersion: "pkg.crossplane.io/v1",
         kind: "Provider",
         metadata: {
-          name: "provider-azure",
+          name: "crossplane-azure-provider",
         },
         spec: {
           package: "xpkg.upbound.io/upbound/provider-azure:v0.34.0",
@@ -97,7 +97,7 @@ export class CrossPlane extends Chart {
         apiVersion: "azure.upbound.io/v1beta1",
         kind: "ProviderConfig",
         metadata: {
-          name: "default",
+          name: "crossplane-azure-provider-config",
         },
         spec: {
           credentials: {
