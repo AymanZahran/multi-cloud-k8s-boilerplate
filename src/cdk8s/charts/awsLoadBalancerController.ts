@@ -1,14 +1,17 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface AwsLoadBalancerControllerProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
+
 export class AwsLoadBalancerController extends Chart {
   constructor(
     scope: Construct,
     id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
+    props: AwsLoadBalancerControllerProps,
   ) {
     super(scope, id, props);
 
@@ -16,9 +19,9 @@ export class AwsLoadBalancerController extends Chart {
       chart: "eks/aws-load-balancer-controller",
       releaseName: "aws-load-balancer-controller",
       namespace: "aws-load-balancer-controller",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }

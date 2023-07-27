@@ -101,7 +101,7 @@ export class AksCluster extends Construct {
       tags: props.aksTags,
     });
 
-    // Install ArgoCD on EKS Cluster
+    // Install ArgoCD on AKS Cluster
     if (props.aksInstallArgoCd) {
       // TODO Currently, we are using null provider to install ArgoCD on Kubernetes Cluster
       //  Use Terraform Kubernetes Provider or cdktf Kubernetes Provider when there is a version

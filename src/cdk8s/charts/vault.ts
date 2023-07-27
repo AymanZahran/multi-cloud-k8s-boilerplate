@@ -1,35 +1,23 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
+interface VaultProps extends ChartProps {
+  helmFlags?: string[];
+  version?: string;
+  values?: any;
+}
+
 export class Vault extends Chart {
-  constructor(
-    scope: Construct,
-    id: string,
-    props: ChartProps,
-    helmFlags?: string[],
-    version?: string,
-    values?: any,
-  ) {
+  constructor(scope: Construct, id: string, props: VaultProps) {
     super(scope, id, props);
-
-    // Storage Backend
-    new Helm(this, "consul", {
-      chart: "hashicorp/consul",
-      releaseName: "consul",
-      namespace: "consul",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
-    });
-
     // Vault
     new Helm(this, "vault", {
       chart: "hashicorp/vault",
       releaseName: "vault",
       namespace: "vault",
-      helmFlags: helmFlags,
-      version: version,
-      values: values,
+      helmFlags: props.helmFlags,
+      version: props.version,
+      values: props.values,
     });
   }
 }

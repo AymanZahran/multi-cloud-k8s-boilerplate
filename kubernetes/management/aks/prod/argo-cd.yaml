@@ -17614,3 +17614,20 @@ spec:
                 path: ca.crt
             optional: true
             secretName: argocd-repo-server-tls
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: argo-cd-application
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: kubernetes/management/aks/prod
+    repoURL: https://github.com/AymanZahran/multi-cloud-k8s-boilerplate
+    targetRevision: HEAD

@@ -1,9 +1,9 @@
 import { App, YamlOutputType } from "cdk8s";
 import { ManagementCluster } from "./cdk8s/managementCluster";
-import { HelmChartFlags } from "./cdk8s/vars/flags";
-import { HelmChartLabels } from "./cdk8s/vars/labels";
-import { HelmChartValues } from "./cdk8s/vars/values";
-import { HelmChartVersions } from "./cdk8s/vars/versions";
+import { HelmChartFlags } from "./cdk8s/properties/flags";
+import { HelmChartLabels } from "./cdk8s/properties/labels";
+import { HelmChartValues } from "./cdk8s/properties/values";
+import { HelmChartVersions } from "./cdk8s/properties/versions";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
 import { Environment } from "./const";
 
@@ -16,10 +16,13 @@ for (const env of Object.values(Environment)) {
 
   new ManagementCluster(eksManagementApp, "management-eks-cluster", {
     app: eksManagementApp,
+    environment: env,
+    provider: "eks",
     CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
     CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
     CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
     CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+    iamRoleArn: "arn:aws:iam::123456789012:role/eks-crossplane-role",
   });
 
   eksManagementApp.synth();
@@ -32,10 +35,15 @@ for (const env of Object.values(Environment)) {
 
   new ManagementCluster(aksManagementApp, "management-aks-cluster", {
     app: aksManagementApp,
+    environment: env,
+    provider: "aks",
     CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
     CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
     CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
     CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+    clientId: "12345678901234567890123456789012",
+    subscriptionId: "12345678-9012-3456-7890-123456789012",
+    tenantId: "12345678-9012-3456-7890-123456789012",
   });
 
   aksManagementApp.synth();
@@ -48,6 +56,8 @@ for (const env of Object.values(Environment)) {
 
   new WorkloadCluster(eksWorkloadApp, "management-eks-cluster", {
     app: eksWorkloadApp,
+    provider: "eks",
+    environment: env,
     EnableArgoImageUpdater: true,
     ArgoImageUpdaterHelmChartLabels: HelmChartLabels.argocd_image_updater[env],
     ArgoImageUpdaterHelmChartsFlags: HelmChartFlags.argocd_image_updater[env],
@@ -171,6 +181,8 @@ for (const env of Object.values(Environment)) {
 
   new WorkloadCluster(aksWorkloadApp, "management-aks-cluster", {
     app: aksWorkloadApp,
+    provider: "aks",
+    environment: env,
     EnableArgoImageUpdater: true,
     EnableArgoNotifications: true,
     EnableArgoRollouts: true,
