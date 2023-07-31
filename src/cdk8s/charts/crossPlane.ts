@@ -2,14 +2,14 @@ import { Helm, Chart, ChartProps, ApiObject } from "cdk8s";
 import { Construct } from "constructs";
 
 interface CrossPlaneProps extends ChartProps {
-  provider: string;
-  helmFlags?: string[];
-  version?: string;
-  values?: any;
-  iamRoleArn?: string;
-  clientId?: string;
-  subscriptionId?: string;
-  tenantId?: string;
+  readonly provider: string;
+  readonly helmFlags?: string[];
+  readonly version?: string;
+  readonly values?: any;
+  readonly iamRoleArn?: string;
+  readonly clientId?: string;
+  readonly subscriptionId?: string;
+  readonly tenantId?: string;
 }
 
 export class CrossPlane extends Chart {

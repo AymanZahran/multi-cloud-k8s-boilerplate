@@ -2,9 +2,9 @@ import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
 interface ArgoRolloutsProps extends ChartProps {
-  helmFlags?: string[];
-  version?: string;
-  values?: any;
+  readonly helmFlags?: string[];
+  readonly version?: string;
+  readonly values?: any;
 }
 
 export class ArgoRollouts extends Chart {

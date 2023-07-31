@@ -1,8 +1,8 @@
 export const HelmChartFlags: any = {
   argo_cd: {
-    dev: [],
-    staging: [],
-    prod: [],
+    dev: ["--set", "application.resourceTrackingMethod=annotation"],
+    staging: ["--set", "application.resourceTrackingMethod=annotation"],
+    prod: ["--set", "application.resourceTrackingMethod=annotation"],
   },
   argocd_image_updater: {
     dev: [],
