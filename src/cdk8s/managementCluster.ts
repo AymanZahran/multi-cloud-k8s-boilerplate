@@ -14,10 +14,10 @@ export interface ManagementClusterProps {
   readonly CrossPlaneHelmChartsFlags?: string[];
   readonly CrossPlaneHelmChartVersion?: string;
   readonly CrossPlaneHelmChartValues?: any;
-  iamRoleArn?: string;
-  clientId?: string;
-  subscriptionId?: string;
-  tenantId?: string;
+  readonly iamRoleArn?: string;
+  readonly clientId?: string;
+  readonly subscriptionId?: string;
+  readonly tenantId?: string;
 }
 
 export class ManagementCluster extends Construct {

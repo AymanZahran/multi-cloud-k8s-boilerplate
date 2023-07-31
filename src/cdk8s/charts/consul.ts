@@ -2,9 +2,9 @@ import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
 interface ConsulProps extends ChartProps {
-  helmFlags?: string[];
-  version?: string;
-  values?: any;
+  readonly helmFlags?: string[];
+  readonly version?: string;
+  readonly values?: any;
 }
 
 export class Consul extends Chart {

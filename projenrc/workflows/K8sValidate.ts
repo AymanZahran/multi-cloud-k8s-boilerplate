@@ -1,9 +1,10 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
+import { Environment } from "../../src/const";
 
 export function K8sValidateWorkflows(project: typescript.TypeScriptAppProject) {
-  for (const env of ["dev", "staging", "prod"]) {
+  for (const env of Object.values(Environment)) {
     const k8s_validate = new GithubWorkflow(
       project.github!,
       "k8svalidate-" + env + "-build",

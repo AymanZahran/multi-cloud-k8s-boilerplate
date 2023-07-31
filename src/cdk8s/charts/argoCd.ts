@@ -3,12 +3,12 @@ import { Construct } from "constructs";
 import { KubernetesDir, RepoURL } from "../../const";
 
 export interface ArgoCdProps extends ChartProps {
-  clusterType: string;
-  provider: string;
-  environment: string;
-  helmFlags?: string[];
-  version?: string;
-  values?: any;
+  readonly clusterType: string;
+  readonly provider: string;
+  readonly environment: string;
+  readonly helmFlags?: string[];
+  readonly version?: string;
+  readonly values?: any;
 }
 
 export class ArgoCd extends Chart {
