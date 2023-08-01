@@ -1,9 +1,13 @@
 import { App, YamlOutputType } from "cdk8s";
 import { ManagementCluster } from "./cdk8s/managementCluster";
-import { HelmChartFlags } from "./cdk8s/properties/flags";
-import { HelmChartLabels } from "./cdk8s/properties/labels";
-import { HelmChartValues } from "./cdk8s/properties/values";
-import { HelmChartVersions } from "./cdk8s/properties/versions";
+import { AksHelmChartFlags } from "./cdk8s/properties/aks/flags";
+import { AksHelmChartLabels } from "./cdk8s/properties/aks/labels";
+import { AksHelmChartValues } from "./cdk8s/properties/aks/values";
+import { AksHelmChartVersions } from "./cdk8s/properties/aks/versions";
+import { EksHelmChartFlags } from "./cdk8s/properties/eks/flags";
+import { EksHelmChartLabels } from "./cdk8s/properties/eks/labels";
+import { EksHelmChartValues } from "./cdk8s/properties/eks/values";
+import { EksHelmChartVersions } from "./cdk8s/properties/eks/versions";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
 import { Environment } from "./const";
 
@@ -13,22 +17,20 @@ for (const env of Object.values(Environment)) {
     outputFileExtension: ".yaml",
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
-
   new ManagementCluster(eksManagementApp, "management-eks-cluster", {
     app: eksManagementApp,
     environment: env,
     provider: "eks",
-    ArgoCdHelmChartLabels: HelmChartLabels.argo_cd[env],
-    ArgoCdHelmChartsFlags: HelmChartFlags.argo_cd[env],
-    ArgoCdHelmChartVersion: HelmChartVersions.argo_cd[env],
-    ArgoCdHelmChartValues: HelmChartValues.argo_cd[env],
-    CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
-    CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
-    CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
-    CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+    ArgoCdHelmChartLabels: EksHelmChartLabels.argo_cd[env],
+    ArgoCdHelmChartsFlags: EksHelmChartFlags.argo_cd[env],
+    ArgoCdHelmChartVersion: EksHelmChartVersions.argo_cd[env],
+    ArgoCdHelmChartValues: EksHelmChartValues.argo_cd[env],
+    CrossPlaneHelmChartLabels: EksHelmChartLabels.crossplane[env],
+    CrossPlaneHelmChartsFlags: EksHelmChartFlags.crossplane[env],
+    CrossPlaneHelmChartVersion: EksHelmChartVersions.crossplane[env],
+    CrossPlaneHelmChartValues: EksHelmChartValues.crossplane[env],
     iamRoleArn: "arn:aws:iam::123456789012:role/eks-crossplane-role",
   });
-
   eksManagementApp.synth();
 
   const aksManagementApp = new App({
@@ -36,24 +38,22 @@ for (const env of Object.values(Environment)) {
     outputFileExtension: ".yaml",
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
-
   new ManagementCluster(aksManagementApp, "management-aks-cluster", {
     app: aksManagementApp,
     environment: env,
     provider: "aks",
-    ArgoCdHelmChartLabels: HelmChartLabels.argo_cd[env],
-    ArgoCdHelmChartsFlags: HelmChartFlags.argo_cd[env],
-    ArgoCdHelmChartVersion: HelmChartVersions.argo_cd[env],
-    ArgoCdHelmChartValues: HelmChartValues.argo_cd[env],
-    CrossPlaneHelmChartLabels: HelmChartLabels.crossplane[env],
-    CrossPlaneHelmChartsFlags: HelmChartFlags.crossplane[env],
-    CrossPlaneHelmChartVersion: HelmChartVersions.crossplane[env],
-    CrossPlaneHelmChartValues: HelmChartValues.crossplane[env],
+    ArgoCdHelmChartLabels: AksHelmChartLabels.argo_cd[env],
+    ArgoCdHelmChartsFlags: AksHelmChartFlags.argo_cd[env],
+    ArgoCdHelmChartVersion: AksHelmChartVersions.argo_cd[env],
+    ArgoCdHelmChartValues: AksHelmChartValues.argo_cd[env],
+    CrossPlaneHelmChartLabels: AksHelmChartLabels.crossplane[env],
+    CrossPlaneHelmChartsFlags: AksHelmChartFlags.crossplane[env],
+    CrossPlaneHelmChartVersion: AksHelmChartVersions.crossplane[env],
+    CrossPlaneHelmChartValues: AksHelmChartValues.crossplane[env],
     clientId: "12345678901234567890123456789012",
     subscriptionId: "12345678-9012-3456-7890-123456789012",
     tenantId: "12345678-9012-3456-7890-123456789012",
   });
-
   aksManagementApp.synth();
 
   const eksWorkloadApp = new App({
@@ -61,125 +61,137 @@ for (const env of Object.values(Environment)) {
     outputFileExtension: ".yaml",
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
-
   new WorkloadCluster(eksWorkloadApp, "management-eks-cluster", {
     app: eksWorkloadApp,
     provider: "eks",
     environment: env,
     EnableArgoImageUpdater: true,
-    ArgoImageUpdaterHelmChartLabels: HelmChartLabels.argocd_image_updater[env],
-    ArgoImageUpdaterHelmChartsFlags: HelmChartFlags.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartLabels:
+      EksHelmChartLabels.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartsFlags:
+      EksHelmChartFlags.argocd_image_updater[env],
     ArgoImageUpdaterHelmChartVersion:
-      HelmChartVersions.argocd_image_updater[env],
-    ArgoImageUpdaterHelmChartValues: HelmChartValues.argocd_image_updater[env],
+      EksHelmChartVersions.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartValues:
+      EksHelmChartValues.argocd_image_updater[env],
     EnableArgoNotifications: true,
-    ArgoNotificationsHelmChartLabels: HelmChartLabels.argo_notifications[env],
-    ArgoNotificationsHelmChartsFlags: HelmChartFlags.argo_notifications[env],
+    ArgoNotificationsHelmChartLabels:
+      EksHelmChartLabels.argo_notifications[env],
+    ArgoNotificationsHelmChartsFlags: EksHelmChartFlags.argo_notifications[env],
     ArgoNotificationsHelmChartVersion:
-      HelmChartVersions.argo_notifications[env],
-    ArgoNotificationsHelmChartValues: HelmChartValues.argo_notifications[env],
+      EksHelmChartVersions.argo_notifications[env],
+    ArgoNotificationsHelmChartValues:
+      EksHelmChartValues.argo_notifications[env],
     EnableArgoRollouts: true,
-    ArgoRolloutsHelmChartLabels: HelmChartLabels.argo_rollouts[env],
-    ArgoRolloutsHelmChartsFlags: HelmChartFlags.argo_rollouts[env],
-    ArgoRolloutsHelmChartVersion: HelmChartVersions.argo_rollouts[env],
-    ArgoRolloutsHelmChartValues: HelmChartValues.argo_rollouts[env],
+    ArgoRolloutsHelmChartLabels: EksHelmChartLabels.argo_rollouts[env],
+    ArgoRolloutsHelmChartsFlags: EksHelmChartFlags.argo_rollouts[env],
+    ArgoRolloutsHelmChartVersion: EksHelmChartVersions.argo_rollouts[env],
+    ArgoRolloutsHelmChartValues: EksHelmChartValues.argo_rollouts[env],
     EnableArgoWorkflows: true,
-    ArgoWorkflowsHelmChartLabels: HelmChartLabels.argo_workflows[env],
-    ArgoWorkflowsHelmChartsFlags: HelmChartFlags.argo_workflows[env],
-    ArgoWorkflowsHelmChartVersion: HelmChartVersions.argo_workflows[env],
-    ArgoWorkflowsHelmChartValues: HelmChartValues.argo_workflows[env],
+    ArgoWorkflowsHelmChartLabels: EksHelmChartLabels.argo_workflows[env],
+    ArgoWorkflowsHelmChartsFlags: EksHelmChartFlags.argo_workflows[env],
+    ArgoWorkflowsHelmChartVersion: EksHelmChartVersions.argo_workflows[env],
+    ArgoWorkflowsHelmChartValues: EksHelmChartValues.argo_workflows[env],
     EnableAwsCloudWatchAgent: false,
     AwsCloudWatchAgentHelmChartLabels:
-      HelmChartLabels.aws_cloudwatch_agent[env],
-    AwsCloudWatchAgentHelmChartsFlags: HelmChartFlags.aws_cloudwatch_agent[env],
+      EksHelmChartLabels.aws_cloudwatch_agent[env],
+    AwsCloudWatchAgentHelmChartsFlags:
+      EksHelmChartFlags.aws_cloudwatch_agent[env],
     AwsCloudWatchAgentHelmChartVersion:
-      HelmChartVersions.aws_cloudwatch_agent[env],
+      EksHelmChartVersions.aws_cloudwatch_agent[env],
     AwsCloudWatchAgentHelmChartValues:
-      HelmChartValues.aws_cloudwatch_agent[env],
+      EksHelmChartValues.aws_cloudwatch_agent[env],
     EnableAwsEbsCsiDriver: false,
-    AwsEbsCsiDriverHelmChartLabels: HelmChartLabels.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartsFlags: HelmChartFlags.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartVersion: HelmChartVersions.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartValues: HelmChartValues.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartLabels: EksHelmChartLabels.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartsFlags: EksHelmChartFlags.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartVersion:
+      EksHelmChartVersions.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartValues: EksHelmChartValues.aws_ebs_csi_driver[env],
     EnableAwsEfsCsiDriver: false,
-    AwsEfsCsiDriverHelmChartLabels: HelmChartLabels.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartsFlags: HelmChartFlags.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartVersion: HelmChartVersions.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartValues: HelmChartValues.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartLabels: EksHelmChartLabels.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartsFlags: EksHelmChartFlags.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartVersion:
+      EksHelmChartVersions.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartValues: EksHelmChartValues.aws_efs_csi_driver[env],
     EnableAwsFsxCsiDriver: false,
-    AwsFsxCsiDriverHelmChartLabels: HelmChartLabels.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartsFlags: HelmChartFlags.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartVersion: HelmChartVersions.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartValues: HelmChartValues.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartLabels: EksHelmChartLabels.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartsFlags: EksHelmChartFlags.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartVersion:
+      EksHelmChartVersions.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartValues: EksHelmChartValues.aws_fsx_csi_driver[env],
     EnableAwsLoadBalancerController: false,
     AwsLoadBalancerControllerHelmChartLabels:
-      HelmChartLabels.aws_load_balancer_controller[env],
+      EksHelmChartLabels.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartsFlags:
-      HelmChartFlags.aws_load_balancer_controller[env],
+      EksHelmChartFlags.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartVersion:
-      HelmChartVersions.aws_load_balancer_controller[env],
+      EksHelmChartVersions.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartValues:
-      HelmChartValues.aws_load_balancer_controller[env],
+      EksHelmChartValues.aws_load_balancer_controller[env],
     EnableAwsSecretStoreCsiDriver: false,
     AwsSecretStoreCsiDriverHelmChartLabels:
-      HelmChartLabels.aws_secret_store_csi_driver[env],
+      EksHelmChartLabels.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartsFlags:
-      HelmChartFlags.aws_secret_store_csi_driver[env],
+      EksHelmChartFlags.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartVersion:
-      HelmChartVersions.aws_secret_store_csi_driver[env],
+      EksHelmChartVersions.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartValues:
-      HelmChartValues.aws_secret_store_csi_driver[env],
+      EksHelmChartValues.aws_secret_store_csi_driver[env],
     EnableCertManager: true,
-    CertManagerHelmChartLabels: HelmChartLabels.cert_manager[env],
-    CertManagerHelmChartsFlags: HelmChartFlags.cert_manager[env],
-    CertManagerHelmChartVersion: HelmChartVersions.cert_manager[env],
-    CertManagerHelmChartValues: HelmChartValues.cert_manager[env],
+    CertManagerHelmChartLabels: EksHelmChartLabels.cert_manager[env],
+    CertManagerHelmChartsFlags: EksHelmChartFlags.cert_manager[env],
+    CertManagerHelmChartVersion: EksHelmChartVersions.cert_manager[env],
+    CertManagerHelmChartValues: EksHelmChartValues.cert_manager[env],
     EnableClusterAutoscaler: true,
-    ClusterAutoscalerHelmChartLabels: HelmChartLabels.cluster_autoscaler[env],
-    ClusterAutoscalerHelmChartsFlags: HelmChartFlags.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartLabels:
+      EksHelmChartLabels.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartsFlags: EksHelmChartFlags.cluster_autoscaler[env],
     ClusterAutoscalerHelmChartVersion:
-      HelmChartVersions.cluster_autoscaler[env],
-    ClusterAutoscalerHelmChartValues: HelmChartValues.cluster_autoscaler[env],
+      EksHelmChartVersions.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartValues:
+      EksHelmChartValues.cluster_autoscaler[env],
     EnableConsul: true,
-    ConsulHelmChartLabels: HelmChartLabels.consul[env],
-    ConsulHelmChartsFlags: HelmChartFlags.consul[env],
-    ConsulHelmChartVersion: HelmChartVersions.consul[env],
-    ConsulHelmChartValues: HelmChartValues.consul[env],
+    ConsulHelmChartLabels: EksHelmChartLabels.consul[env],
+    ConsulHelmChartsFlags: EksHelmChartFlags.consul[env],
+    ConsulHelmChartVersion: EksHelmChartVersions.consul[env],
+    ConsulHelmChartValues: EksHelmChartValues.consul[env],
     EnableKubeStateMetrics: true,
-    KubeStateMetricsHelmChartLabels: HelmChartLabels.kube_state_metrics[env],
-    KubeStateMetricsHelmChartsFlags: HelmChartFlags.kube_state_metrics[env],
-    KubeStateMetricsHelmChartVersion: HelmChartVersions.kube_state_metrics[env],
-    KubeStateMetricsHelmChartValues: HelmChartValues.kube_state_metrics[env],
+    KubeStateMetricsHelmChartLabels: EksHelmChartLabels.kube_state_metrics[env],
+    KubeStateMetricsHelmChartsFlags: EksHelmChartFlags.kube_state_metrics[env],
+    KubeStateMetricsHelmChartVersion:
+      EksHelmChartVersions.kube_state_metrics[env],
+    KubeStateMetricsHelmChartValues: EksHelmChartValues.kube_state_metrics[env],
     EnableMetricsServer: true,
-    MetricsServerHelmChartLabels: HelmChartLabels.metrics_server[env],
-    MetricsServerHelmChartsFlags: HelmChartFlags.metrics_server[env],
-    MetricsServerHelmChartVersion: HelmChartVersions.metrics_server[env],
-    MetricsServerHelmChartValues: HelmChartValues.metrics_server[env],
+    MetricsServerHelmChartLabels: EksHelmChartLabels.metrics_server[env],
+    MetricsServerHelmChartsFlags: EksHelmChartFlags.metrics_server[env],
+    MetricsServerHelmChartVersion: EksHelmChartVersions.metrics_server[env],
+    MetricsServerHelmChartValues: EksHelmChartValues.metrics_server[env],
     EnablePrometheus: true,
-    PrometheusHelmChartLabels: HelmChartLabels.prometheus[env],
-    PrometheusHelmChartsFlags: HelmChartFlags.prometheus[env],
-    PrometheusHelmChartVersion: HelmChartVersions.prometheus[env],
-    PrometheusHelmChartValues: HelmChartValues.prometheus[env],
+    PrometheusHelmChartLabels: EksHelmChartLabels.prometheus[env],
+    PrometheusHelmChartsFlags: EksHelmChartFlags.prometheus[env],
+    PrometheusHelmChartVersion: EksHelmChartVersions.prometheus[env],
+    PrometheusHelmChartValues: EksHelmChartValues.prometheus[env],
     EnableTekton: true,
-    TektonHelmChartLabels: HelmChartLabels.tekton[env],
-    TektonHelmChartsFlags: HelmChartFlags.tekton[env],
-    TektonHelmChartVersion: HelmChartVersions.tekton[env],
-    TektonHelmChartValues: HelmChartValues.tekton[env],
+    TektonHelmChartLabels: EksHelmChartLabels.tekton[env],
+    TektonHelmChartsFlags: EksHelmChartFlags.tekton[env],
+    TektonHelmChartVersion: EksHelmChartVersions.tekton[env],
+    TektonHelmChartValues: EksHelmChartValues.tekton[env],
     EnableVault: true,
-    VaultHelmChartLabels: HelmChartLabels.vault[env],
-    VaultHelmChartsFlags: HelmChartFlags.vault[env],
-    VaultHelmChartVersion: HelmChartVersions.vault[env],
-    VaultHelmChartValues: HelmChartValues.vault[env],
+    VaultHelmChartLabels: EksHelmChartLabels.vault[env],
+    VaultHelmChartsFlags: EksHelmChartFlags.vault[env],
+    VaultHelmChartVersion: EksHelmChartVersions.vault[env],
+    VaultHelmChartValues: EksHelmChartValues.vault[env],
     EnableVaultSecretStoreDriver: true,
     VaultSecretStoreDriverHelmChartLabels:
-      HelmChartLabels.vault_secret_store_driver[env],
+      EksHelmChartLabels.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartsFlags:
-      HelmChartFlags.vault_secret_store_driver[env],
+      EksHelmChartFlags.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartVersion:
-      HelmChartVersions.vault_secret_store_driver[env],
+      EksHelmChartVersions.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartValues:
-      HelmChartValues.vault_secret_store_driver[env],
+      EksHelmChartValues.vault_secret_store_driver[env],
   });
+  eksWorkloadApp.synth();
 
   const aksWorkloadApp = new App({
     outdir: "dist/workload/aks/" + env,
@@ -187,126 +199,135 @@ for (const env of Object.values(Environment)) {
     yamlOutputType: YamlOutputType.FILE_PER_CHART,
   });
 
-  eksWorkloadApp.synth();
-
   new WorkloadCluster(aksWorkloadApp, "management-aks-cluster", {
     app: aksWorkloadApp,
     provider: "aks",
     environment: env,
     EnableArgoImageUpdater: true,
-    ArgoImageUpdaterHelmChartLabels: HelmChartLabels.argocd_image_updater[env],
-    ArgoImageUpdaterHelmChartsFlags: HelmChartFlags.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartLabels:
+      AksHelmChartLabels.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartsFlags:
+      AksHelmChartFlags.argocd_image_updater[env],
     ArgoImageUpdaterHelmChartVersion:
-      HelmChartVersions.argocd_image_updater[env],
-    ArgoImageUpdaterHelmChartValues: HelmChartValues.argocd_image_updater[env],
+      AksHelmChartVersions.argocd_image_updater[env],
+    ArgoImageUpdaterHelmChartValues:
+      AksHelmChartValues.argocd_image_updater[env],
     EnableArgoNotifications: true,
-    ArgoNotificationsHelmChartLabels: HelmChartLabels.argo_notifications[env],
-    ArgoNotificationsHelmChartsFlags: HelmChartFlags.argo_notifications[env],
+    ArgoNotificationsHelmChartLabels:
+      AksHelmChartLabels.argo_notifications[env],
+    ArgoNotificationsHelmChartsFlags: AksHelmChartFlags.argo_notifications[env],
     ArgoNotificationsHelmChartVersion:
-      HelmChartVersions.argo_notifications[env],
-    ArgoNotificationsHelmChartValues: HelmChartValues.argo_notifications[env],
+      AksHelmChartVersions.argo_notifications[env],
+    ArgoNotificationsHelmChartValues:
+      AksHelmChartValues.argo_notifications[env],
     EnableArgoRollouts: true,
-    ArgoRolloutsHelmChartLabels: HelmChartLabels.argo_rollouts[env],
-    ArgoRolloutsHelmChartsFlags: HelmChartFlags.argo_rollouts[env],
-    ArgoRolloutsHelmChartVersion: HelmChartVersions.argo_rollouts[env],
-    ArgoRolloutsHelmChartValues: HelmChartValues.argo_rollouts[env],
+    ArgoRolloutsHelmChartLabels: AksHelmChartLabels.argo_rollouts[env],
+    ArgoRolloutsHelmChartsFlags: AksHelmChartFlags.argo_rollouts[env],
+    ArgoRolloutsHelmChartVersion: AksHelmChartVersions.argo_rollouts[env],
+    ArgoRolloutsHelmChartValues: AksHelmChartValues.argo_rollouts[env],
     EnableArgoWorkflows: true,
-    ArgoWorkflowsHelmChartLabels: HelmChartLabels.argo_workflows[env],
-    ArgoWorkflowsHelmChartsFlags: HelmChartFlags.argo_workflows[env],
-    ArgoWorkflowsHelmChartVersion: HelmChartVersions.argo_workflows[env],
-    ArgoWorkflowsHelmChartValues: HelmChartValues.argo_workflows[env],
+    ArgoWorkflowsHelmChartLabels: AksHelmChartLabels.argo_workflows[env],
+    ArgoWorkflowsHelmChartsFlags: AksHelmChartFlags.argo_workflows[env],
+    ArgoWorkflowsHelmChartVersion: AksHelmChartVersions.argo_workflows[env],
+    ArgoWorkflowsHelmChartValues: AksHelmChartValues.argo_workflows[env],
     EnableAwsCloudWatchAgent: false,
     AwsCloudWatchAgentHelmChartLabels:
-      HelmChartLabels.aws_cloudwatch_agent[env],
-    AwsCloudWatchAgentHelmChartsFlags: HelmChartFlags.aws_cloudwatch_agent[env],
+      AksHelmChartLabels.aws_cloudwatch_agent[env],
+    AwsCloudWatchAgentHelmChartsFlags:
+      AksHelmChartFlags.aws_cloudwatch_agent[env],
     AwsCloudWatchAgentHelmChartVersion:
-      HelmChartVersions.aws_cloudwatch_agent[env],
+      AksHelmChartVersions.aws_cloudwatch_agent[env],
     AwsCloudWatchAgentHelmChartValues:
-      HelmChartValues.aws_cloudwatch_agent[env],
+      AksHelmChartValues.aws_cloudwatch_agent[env],
     EnableAwsEbsCsiDriver: false,
-    AwsEbsCsiDriverHelmChartLabels: HelmChartLabels.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartsFlags: HelmChartFlags.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartVersion: HelmChartVersions.aws_ebs_csi_driver[env],
-    AwsEbsCsiDriverHelmChartValues: HelmChartValues.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartLabels: AksHelmChartLabels.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartsFlags: AksHelmChartFlags.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartVersion:
+      AksHelmChartVersions.aws_ebs_csi_driver[env],
+    AwsEbsCsiDriverHelmChartValues: AksHelmChartValues.aws_ebs_csi_driver[env],
     EnableAwsEfsCsiDriver: false,
-    AwsEfsCsiDriverHelmChartLabels: HelmChartLabels.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartsFlags: HelmChartFlags.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartVersion: HelmChartVersions.aws_efs_csi_driver[env],
-    AwsEfsCsiDriverHelmChartValues: HelmChartValues.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartLabels: AksHelmChartLabels.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartsFlags: AksHelmChartFlags.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartVersion:
+      AksHelmChartVersions.aws_efs_csi_driver[env],
+    AwsEfsCsiDriverHelmChartValues: AksHelmChartValues.aws_efs_csi_driver[env],
     EnableAwsFsxCsiDriver: false,
-    AwsFsxCsiDriverHelmChartLabels: HelmChartLabels.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartsFlags: HelmChartFlags.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartVersion: HelmChartVersions.aws_fsx_csi_driver[env],
-    AwsFsxCsiDriverHelmChartValues: HelmChartValues.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartLabels: AksHelmChartLabels.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartsFlags: AksHelmChartFlags.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartVersion:
+      AksHelmChartVersions.aws_fsx_csi_driver[env],
+    AwsFsxCsiDriverHelmChartValues: AksHelmChartValues.aws_fsx_csi_driver[env],
     EnableAwsLoadBalancerController: false,
     AwsLoadBalancerControllerHelmChartLabels:
-      HelmChartLabels.aws_load_balancer_controller[env],
+      AksHelmChartLabels.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartsFlags:
-      HelmChartFlags.aws_load_balancer_controller[env],
+      AksHelmChartFlags.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartVersion:
-      HelmChartVersions.aws_load_balancer_controller[env],
+      AksHelmChartVersions.aws_load_balancer_controller[env],
     AwsLoadBalancerControllerHelmChartValues:
-      HelmChartValues.aws_load_balancer_controller[env],
+      AksHelmChartValues.aws_load_balancer_controller[env],
     EnableAwsSecretStoreCsiDriver: false,
     AwsSecretStoreCsiDriverHelmChartLabels:
-      HelmChartLabels.aws_secret_store_csi_driver[env],
+      AksHelmChartLabels.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartsFlags:
-      HelmChartFlags.aws_secret_store_csi_driver[env],
+      AksHelmChartFlags.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartVersion:
-      HelmChartVersions.aws_secret_store_csi_driver[env],
+      AksHelmChartVersions.aws_secret_store_csi_driver[env],
     AwsSecretStoreCsiDriverHelmChartValues:
-      HelmChartValues.aws_secret_store_csi_driver[env],
+      AksHelmChartValues.aws_secret_store_csi_driver[env],
     EnableCertManager: true,
-    CertManagerHelmChartLabels: HelmChartLabels.cert_manager[env],
-    CertManagerHelmChartsFlags: HelmChartFlags.cert_manager[env],
-    CertManagerHelmChartVersion: HelmChartVersions.cert_manager[env],
-    CertManagerHelmChartValues: HelmChartValues.cert_manager[env],
+    CertManagerHelmChartLabels: AksHelmChartLabels.cert_manager[env],
+    CertManagerHelmChartsFlags: AksHelmChartFlags.cert_manager[env],
+    CertManagerHelmChartVersion: AksHelmChartVersions.cert_manager[env],
+    CertManagerHelmChartValues: AksHelmChartValues.cert_manager[env],
     EnableClusterAutoscaler: true,
-    ClusterAutoscalerHelmChartLabels: HelmChartLabels.cluster_autoscaler[env],
-    ClusterAutoscalerHelmChartsFlags: HelmChartFlags.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartLabels:
+      AksHelmChartLabels.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartsFlags: AksHelmChartFlags.cluster_autoscaler[env],
     ClusterAutoscalerHelmChartVersion:
-      HelmChartVersions.cluster_autoscaler[env],
-    ClusterAutoscalerHelmChartValues: HelmChartValues.cluster_autoscaler[env],
+      AksHelmChartVersions.cluster_autoscaler[env],
+    ClusterAutoscalerHelmChartValues:
+      AksHelmChartValues.cluster_autoscaler[env],
     EnableConsul: true,
-    ConsulHelmChartLabels: HelmChartLabels.consul[env],
-    ConsulHelmChartsFlags: HelmChartFlags.consul[env],
-    ConsulHelmChartVersion: HelmChartVersions.consul[env],
-    ConsulHelmChartValues: HelmChartValues.consul[env],
+    ConsulHelmChartLabels: AksHelmChartLabels.consul[env],
+    ConsulHelmChartsFlags: AksHelmChartFlags.consul[env],
+    ConsulHelmChartVersion: AksHelmChartVersions.consul[env],
+    ConsulHelmChartValues: AksHelmChartValues.consul[env],
     EnableKubeStateMetrics: true,
-    KubeStateMetricsHelmChartLabels: HelmChartLabels.kube_state_metrics[env],
-    KubeStateMetricsHelmChartsFlags: HelmChartFlags.kube_state_metrics[env],
-    KubeStateMetricsHelmChartVersion: HelmChartVersions.kube_state_metrics[env],
-    KubeStateMetricsHelmChartValues: HelmChartValues.kube_state_metrics[env],
+    KubeStateMetricsHelmChartLabels: AksHelmChartLabels.kube_state_metrics[env],
+    KubeStateMetricsHelmChartsFlags: AksHelmChartFlags.kube_state_metrics[env],
+    KubeStateMetricsHelmChartVersion:
+      AksHelmChartVersions.kube_state_metrics[env],
+    KubeStateMetricsHelmChartValues: AksHelmChartValues.kube_state_metrics[env],
     EnableMetricsServer: true,
-    MetricsServerHelmChartLabels: HelmChartLabels.metrics_server[env],
-    MetricsServerHelmChartsFlags: HelmChartFlags.metrics_server[env],
-    MetricsServerHelmChartVersion: HelmChartVersions.metrics_server[env],
-    MetricsServerHelmChartValues: HelmChartValues.metrics_server[env],
+    MetricsServerHelmChartLabels: AksHelmChartLabels.metrics_server[env],
+    MetricsServerHelmChartsFlags: AksHelmChartFlags.metrics_server[env],
+    MetricsServerHelmChartVersion: AksHelmChartVersions.metrics_server[env],
+    MetricsServerHelmChartValues: AksHelmChartValues.metrics_server[env],
     EnablePrometheus: true,
-    PrometheusHelmChartLabels: HelmChartLabels.prometheus[env],
-    PrometheusHelmChartsFlags: HelmChartFlags.prometheus[env],
-    PrometheusHelmChartVersion: HelmChartVersions.prometheus[env],
-    PrometheusHelmChartValues: HelmChartValues.prometheus[env],
+    PrometheusHelmChartLabels: AksHelmChartLabels.prometheus[env],
+    PrometheusHelmChartsFlags: AksHelmChartFlags.prometheus[env],
+    PrometheusHelmChartVersion: AksHelmChartVersions.prometheus[env],
+    PrometheusHelmChartValues: AksHelmChartValues.prometheus[env],
     EnableTekton: true,
-    TektonHelmChartLabels: HelmChartLabels.tekton[env],
-    TektonHelmChartsFlags: HelmChartFlags.tekton[env],
-    TektonHelmChartVersion: HelmChartVersions.tekton[env],
-    TektonHelmChartValues: HelmChartValues.tekton[env],
+    TektonHelmChartLabels: AksHelmChartLabels.tekton[env],
+    TektonHelmChartsFlags: AksHelmChartFlags.tekton[env],
+    TektonHelmChartVersion: AksHelmChartVersions.tekton[env],
+    TektonHelmChartValues: AksHelmChartValues.tekton[env],
     EnableVault: true,
-    VaultHelmChartLabels: HelmChartLabels.vault[env],
-    VaultHelmChartsFlags: HelmChartFlags.vault[env],
-    VaultHelmChartVersion: HelmChartVersions.vault[env],
-    VaultHelmChartValues: HelmChartValues.vault[env],
+    VaultHelmChartLabels: AksHelmChartLabels.vault[env],
+    VaultHelmChartsFlags: AksHelmChartFlags.vault[env],
+    VaultHelmChartVersion: AksHelmChartVersions.vault[env],
+    VaultHelmChartValues: AksHelmChartValues.vault[env],
     EnableVaultSecretStoreDriver: true,
     VaultSecretStoreDriverHelmChartLabels:
-      HelmChartLabels.vault_secret_store_driver[env],
+      AksHelmChartLabels.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartsFlags:
-      HelmChartFlags.vault_secret_store_driver[env],
+      AksHelmChartFlags.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartVersion:
-      HelmChartVersions.vault_secret_store_driver[env],
+      AksHelmChartVersions.vault_secret_store_driver[env],
     VaultSecretStoreDriverHelmChartValues:
-      HelmChartValues.vault_secret_store_driver[env],
+      AksHelmChartValues.vault_secret_store_driver[env],
   });
-
   aksWorkloadApp.synth();
 }
