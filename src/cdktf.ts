@@ -11,7 +11,10 @@ import { DefineEksVariables } from "./cdktf/eks/vars";
 import {
   AwsAccessKey,
   AwsRegion,
-  AzureRegion, AzureSubscriptionId, AzureTenantId, AzureTerraformClientId,
+  AzureRegion,
+  AzureSubscriptionId,
+  AzureTenantId,
+  AzureTerraformClientId,
   Environment,
   StackConfig,
   TerraformRemoteBackendHostName,

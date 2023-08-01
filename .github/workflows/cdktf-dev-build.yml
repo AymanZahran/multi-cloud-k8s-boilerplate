@@ -13,12 +13,12 @@ jobs:
       contents: read
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.dev_AWS_ACCESS_KEY_ID }}
+      AWS_ACCESS_KEY_ID: "123456789012"
       AWS_SECRET_ACCESS_KEY: ${{ secrets.dev_AWS_SECRET_ACCESS_KEY }}
-      ARM_CLIENT_ID: ${{ secrets.dev_AZURE_CLIENT_ID }}
+      ARM_CLIENT_ID: 12345678-1234-1234-1234-123456789012
       ARM_CLIENT_SECRET: ${{ secrets.dev_AZURE_CLIENT_SECRET }}
-      ARM_TENANT_ID: ${{ secrets.dev_AZURE_TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.dev_AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: 12345678-1234-1234-1234-123456789012
+      ARM_SUBSCRIPTION_ID: 12345678-1234-1234-1234-123456789012
       stack: dev
       context: build
     steps:
@@ -51,8 +51,8 @@ jobs:
           }' > ~/.terraform.d/credentials.tfrc.json
       - name: AZ Login
         run: |-
-          az login --service-principal -u ${{ secrets.dev_AZURE_CLIENT_ID }} -p ${{ secrets.dev_AZURE_CLIENT_SECRET }} --tenant ${{ secrets.dev_AZURE_TENANT_ID }}
-          az account set --subscription ${{ secrets.dev_AZURE_SUBSCRIPTION_ID }}
+          az login --service-principal -u 12345678-1234-1234-1234-123456789012 -p ${{ secrets.dev_AZURE_CLIENT_SECRET }} --tenant 12345678-1234-1234-1234-123456789012
+          az account set --subscription 12345678-1234-1234-1234-123456789012
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
       - name: Comment on the PR

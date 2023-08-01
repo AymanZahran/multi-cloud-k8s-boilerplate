@@ -1,7 +1,14 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { CI_Versions, Environment, AzureTerraformClientId, AzureSubscriptionId, AzureTenantId, AwsAccessKey } from "../../src/const";
+import {
+  CI_Versions,
+  Environment,
+  AzureTerraformClientId,
+  AzureSubscriptionId,
+  AzureTenantId,
+  AwsAccessKey,
+} from "../../src/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
@@ -32,7 +39,8 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
           AWS_ACCESS_KEY_ID: AwsAccessKey[env],
-          AWS_SECRET_ACCESS_KEY: "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
+          AWS_SECRET_ACCESS_KEY:
+            "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
           ARM_CLIENT_ID: AzureTerraformClientId[env],
           ARM_CLIENT_SECRET: "${{ secrets." + env + "_AZURE_CLIENT_SECRET }}",
           ARM_TENANT_ID: AzureTenantId[env],
@@ -88,21 +96,16 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
             name: "AZ Login",
             run:
               "az login --service-principal -u " +
-              "${{ secrets." +
-              env +
-              "_AZURE_CLIENT_ID }}" +
+              AzureTerraformClientId[env] +
               " -p " +
               "${{ secrets." +
               env +
               "_AZURE_CLIENT_SECRET }}" +
               " --tenant " +
-              "${{ secrets." +
-              env +
-              "_AZURE_TENANT_ID }}\n" +
+              AzureTenantId[env] +
+              "\n" +
               "az account set --subscription " +
-              "${{ secrets." +
-              env +
-              "_AZURE_SUBSCRIPTION_ID }}",
+              AzureSubscriptionId[env],
           },
           {
             name: "Terraform Plan",

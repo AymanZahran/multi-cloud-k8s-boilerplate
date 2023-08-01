@@ -136,19 +136,19 @@
   "provider": {
     "aws": [
       {
-        "access_key": "",
+        "access_key": "123456789012",
         "region": "us-east-1",
         "secret_key": ""
       }
     ],
     "azurerm": [
       {
-        "client_id": "",
+        "client_id": "12345678-1234-1234-1234-123456789012",
         "client_secret": "",
         "features": {
         },
-        "subscription_id": "",
-        "tenant_id": ""
+        "subscription_id": "12345678-1234-1234-1234-123456789012",
+        "tenant_id": "12345678-1234-1234-1234-123456789012"
       }
     ],
     "null": [
@@ -239,11 +239,11 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "5.10.0"
+        "version": "5.9.0"
       },
       "azurerm": {
         "source": "azurerm",
-        "version": "3.67.0"
+        "version": "3.66.0"
       },
       "null": {
         "source": "null",
