@@ -1,4 +1,4 @@
-export const HelmChartFlags: any = {
+export const AksHelmChartFlags: any = {
   argo_cd: {
     dev: ["--set", "application.resourceTrackingMethod=annotation"],
     staging: ["--set", "application.resourceTrackingMethod=annotation"],

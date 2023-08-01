@@ -1,4 +1,4 @@
-export const HelmChartVersions: any = {
+export const EksHelmChartVersions: any = {
   argo_cd: {
     dev: "5.39.0",
     staging: "5.39.0",
