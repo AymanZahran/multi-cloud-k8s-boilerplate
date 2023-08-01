@@ -9,8 +9,9 @@ import { DefineAksVariables } from "./cdktf/aks/vars";
 import { EksCluster } from "./cdktf/eks/eksCluster";
 import { DefineEksVariables } from "./cdktf/eks/vars";
 import {
+  AwsAccessKey,
   AwsRegion,
-  AzureRegion,
+  AzureRegion, AzureSubscriptionId, AzureTenantId, AzureTerraformClientId,
   Environment,
   StackConfig,
   TerraformRemoteBackendHostName,
@@ -25,7 +26,7 @@ class MultiCloudBoilerPlate extends TerraformStack {
 
     // Create AWS Providers
     new AwsProvider(this, "AWS", {
-      accessKey: process.env.AWS_ACCESS_KEY_ID || "",
+      accessKey: AwsAccessKey[configuration.environment],
       secretKey: process.env.AWS_SECRET_ACCESS_KEY || "",
       region: configuration.region.aws,
     });
@@ -33,9 +34,9 @@ class MultiCloudBoilerPlate extends TerraformStack {
     // Create Azure Provider
     new AzurermProvider(this, "AZURE", {
       features: {},
-      subscriptionId: process.env.ARM_SUBSCRIPTION_ID || "",
-      tenantId: process.env.ARM_TENANT_ID || "",
-      clientId: process.env.ARM_CLIENT_ID || "",
+      subscriptionId: AzureSubscriptionId[configuration.environment],
+      tenantId: AzureTenantId[configuration.environment],
+      clientId: AzureTerraformClientId[configuration.environment],
       clientSecret: process.env.ARM_CLIENT_SECRET || "",
     });
 

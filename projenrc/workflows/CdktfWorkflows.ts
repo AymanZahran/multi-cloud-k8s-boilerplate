@@ -1,7 +1,7 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { CI_Versions, Environment } from "../../src/const";
+import { CI_Versions, Environment, AzureTerraformClientId, AzureSubscriptionId, AzureTenantId, AwsAccessKey } from "../../src/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
@@ -31,14 +31,12 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         },
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
-          AWS_ACCESS_KEY_ID: "${{ secrets." + env + "_AWS_ACCESS_KEY_ID }}",
-          AWS_SECRET_ACCESS_KEY:
-            "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
-          ARM_CLIENT_ID: "${{ secrets." + env + "_AZURE_CLIENT_ID }}",
+          AWS_ACCESS_KEY_ID: AwsAccessKey[env],
+          AWS_SECRET_ACCESS_KEY: "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
+          ARM_CLIENT_ID: AzureTerraformClientId[env],
           ARM_CLIENT_SECRET: "${{ secrets." + env + "_AZURE_CLIENT_SECRET }}",
-          ARM_TENANT_ID: "${{ secrets." + env + "_AZURE_TENANT_ID }}",
-          ARM_SUBSCRIPTION_ID:
-            "${{ secrets." + env + "_AZURE_SUBSCRIPTION_ID }}",
+          ARM_TENANT_ID: AzureTenantId[env],
+          ARM_SUBSCRIPTION_ID: AzureSubscriptionId[env],
           stack: env,
           context: context,
         },
