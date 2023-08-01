@@ -1,7 +1,7 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
-interface AwsCloudWatchAgentProps extends ChartProps {
+export interface AwsCloudWatchAgentProps extends ChartProps {
   readonly helmFlags?: string[];
   readonly version?: string;
   readonly values?: any;

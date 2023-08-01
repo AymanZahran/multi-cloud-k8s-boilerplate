@@ -1,15 +1,15 @@
 import { Helm, Chart, ChartProps, ApiObject } from "cdk8s";
 import { Construct } from "constructs";
 
-interface CrossPlaneProps extends ChartProps {
+export interface CrossPlaneProps extends ChartProps {
   readonly provider: string;
   readonly helmFlags?: string[];
   readonly version?: string;
   readonly values?: any;
   readonly iamRoleArn?: string;
-  readonly clientId?: string;
-  readonly subscriptionId?: string;
   readonly tenantId?: string;
+  readonly subscriptionId?: string;
+  readonly clientId?: string;
 }
 
 export class CrossPlane extends Chart {
@@ -103,9 +103,9 @@ export class CrossPlane extends Chart {
           credentials: {
             source: "UserAssignedIdentity",
           },
-          clientID: props.clientId,
-          subscriptionID: props.subscriptionId,
           tenantID: props.tenantId,
+          subscriptionID: props.subscriptionId,
+          clientID: props.clientId,
         },
       });
     }
