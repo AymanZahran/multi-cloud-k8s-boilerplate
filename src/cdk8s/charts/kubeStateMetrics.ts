@@ -1,7 +1,7 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
-interface KubeStateMetricsProps extends ChartProps {
+export interface KubeStateMetricsProps extends ChartProps {
   readonly helmFlags?: string[];
   readonly version?: string;
   readonly values?: any;

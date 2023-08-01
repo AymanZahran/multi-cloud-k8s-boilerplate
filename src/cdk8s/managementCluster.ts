@@ -15,9 +15,9 @@ export interface ManagementClusterProps {
   readonly CrossPlaneHelmChartVersion?: string;
   readonly CrossPlaneHelmChartValues?: any;
   readonly iamRoleArn?: string;
-  readonly clientId?: string;
-  readonly subscriptionId?: string;
   readonly tenantId?: string;
+  readonly subscriptionId?: string;
+  readonly clientId?: string;
 }
 
 export class ManagementCluster extends Construct {
@@ -42,9 +42,9 @@ export class ManagementCluster extends Construct {
       version: props.CrossPlaneHelmChartVersion,
       values: props.CrossPlaneHelmChartValues,
       iamRoleArn: props.iamRoleArn,
-      clientId: props.clientId,
-      subscriptionId: props.subscriptionId,
       tenantId: props.tenantId,
+      subscriptionId: props.subscriptionId,
+      clientId: props.clientId,
     });
   }
 }

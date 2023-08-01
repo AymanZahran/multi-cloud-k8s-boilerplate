@@ -1,7 +1,7 @@
 import { Helm, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
-interface AwsEfsCsiDriverProps extends ChartProps {
+export interface AwsEfsCsiDriverProps extends ChartProps {
   readonly helmFlags?: string[];
   readonly version?: string;
   readonly values?: any;

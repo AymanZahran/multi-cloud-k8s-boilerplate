@@ -44,6 +44,27 @@ export enum Providers {
   aks = "aks",
 }
 
+export const AwsAccountId: any = {
+  dev: "123456789012",
+  staging: "123456789012",
+  prod: "123456789012",
+};
+export const AzureTenantId: any = {
+  dev: "12345678-1234-1234-1234-123456789012",
+  staging: "12345678-1234-1234-1234-123456789012",
+  prod: "12345678-1234-1234-1234-123456789012",
+};
+export const AzureSubscriptionId: any = {
+  dev: "12345678-1234-1234-1234-123456789012",
+  staging: "12345678-1234-1234-1234-123456789012",
+  prod: "12345678-1234-1234-1234-123456789012",
+};
+export const AzureCrossPlaneClientId: any = {
+  dev: "12345678-1234-1234-1234-123456789012",
+  staging: "12345678-1234-1234-1234-123456789012",
+  prod: "12345678-1234-1234-1234-123456789012",
+};
+
 export enum Environment {
   dev = "dev",
   staging = "staging",
