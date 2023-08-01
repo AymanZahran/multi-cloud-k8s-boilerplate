@@ -65,6 +65,10 @@ for (const env of Object.values(Environment)) {
     app: eksWorkloadApp,
     provider: "eks",
     environment: env,
+    ArgoCdHelmChartLabels: AksHelmChartLabels.argo_cd[env],
+    ArgoCdHelmChartsFlags: AksHelmChartFlags.argo_cd[env],
+    ArgoCdHelmChartVersion: AksHelmChartVersions.argo_cd[env],
+    ArgoCdHelmChartValues: AksHelmChartValues.argo_cd[env],
     EnableArgoImageUpdater: true,
     ArgoImageUpdaterHelmChartLabels:
       EksHelmChartLabels.argocd_image_updater[env],
@@ -203,6 +207,10 @@ for (const env of Object.values(Environment)) {
     app: aksWorkloadApp,
     provider: "aks",
     environment: env,
+    ArgoCdHelmChartLabels: AksHelmChartLabels.argo_cd[env],
+    ArgoCdHelmChartsFlags: AksHelmChartFlags.argo_cd[env],
+    ArgoCdHelmChartVersion: AksHelmChartVersions.argo_cd[env],
+    ArgoCdHelmChartValues: AksHelmChartValues.argo_cd[env],
     EnableArgoImageUpdater: true,
     ArgoImageUpdaterHelmChartLabels:
       AksHelmChartLabels.argocd_image_updater[env],
