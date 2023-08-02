@@ -10,6 +10,7 @@ export interface CrossPlaneProps extends ChartProps {
   readonly tenantId?: string;
   readonly subscriptionId?: string;
   readonly clientId?: string;
+  readonly crossPlaneServiceAccountName?: string;
 }
 
 export class CrossPlane extends Chart {
@@ -31,7 +32,7 @@ export class CrossPlane extends Chart {
         apiVersion: "v1",
         kind: "ServiceAccount",
         metadata: {
-          name: "crossplane-aws-sa",
+          name: props.crossPlaneServiceAccountName,
           namespace: "crossplane-system",
           annotations: {
             "eks.amazonaws.com/role-arn": props.iamRoleArn as string,

@@ -1,6 +1,5 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
-
 import { App, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
@@ -9,40 +8,53 @@ import { DefineAksVariables } from "./cdktf/aks/vars";
 import { EksCluster } from "./cdktf/eks/eksCluster";
 import { DefineEksVariables } from "./cdktf/eks/vars";
 import {
+  AwsAccessKey,
+  AwsAccountId,
   AwsRegion,
   AzureRegion,
+  AzureSubscriptionId,
+  AzureTenantId,
+  AzureTerraformClientId,
   Environment,
-  StackConfig,
   TerraformRemoteBackendHostName,
   TerraformRemoteBackendOrganization,
 } from "./const";
 
 config(); // Load the values from the .env file into process.env
 
+interface MultiCloudBoilerPlateProps {
+  environment: Environment;
+  region: {
+    aws?: AwsRegion;
+    azure?: AzureRegion;
+  };
+}
+
 class MultiCloudBoilerPlate extends TerraformStack {
-  constructor(scope: Construct, id: string, configuration: StackConfig) {
+  constructor(scope: Construct, id: string, props: MultiCloudBoilerPlateProps) {
     super(scope, id);
 
     // Create AWS Providers
     new AwsProvider(this, "AWS", {
-      accessKey: process.env.AWS_ACCESS_KEY_ID || "",
+      accessKey: AwsAccessKey[props.environment],
       secretKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-      region: configuration.region.aws,
+      region: props.region.aws,
     });
 
     // Create Azure Provider
     new AzurermProvider(this, "AZURE", {
       features: {},
-      subscriptionId: process.env.ARM_SUBSCRIPTION_ID || "",
-      tenantId: process.env.ARM_TENANT_ID || "",
-      clientId: process.env.ARM_CLIENT_ID || "",
+      subscriptionId: AzureSubscriptionId[props.environment],
+      tenantId: AzureTenantId[props.environment],
+      clientId: AzureTerraformClientId[props.environment],
       clientSecret: process.env.ARM_CLIENT_SECRET || "",
     });
 
     // Create EKS Cluster
-    const EksVariables = DefineEksVariables(this, configuration.environment);
+    const EksVariables = DefineEksVariables(this, props.environment);
     new EksCluster(this, "eks", {
-      eksRegion: configuration.region.aws,
+      AccountId: AwsAccountId[props.environment],
+      eksRegion: props.region.aws,
       eksCreateVpc: EksVariables.eksCreateVpc.value,
       eksCreateIgw: EksVariables.eksCreateIgw.value,
       eksAzs: EksVariables.eksAzs.value,
@@ -71,12 +83,20 @@ class MultiCloudBoilerPlate extends TerraformStack {
       eksTags: EksVariables.eksTags.value,
       eksInstallArgoCd: EksVariables.eksInstallArgoCd.value,
       eksInstallArgoCdPath: EksVariables.eksInstallArgoCdPath.value,
+      eksCrossPlaneIamRoleArn:
+        "arn:aws:iam::" +
+        AwsAccountId[props.environment] +
+        ":role/" +
+        EksVariables.eksCrossPlaneIamRoleName,
+      eksCrossPlaneServiceAccountName:
+        EksVariables.eksCrossPlaneServiceAccountName.value,
+      eksCrossPlaneNamespace: EksVariables.eksCrossPlaneNamespace.value,
     });
 
     // Create AKS Cluster
-    const AksVariables = DefineAksVariables(this, configuration.environment);
+    const AksVariables = DefineAksVariables(this, props.environment);
     new AksCluster(this, "aks", {
-      aksLocation: configuration.region.azure,
+      aksLocation: props.region.azure,
       aksPrefix: AksVariables.aksPrefix.value,
       aksVnetName: AksVariables.aksVnetName.value,
       aksResourceGroupName: AksVariables.aksResourceGroupName.value,

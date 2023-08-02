@@ -1,3 +1,4 @@
+import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { NullProvider } from "@cdktf/provider-null/lib/provider";
 import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
@@ -6,6 +7,7 @@ import { Vpc } from "../../../.gen/modules/vpc";
 import { AwsRegion } from "../../const";
 
 export interface EksClusterProps {
+  readonly AccountId: string;
   readonly eksRegion: AwsRegion | undefined;
   readonly eksCreateVpc: boolean;
   readonly eksCreateIgw: boolean;
@@ -31,6 +33,9 @@ export interface EksClusterProps {
   readonly eksTags: { [key: string]: string };
   readonly eksInstallArgoCd: boolean;
   readonly eksInstallArgoCdPath: string;
+  readonly eksCrossPlaneIamRoleArn: string;
+  readonly eksCrossPlaneServiceAccountName: string;
+  readonly eksCrossPlaneNamespace: string;
 }
 
 export class EksCluster extends Construct {
@@ -85,6 +90,32 @@ export class EksCluster extends Construct {
       iamRoleTags: props.eksTags,
       clusterTags: props.eksTags,
       tags: props.eksTags,
+    });
+
+    new IamRole(this, "iam-eks-node-role", {
+      dependsOn: [this.eks],
+      name: props.eksIamRoleName,
+      managedPolicyArns: ["arn:aws:iam::aws:policy/AdministratorAccess"],
+      assumeRolePolicy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Sid: "AllowCrossplaneToAssumeRole",
+            Effect: "Allow",
+            Principal: {
+              Federated: `arn:aws:iam::${props.AccountId}:oidc-provider/oidc.eks.${props.eksRegion}.amazonaws.com/id/${props.eksCrossPlaneIamRoleArn}`,
+            },
+            Action: "sts:AssumeRoleWithWebIdentity",
+            Condition: {
+              StringEquals: {
+                [`oidc.eks.${props.eksRegion}.amazonaws.com/id/${props.eksCrossPlaneIamRoleArn}:sub`]: `system:serviceaccount:${props.eksCrossPlaneNamespace}:${props.eksCrossPlaneServiceAccountName}`,
+                [`oidc.eks.${props.eksRegion}.amazonaws.com/id/${props.eksCrossPlaneIamRoleArn}:aud`]:
+                  "sts.amazonaws.com",
+              },
+            },
+          },
+        ],
+      }),
     });
 
     // Install ArgoCD on EKS Cluster

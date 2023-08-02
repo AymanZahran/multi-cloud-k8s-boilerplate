@@ -184,6 +184,34 @@ export function DefineEksVariables(
       description: "The path to the Argo CD installation",
     },
   );
+  const eksCrossPlaneIamRoleName = new TerraformVariable(
+    stack,
+    "crossplane_iam_role_name",
+    {
+      type: "string",
+      default: EksTerraformVariables.eksCrossPlaneIamRoleName[environment],
+      description: "The name of the IAM role",
+    },
+  );
+  const eksCrossPlaneServiceAccountName = new TerraformVariable(
+    stack,
+    "crossplane_service_account_name",
+    {
+      type: "string",
+      default:
+        EksTerraformVariables.eksCrossPlaneServiceAccountName[environment],
+      description: "The name of the service account",
+    },
+  );
+  const eksCrossPlaneNamespace = new TerraformVariable(
+    stack,
+    "crossplane_namespace",
+    {
+      type: "string",
+      default: EksTerraformVariables.eksCrossPlaneNamespace[environment],
+      description: "The namespace of the service account",
+    },
+  );
 
   return {
     eksCreateVpc,
@@ -210,5 +238,8 @@ export function DefineEksVariables(
     eksTags,
     eksInstallArgoCd,
     eksInstallArgoCdPath,
+    eksCrossPlaneIamRoleName,
+    eksCrossPlaneServiceAccountName,
+    eksCrossPlaneNamespace,
   };
 }

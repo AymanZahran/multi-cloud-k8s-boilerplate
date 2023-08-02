@@ -13,12 +13,12 @@ jobs:
       contents: read
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.prod_AWS_ACCESS_KEY_ID }}
+      AWS_ACCESS_KEY_ID: AKIA5EZUTDHMR45HQYKA
       AWS_SECRET_ACCESS_KEY: ${{ secrets.prod_AWS_SECRET_ACCESS_KEY }}
-      ARM_CLIENT_ID: ${{ secrets.prod_AZURE_CLIENT_ID }}
+      ARM_CLIENT_ID: ff9f2cd0-a91d-4f34-97ac-6670bb08cc05
       ARM_CLIENT_SECRET: ${{ secrets.prod_AZURE_CLIENT_SECRET }}
-      ARM_TENANT_ID: ${{ secrets.prod_AZURE_TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.prod_AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
+      ARM_SUBSCRIPTION_ID: 65d113fc-bfd6-4cdb-a308-06fce27d592a
       stack: prod
       context: build
     steps:
@@ -51,8 +51,8 @@ jobs:
           }' > ~/.terraform.d/credentials.tfrc.json
       - name: AZ Login
         run: |-
-          az login --service-principal -u ${{ secrets.prod_AZURE_CLIENT_ID }} -p ${{ secrets.prod_AZURE_CLIENT_SECRET }} --tenant ${{ secrets.prod_AZURE_TENANT_ID }}
-          az account set --subscription ${{ secrets.prod_AZURE_SUBSCRIPTION_ID }}
+          az login --service-principal -u ff9f2cd0-a91d-4f34-97ac-6670bb08cc05 -p ${{ secrets.prod_AZURE_CLIENT_SECRET }} --tenant 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
+          az account set --subscription 65d113fc-bfd6-4cdb-a308-06fce27d592a
       - name: Terraform Plan
         run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
       - name: Comment on the PR

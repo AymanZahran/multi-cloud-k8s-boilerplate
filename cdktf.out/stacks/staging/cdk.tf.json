@@ -136,19 +136,19 @@
   "provider": {
     "aws": [
       {
-        "access_key": "",
+        "access_key": "AKIA5EZUTDHMR45HQYKA",
         "region": "us-east-1",
         "secret_key": ""
       }
     ],
     "azurerm": [
       {
-        "client_id": "",
+        "client_id": "ff9f2cd0-a91d-4f34-97ac-6670bb08cc05",
         "client_secret": "",
         "features": {
         },
-        "subscription_id": "",
-        "tenant_id": ""
+        "subscription_id": "de40a960-a7dd-4c03-ad60-9a6c07c93ed2",
+        "tenant_id": "3e5e67ad-2e8c-4a0a-b170-8fe996eebec0"
       }
     ],
     "null": [
@@ -161,6 +161,24 @@
     ]
   },
   "resource": {
+    "aws_iam_role": {
+      "eks_iam-eks-node-role_1738041F": {
+        "//": {
+          "metadata": {
+            "path": "staging/eks/iam-eks-node-role",
+            "uniqueId": "eks_iam-eks-node-role_1738041F"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowCrossplaneToAssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Federated\":\"arn:aws:iam::903664048601:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}\"},\"Action\":\"sts:AssumeRoleWithWebIdentity\",\"Condition\":{\"StringEquals\":{\"oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}:sub\":\"system:serviceaccount:${var.crossplane_namespace}:${var.crossplane_service_account_name}\",\"oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}:aud\":\"sts.amazonaws.com\"}}}]}",
+        "depends_on": [
+          "module.eks_B1A34D59"
+        ],
+        "managed_policy_arns": [
+          "arn:aws:iam::aws:policy/AdministratorAccess"
+        ],
+        "name": "${var.eks_iam_role_name}"
+      }
+    },
     "null_resource": {
       "aks_argo-cd-aks-install-null_A56F49F3": {
         "//": {
@@ -421,6 +439,21 @@
     "aks_vnet_name": {
       "default": "staging-aks-vnet",
       "description": "The name of the AKS VNet",
+      "type": "string"
+    },
+    "crossplane_iam_role_name": {
+      "default": "eks-crossplane-iam-role-staging",
+      "description": "The name of the IAM role",
+      "type": "string"
+    },
+    "crossplane_namespace": {
+      "default": "crossplane-system",
+      "description": "The namespace of the service account",
+      "type": "string"
+    },
+    "crossplane_service_account_name": {
+      "default": "eks-crossplane-sa-staging",
+      "description": "The name of the service account",
       "type": "string"
     },
     "eks_azs": {
