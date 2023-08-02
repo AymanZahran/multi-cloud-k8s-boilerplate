@@ -75,6 +75,10 @@ class MultiCloudBoilerPlate extends TerraformStack {
       eksTags: EksVariables.eksTags.value,
       eksInstallArgoCd: EksVariables.eksInstallArgoCd.value,
       eksInstallArgoCdPath: EksVariables.eksInstallArgoCdPath.value,
+      eksCrossPlaneIamRoleName: EksVariables.eksCrossPlaneIamRoleName.value,
+      eksCrossPlaneServiceAccountName:
+        EksVariables.eksCrossPlaneServiceAccountName.value,
+      eksCrossPlaneNamespace: EksVariables.eksCrossPlaneNamespace.value,
     });
 
     // Create AKS Cluster

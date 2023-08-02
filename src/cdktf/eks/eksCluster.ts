@@ -2,6 +2,7 @@ import { NullProvider } from "@cdktf/provider-null/lib/provider";
 import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
+import { IamEksRole } from "../../../.gen/modules/iam-eks-role";
 import { Vpc } from "../../../.gen/modules/vpc";
 import { AwsRegion } from "../../const";
 
@@ -31,6 +32,9 @@ export interface EksClusterProps {
   readonly eksTags: { [key: string]: string };
   readonly eksInstallArgoCd: boolean;
   readonly eksInstallArgoCdPath: string;
+  readonly eksCrossPlaneIamRoleName: string;
+  readonly eksCrossPlaneServiceAccountName: string;
+  readonly eksCrossPlaneNamespace: string;
 }
 
 export class EksCluster extends Construct {
@@ -85,6 +89,17 @@ export class EksCluster extends Construct {
       iamRoleTags: props.eksTags,
       clusterTags: props.eksTags,
       tags: props.eksTags,
+    });
+
+    new IamEksRole(this, "iam-eks-role", {
+      roleName: props.eksCrossPlaneIamRoleName,
+      createRole: true,
+      clusterServiceAccounts: {
+        crossPlane: [
+          props.eksCrossPlaneNamespace,
+          props.eksCrossPlaneServiceAccountName,
+        ],
+      },
     });
 
     // Install ArgoCD on EKS Cluster

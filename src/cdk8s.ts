@@ -11,6 +11,7 @@ import { EksHelmChartLabels } from "./cdk8s/properties/eks/labels";
 import { EksHelmChartValues } from "./cdk8s/properties/eks/values";
 import { EksHelmChartVersions } from "./cdk8s/properties/eks/versions";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
+import { EksTerraformVariables } from "./cdktf/eks/default";
 import {
   Environment,
   AwsAccountId,
@@ -38,7 +39,12 @@ for (const env of Object.values(Environment)) {
     CrossPlaneHelmChartVersion: EksHelmChartVersions.crossplane[env],
     CrossPlaneHelmChartValues: EksHelmChartValues.crossplane[env],
     iamRoleArn:
-      "arn:aws:iam::" + AwsAccountId[env] + ":role/eks-crossplane-role-" + env,
+      "arn:aws:iam::" +
+      AwsAccountId[env] +
+      ":role/" +
+      EksTerraformVariables.eksCrossPlaneIamRoleName[env],
+    crossPlaneServiceAccountName:
+      EksTerraformVariables.eksCrossPlaneServiceAccountName[env],
   });
   eksManagementApp.synth();
 

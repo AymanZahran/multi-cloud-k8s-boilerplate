@@ -107,6 +107,24 @@
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
     },
+    "eks_iam-eks-role_3A76A0B8": {
+      "//": {
+        "metadata": {
+          "path": "staging/eks/iam-eks-role",
+          "uniqueId": "eks_iam-eks-role_3A76A0B8"
+        }
+      },
+      "cluster_service_accounts": {
+        "crossPlane": [
+          "${var.crossplane_namespace}",
+          "${var.crossplane_service_account_name}"
+        ]
+      },
+      "create_role": true,
+      "role_name": "${var.crossplane_iam_role_name}",
+      "source": "terraform-aws-modules/iam/aws//modules/iam-eks-role",
+      "version": "5.28.0"
+    },
     "eks_vpc_924ECCC8": {
       "//": {
         "metadata": {
@@ -239,11 +257,11 @@
     "required_providers": {
       "aws": {
         "source": "aws",
-        "version": "5.10.0"
+        "version": "5.9.0"
       },
       "azurerm": {
         "source": "azurerm",
-        "version": "3.67.0"
+        "version": "3.66.0"
       },
       "null": {
         "source": "null",
@@ -421,6 +439,21 @@
     "aks_vnet_name": {
       "default": "staging-aks-vnet",
       "description": "The name of the AKS VNet",
+      "type": "string"
+    },
+    "crossplane_iam_role_name": {
+      "default": "eks-crossplane-iam-role-staging",
+      "description": "The name of the IAM role",
+      "type": "string"
+    },
+    "crossplane_namespace": {
+      "default": "crossplane-system",
+      "description": "The namespace of the service account",
+      "type": "string"
+    },
+    "crossplane_service_account_name": {
+      "default": "eks-crossplane-sa-staging",
+      "description": "The name of the service account",
       "type": "string"
     },
     "eks_azs": {

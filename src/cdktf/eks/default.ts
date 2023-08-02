@@ -160,4 +160,19 @@ export const EksTerraformVariables: any = {
     staging: KubernetesManagementDir + "eks/" + "staging",
     prod: KubernetesManagementDir + "eks/" + "prod",
   },
+  eksCrossPlaneIamRoleName: {
+    dev: "eks-crossplane-iam-role-dev",
+    staging: "eks-crossplane-iam-role-staging",
+    prod: "eks-crossplane-iam-role-prod",
+  },
+  eksCrossPlaneServiceAccountName: {
+    dev: "eks-crossplane-sa-dev",
+    staging: "eks-crossplane-sa-staging",
+    prod: "eks-crossplane-sa-prod",
+  },
+  eksCrossPlaneNamespace: {
+    dev: "crossplane-system",
+    staging: "crossplane-system",
+    prod: "crossplane-system",
+  },
 };

@@ -18,6 +18,7 @@ export interface ManagementClusterProps {
   readonly tenantId?: string;
   readonly subscriptionId?: string;
   readonly clientId?: string;
+  readonly crossPlaneServiceAccountName?: string;
 }
 
 export class ManagementCluster extends Construct {
@@ -45,6 +46,7 @@ export class ManagementCluster extends Construct {
       tenantId: props.tenantId,
       subscriptionId: props.subscriptionId,
       clientId: props.clientId,
+      crossPlaneServiceAccountName: props.crossPlaneServiceAccountName,
     });
   }
 }
