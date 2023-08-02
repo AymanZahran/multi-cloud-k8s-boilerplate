@@ -16,37 +16,44 @@ import {
   AzureTenantId,
   AzureTerraformClientId,
   Environment,
-  StackConfig,
   TerraformRemoteBackendHostName,
   TerraformRemoteBackendOrganization,
 } from "./const";
 
 config(); // Load the values from the .env file into process.env
 
+interface MultiCloudBoilerPlateProps {
+  environment: Environment;
+  region: {
+    aws?: AwsRegion;
+    azure?: AzureRegion;
+  };
+}
+
 class MultiCloudBoilerPlate extends TerraformStack {
-  constructor(scope: Construct, id: string, configuration: StackConfig) {
+  constructor(scope: Construct, id: string, props: MultiCloudBoilerPlateProps) {
     super(scope, id);
 
     // Create AWS Providers
     new AwsProvider(this, "AWS", {
-      accessKey: AwsAccessKey[configuration.environment],
+      accessKey: AwsAccessKey[props.environment],
       secretKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-      region: configuration.region.aws,
+      region: props.region.aws,
     });
 
     // Create Azure Provider
     new AzurermProvider(this, "AZURE", {
       features: {},
-      subscriptionId: AzureSubscriptionId[configuration.environment],
-      tenantId: AzureTenantId[configuration.environment],
-      clientId: AzureTerraformClientId[configuration.environment],
+      subscriptionId: AzureSubscriptionId[props.environment],
+      tenantId: AzureTenantId[props.environment],
+      clientId: AzureTerraformClientId[props.environment],
       clientSecret: process.env.ARM_CLIENT_SECRET || "",
     });
 
     // Create EKS Cluster
-    const EksVariables = DefineEksVariables(this, configuration.environment);
+    const EksVariables = DefineEksVariables(this, props.environment);
     new EksCluster(this, "eks", {
-      eksRegion: configuration.region.aws,
+      eksRegion: props.region.aws,
       eksCreateVpc: EksVariables.eksCreateVpc.value,
       eksCreateIgw: EksVariables.eksCreateIgw.value,
       eksAzs: EksVariables.eksAzs.value,
@@ -82,9 +89,9 @@ class MultiCloudBoilerPlate extends TerraformStack {
     });
 
     // Create AKS Cluster
-    const AksVariables = DefineAksVariables(this, configuration.environment);
+    const AksVariables = DefineAksVariables(this, props.environment);
     new AksCluster(this, "aks", {
-      aksLocation: configuration.region.azure,
+      aksLocation: props.region.azure,
       aksPrefix: AksVariables.aksPrefix.value,
       aksVnetName: AksVariables.aksVnetName.value,
       aksResourceGroupName: AksVariables.aksResourceGroupName.value,

@@ -91,14 +91,6 @@ export enum AzureRegion {
   west_us = "westus",
 }
 
-export interface StackConfig {
-  environment: Environment;
-  region: {
-    aws?: AwsRegion;
-    azure?: AzureRegion;
-  };
-}
-
 export const RepoURL =
   "https://github.com/AymanZahran/multi-cloud-k8s-boilerplate";
 export const KubernetesDir = "kubernetes";
