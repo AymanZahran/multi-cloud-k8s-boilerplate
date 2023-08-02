@@ -45,34 +45,34 @@ export enum Providers {
 }
 
 export const AwsAccountId: any = {
-  dev: "123456789012",
-  staging: "123456789012",
-  prod: "123456789012",
+  dev: "903664048601",
+  staging: "903664048601",
+  prod: "903664048601",
 };
 export const AwsAccessKey: any = {
-  dev: "123456789012",
-  staging: "123456789012",
-  prod: "123456789012",
+  dev: "AKIA5EZUTDHMR45HQYKA",
+  staging: "AKIA5EZUTDHMR45HQYKA",
+  prod: "AKIA5EZUTDHMR45HQYKA",
 };
 export const AzureTenantId: any = {
-  dev: "12345678-1234-1234-1234-123456789012",
-  staging: "12345678-1234-1234-1234-123456789012",
-  prod: "12345678-1234-1234-1234-123456789012",
+  dev: "3e5e67ad-2e8c-4a0a-b170-8fe996eebec0",
+  staging: "3e5e67ad-2e8c-4a0a-b170-8fe996eebec0",
+  prod: "3e5e67ad-2e8c-4a0a-b170-8fe996eebec0",
 };
 export const AzureSubscriptionId: any = {
-  dev: "12345678-1234-1234-1234-123456789012",
-  staging: "12345678-1234-1234-1234-123456789012",
-  prod: "12345678-1234-1234-1234-123456789012",
+  dev: "7feba40e-3797-4714-bffd-788ab08a6cde",
+  staging: "de40a960-a7dd-4c03-ad60-9a6c07c93ed2",
+  prod: "65d113fc-bfd6-4cdb-a308-06fce27d592a",
 };
 export const AzureTerraformClientId: any = {
-  dev: "12345678-1234-1234-1234-123456789012",
-  staging: "12345678-1234-1234-1234-123456789012",
-  prod: "12345678-1234-1234-1234-123456789012",
+  dev: "ff9f2cd0-a91d-4f34-97ac-6670bb08cc05",
+  staging: "ff9f2cd0-a91d-4f34-97ac-6670bb08cc05",
+  prod: "ff9f2cd0-a91d-4f34-97ac-6670bb08cc05",
 };
 export const AzureCrossPlaneClientId: any = {
-  dev: "12345678-1234-1234-1234-123456789012",
-  staging: "12345678-1234-1234-1234-123456789012",
-  prod: "12345678-1234-1234-1234-123456789012",
+  dev: "b266af97-6923-4d9a-b754-3dc573a6dbdc",
+  staging: "b266af97-6923-4d9a-b754-3dc573a6dbdc",
+  prod: "b266af97-6923-4d9a-b754-3dc573a6dbdc",
 };
 
 export enum Environment {

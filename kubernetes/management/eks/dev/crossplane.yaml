@@ -1003,7 +1003,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eks-crossplane-iam-role-dev
+    eks.amazonaws.com/role-arn: arn:aws:iam::903664048601:role/eks-crossplane-iam-role-dev
   name: eks-crossplane-sa-dev
   namespace: crossplane-system
 ---
@@ -1011,7 +1011,7 @@ apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
 metadata:
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eks-crossplane-iam-role-dev
+    eks.amazonaws.com/role-arn: arn:aws:iam::903664048601:role/eks-crossplane-iam-role-dev
   name: crossplane-aws-controller-config
 spec:
   podSecurityContext:

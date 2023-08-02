@@ -154,19 +154,19 @@
   "provider": {
     "aws": [
       {
-        "access_key": "123456789012",
+        "access_key": "AKIA5EZUTDHMR45HQYKA",
         "region": "us-east-1",
         "secret_key": ""
       }
     ],
     "azurerm": [
       {
-        "client_id": "12345678-1234-1234-1234-123456789012",
+        "client_id": "ff9f2cd0-a91d-4f34-97ac-6670bb08cc05",
         "client_secret": "",
         "features": {
         },
-        "subscription_id": "12345678-1234-1234-1234-123456789012",
-        "tenant_id": "12345678-1234-1234-1234-123456789012"
+        "subscription_id": "7feba40e-3797-4714-bffd-788ab08a6cde",
+        "tenant_id": "3e5e67ad-2e8c-4a0a-b170-8fe996eebec0"
       }
     ],
     "null": [

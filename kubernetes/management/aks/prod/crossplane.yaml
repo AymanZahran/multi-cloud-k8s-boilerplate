@@ -1011,8 +1011,8 @@ kind: ProviderConfig
 metadata:
   name: crossplane-azure-provider-config
 spec:
-  clientID: 12345678-1234-1234-1234-123456789012
+  clientID: b266af97-6923-4d9a-b754-3dc573a6dbdc
   credentials:
     source: UserAssignedIdentity
-  subscriptionID: 12345678-1234-1234-1234-123456789012
-  tenantID: 12345678-1234-1234-1234-123456789012
+  subscriptionID: 65d113fc-bfd6-4cdb-a308-06fce27d592a
+  tenantID: 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
