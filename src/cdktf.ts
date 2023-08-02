@@ -1,6 +1,5 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
-
 import { App, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
@@ -10,6 +9,7 @@ import { EksCluster } from "./cdktf/eks/eksCluster";
 import { DefineEksVariables } from "./cdktf/eks/vars";
 import {
   AwsAccessKey,
+  AwsAccountId,
   AwsRegion,
   AzureRegion,
   AzureSubscriptionId,
@@ -53,6 +53,7 @@ class MultiCloudBoilerPlate extends TerraformStack {
     // Create EKS Cluster
     const EksVariables = DefineEksVariables(this, props.environment);
     new EksCluster(this, "eks", {
+      AccountId: AwsAccountId[props.environment],
       eksRegion: props.region.aws,
       eksCreateVpc: EksVariables.eksCreateVpc.value,
       eksCreateIgw: EksVariables.eksCreateIgw.value,
@@ -82,7 +83,11 @@ class MultiCloudBoilerPlate extends TerraformStack {
       eksTags: EksVariables.eksTags.value,
       eksInstallArgoCd: EksVariables.eksInstallArgoCd.value,
       eksInstallArgoCdPath: EksVariables.eksInstallArgoCdPath.value,
-      eksCrossPlaneIamRoleName: EksVariables.eksCrossPlaneIamRoleName.value,
+      eksCrossPlaneIamRoleArn:
+        "arn:aws:iam::" +
+        AwsAccountId[props.environment] +
+        ":role/" +
+        EksVariables.eksCrossPlaneIamRoleName,
       eksCrossPlaneServiceAccountName:
         EksVariables.eksCrossPlaneServiceAccountName.value,
       eksCrossPlaneNamespace: EksVariables.eksCrossPlaneNamespace.value,

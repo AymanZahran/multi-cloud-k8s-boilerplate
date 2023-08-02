@@ -107,24 +107,6 @@
       "version": "19.15.3",
       "vpc_id": "${module.eks_vpc_924ECCC8.vpc_id}"
     },
-    "eks_iam-eks-role_3A76A0B8": {
-      "//": {
-        "metadata": {
-          "path": "dev/eks/iam-eks-role",
-          "uniqueId": "eks_iam-eks-role_3A76A0B8"
-        }
-      },
-      "cluster_service_accounts": {
-        "crossPlane": [
-          "${var.crossplane_namespace}",
-          "${var.crossplane_service_account_name}"
-        ]
-      },
-      "create_role": true,
-      "role_name": "${var.crossplane_iam_role_name}",
-      "source": "terraform-aws-modules/iam/aws//modules/iam-eks-role",
-      "version": "5.28.0"
-    },
     "eks_vpc_924ECCC8": {
       "//": {
         "metadata": {
@@ -179,6 +161,24 @@
     ]
   },
   "resource": {
+    "aws_iam_role": {
+      "eks_iam-eks-node-role_1738041F": {
+        "//": {
+          "metadata": {
+            "path": "dev/eks/iam-eks-node-role",
+            "uniqueId": "eks_iam-eks-node-role_1738041F"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"AllowCrossplaneToAssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Federated\":\"arn:aws:iam::903664048601:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}\"},\"Action\":\"sts:AssumeRoleWithWebIdentity\",\"Condition\":{\"StringEquals\":{\"oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}:sub\":\"system:serviceaccount:${var.crossplane_namespace}:${var.crossplane_service_account_name}\",\"oidc.eks.us-east-1.amazonaws.com/id/arn:aws:iam::903664048601:role/${var.crossplane_iam_role_name}:aud\":\"sts.amazonaws.com\"}}}]}",
+        "depends_on": [
+          "module.eks_B1A34D59"
+        ],
+        "managed_policy_arns": [
+          "arn:aws:iam::aws:policy/AdministratorAccess"
+        ],
+        "name": "${var.eks_iam_role_name}"
+      }
+    },
     "null_resource": {
       "aks_argo-cd-aks-install-null_A56F49F3": {
         "//": {

@@ -16,11 +16,6 @@
       "version": "19.15.3"
     },
     {
-      "name": "iam-eks-role",
-      "source": "terraform-aws-modules/iam/aws//modules/iam-eks-role",
-      "version": "5.28.0"
-    },
-    {
       "name": "vnet",
       "source": "Azure/vnet/azurerm",
       "version": "4.1.0"
