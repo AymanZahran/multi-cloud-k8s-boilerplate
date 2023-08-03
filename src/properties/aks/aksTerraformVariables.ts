@@ -1,4 +1,4 @@
-import { KubernetesManagementDir } from "../../const";
+import { KubernetesManagementDir } from "../const";
 
 export const AksTerraformVariables: any = {
   aksResource_group_name: {

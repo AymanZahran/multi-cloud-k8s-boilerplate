@@ -8,7 +8,7 @@ import {
   AzureSubscriptionId,
   AzureTenantId,
   AwsAccessKey,
-} from "../../src/const";
+} from "../../src/properties/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {

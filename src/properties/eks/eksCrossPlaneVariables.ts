@@ -1,4 +1,4 @@
-export const EksWorkloadClusterVars: any = {
+export const EksCrossPlaneVariables: any = {
   eksVpcName: {
     dev: "dev-eks-vpc",
     staging: "staging-eks-vpc",

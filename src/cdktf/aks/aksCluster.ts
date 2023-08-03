@@ -3,7 +3,7 @@ import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
 import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
-import { AzureRegion } from "../../const";
+import { AzureRegion } from "../../properties/const";
 
 export interface AksClusterProps {
   readonly aksLocation: AzureRegion | undefined;

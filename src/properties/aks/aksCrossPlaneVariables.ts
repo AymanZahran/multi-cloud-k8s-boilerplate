@@ -1,4 +1,4 @@
-export const AksWorkloadClusterVars: any = {
+export const AksCrossPlaneVariables: any = {
   aksVnetName: {
     dev: "aks-vnet-dev",
     staging: "aks-vnet-staging",
