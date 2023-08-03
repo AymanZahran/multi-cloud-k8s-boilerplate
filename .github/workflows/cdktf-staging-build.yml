@@ -21,6 +21,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: de40a960-a7dd-4c03-ad60-9a6c07c93ed2
       stack: staging
       context: build
+      FREEZE: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,8 +54,13 @@ jobs:
         run: |-
           az login --service-principal -u ff9f2cd0-a91d-4f34-97ac-6670bb08cc05 -p ${{ secrets.staging_AZURE_CLIENT_SECRET }} --tenant 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
           az account set --subscription de40a960-a7dd-4c03-ad60-9a6c07c93ed2
-      - name: Terraform Plan
-        run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
+      - name: Terraform Plan / Apply
+        run: |-
+          if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; 
+          else 
+            if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled"; 
+            else cdktf deploy ${{ env.stack }} --auto-approve; 
+          fi
       - name: Comment on the PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@0.9.0

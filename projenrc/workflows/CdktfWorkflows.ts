@@ -7,7 +7,7 @@ import {
   AzureTerraformClientId,
   AzureSubscriptionId,
   AzureTenantId,
-  AwsAccessKey,
+  AwsAccessKey, FreezeFlag,
 } from "../../src/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
@@ -47,6 +47,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           ARM_SUBSCRIPTION_ID: AzureSubscriptionId[env],
           stack: env,
           context: context,
+          FREEZE: FreezeFlag,
         },
         steps: [
           {
@@ -108,10 +109,13 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
               AzureSubscriptionId[env],
           },
           {
-            name: "Terraform Plan",
-            run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi',
-            // Uncomment this line to deploy after merge to master
-            // run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+            name: "Terraform Plan / Apply",
+            // If Freeze is true, then cdktf deploy will fail if there are any changes to the stack.
+            run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; \n' +
+                 'else \n' +
+                 '  if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled"; \n' +
+                 '  else cdktf deploy ${{ env.stack }} --auto-approve; \n' +
+                 'fi',
           },
           {
             name: "Comment on the PR",
