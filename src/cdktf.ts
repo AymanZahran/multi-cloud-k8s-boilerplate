@@ -18,7 +18,7 @@ import {
   Environment,
   TerraformRemoteBackendHostName,
   TerraformRemoteBackendOrganization,
-} from "./const";
+} from "./properties/const";
 
 config(); // Load the values from the .env file into process.env
 

@@ -4,7 +4,7 @@ import { Resource } from "@cdktf/provider-null/lib/resource";
 import { Construct } from "constructs";
 import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
-import { AwsRegion } from "../../const";
+import { AwsRegion } from "../../properties/const";
 
 export interface EksClusterProps {
   readonly AccountId: string;
