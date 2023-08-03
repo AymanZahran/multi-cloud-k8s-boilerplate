@@ -30,7 +30,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           },
         });
       }
-      cdktf_workflow.addJob("build", {
+      cdktf_workflow.addJob(context, {
         name: "cdktf-" + env + "-" + context,
         runsOn: ["ubuntu-latest"],
         permissions: {
@@ -109,13 +109,16 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
               AzureSubscriptionId[env],
           },
           {
-            name: "Terraform Plan / Apply",
-            // If Freeze is true, then cdktf deploy will fail if there are any changes to the stack.
-            run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; \n' +
-                 'else \n' +
-                 '  if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled"; \n' +
-                 '  else cdktf deploy ${{ env.stack }} --auto-approve; \n' +
-                 'fi',
+            if: "env.context == 'build'",
+            name: "Terraform Plan",
+            run: 'cdktf plan ${{ env.stack }};'
+          },
+          {
+            if: "env.context == 'deploy'",
+            name: "Terraform Apply",
+            run: 'if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; \n' +
+                 // 'else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+                 'else echo "cdktf deploy will be applied here"; fi',
           },
           {
             name: "Comment on the PR",
