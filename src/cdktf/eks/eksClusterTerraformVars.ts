@@ -2,7 +2,7 @@ import { TerraformStack, TerraformVariable } from "cdktf";
 import { Environment } from "../../properties/const";
 import { EksTerraformVariables } from "../../properties/eks/eksTerraformVariables";
 
-export function DefineEksVariables(
+export function EksClusterTerraformVars(
   stack: TerraformStack,
   environment: Environment,
 ) {

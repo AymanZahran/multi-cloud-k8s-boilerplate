@@ -1,7 +1,7 @@
 import { Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
-import { EksCrossPlane } from "./managedResources/eks";
-import { VpcCrossPlane } from "./managedResources/vpc";
+import { EksCrossPlane } from "./managedResources/eksCrossPlane";
+import { VpcCrossPlane } from "./managedResources/vpcCrossPlane";
 
 export interface EksClusterCrossPlaneProps extends ChartProps {
   readonly eksVpcName?: string;

@@ -6,7 +6,7 @@ import { Eks } from "../../../.gen/modules/eks";
 import { Vpc } from "../../../.gen/modules/vpc";
 import { AwsRegion } from "../../properties/const";
 
-export interface EksClusterProps {
+export interface EksClusterTerraformProps {
   readonly AccountId: string;
   readonly eksRegion: AwsRegion | undefined;
   readonly eksCreateVpc: boolean;
@@ -38,11 +38,11 @@ export interface EksClusterProps {
   readonly eksCrossPlaneNamespace: string;
 }
 
-export class EksCluster extends Construct {
+export class EksClusterTerraform extends Construct {
   private readonly vpc?: Vpc;
   private readonly eks?: Eks;
 
-  constructor(scope: Construct, name: string, props: EksClusterProps) {
+  constructor(scope: Construct, name: string, props: EksClusterTerraformProps) {
     super(scope, name);
 
     // Create VPC
