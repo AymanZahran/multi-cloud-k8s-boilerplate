@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { ArgoCd } from "./charts/argoCd";
 import { CrossPlane } from "./charts/crossPlane";
-import { AksClusterCrossPlane } from "./crosslane/aks/aksClusterCrossPlane";
-import { EksClusterCrossPlane } from "./crosslane/eks/eksClusterCrossPlane";
+import { AksClusterCrossPlane } from "./crossplane/aksClusterCrossPlane";
+import { EksClusterCrossPlane } from "./crossplane/eksClusterCrossPlane";
 
 export interface ManagementClusterProps {
   readonly app: any;
@@ -21,6 +21,45 @@ export interface ManagementClusterProps {
   readonly subscriptionId?: string;
   readonly clientId?: string;
   readonly crossPlaneServiceAccountName?: string;
+  // EKS
+  readonly eksVpcName?: string;
+  readonly eksRegion?: string;
+  readonly eksCidrBlock?: string;
+  readonly eksEnableDnsHostNames?: boolean;
+  readonly eksEnableDnsSupport?: boolean;
+  readonly eksInstanceTenancy?: string;
+  readonly eksProviderConfigRef?: string;
+  readonly eksSubnetName?: string;
+  readonly eksAvailabilityZone?: string[];
+  readonly eksSubnetCidrBlock?: string[];
+  readonly eksClusterName?: string;
+  readonly eksEndpointPrivateAccess?: boolean;
+  readonly eksEndpointPublicAccess?: boolean;
+  readonly eksSecurityGroupIdRefs?: string[];
+  readonly eksSubnetIdRefs?: string[];
+  readonly eksRoleArnRef?: string;
+  readonly eksVersion?: string;
+  readonly eksWriteConnectionSecretToRef?: string;
+  readonly eksWriteConnectionSecretToRefNamespace?: string;
+  //AKS
+  readonly aksVnetName?: string;
+  readonly aksLocation?: string;
+  readonly aksAddressPrefixes?: string[];
+  readonly aksProviderConfigRef?: string;
+  readonly aksResourceGroupNameRef?: string;
+  readonly aksSubnetName?: string;
+  readonly aksAvailabilityZone?: string;
+  readonly aksCidrBlock?: string;
+  readonly aksMapPublicIpOnLaunch?: boolean;
+  readonly aksClusterName?: string;
+  readonly aksDisableRBAC?: boolean;
+  readonly aksDnsNamePrefix?: string;
+  readonly aksNodeCount?: number;
+  readonly aksNodeVMSize?: string;
+  readonly aksVersion?: string;
+  readonly aksVnetSubnetIDRef?: string;
+  readonly aksWriteConnectionSecretToRef?: string;
+  readonly aksWriteConnectionSecretToRefNamespace?: string;
 }
 
 export class ManagementCluster extends Construct {
@@ -53,44 +92,46 @@ export class ManagementCluster extends Construct {
 
     if (props.provider === "eks") {
       new EksClusterCrossPlane(this, "crossplane-eks-cluster", {
-        vpcName: "crossplane-eks-cluster-vnet",
-        region: "us-east-1",
-        cidrBlock: "10.0.0.0/16",
-        enableDnsHostNames: true,
-        enableDnsSupport: true,
-        instanceTenancy: "default",
-        providerConfigRef: "aws-provider",
-        subnetName: "crossplane-eks-cluster-subnet",
-        availabilityZone: ["us-east-1a", "us-east-1b", "us-east-1c"],
-        subnetCidrBlock: ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"],
-        clusterName: "crossplane-eks-cluster",
-        endpointPrivateAccess: true,
-        endpointPublicAccess: true,
-        securityGroupIdRefs: ["crossplane-eks-cluster-sg"],
-        version: "1.18",
-        writeConnectionSecretToRef: "crossplane-eks-cluster-connection-secret",
-        writeConnectionSecretToRefNamespace: "default",
+        eksVpcName: props.eksVpcName,
+        eksRegion: props.eksRegion,
+        eksCidrBlock: props.eksCidrBlock,
+        eksEnableDnsHostNames: props.eksEnableDnsHostNames,
+        eksEnableDnsSupport: props.eksEnableDnsSupport,
+        eksInstanceTenancy: props.eksInstanceTenancy,
+        eksProviderConfigRef: props.eksProviderConfigRef,
+        eksSubnetName: props.eksSubnetName,
+        eksAvailabilityZone: props.eksAvailabilityZone,
+        eksSubnetCidrBlock: props.eksSubnetCidrBlock,
+        eksClusterName: props.eksClusterName,
+        eksEndpointPrivateAccess: props.eksEndpointPrivateAccess,
+        eksEndpointPublicAccess: props.eksEndpointPublicAccess,
+        eksSecurityGroupIdRefs: props.eksSecurityGroupIdRefs,
+        eksVersion: props.eksVersion,
+        eksWriteConnectionSecretToRef: props.eksWriteConnectionSecretToRef,
+        eksWriteConnectionSecretToRefNamespace:
+          props.eksWriteConnectionSecretToRefNamespace,
       });
     } else {
       new AksClusterCrossPlane(this, "crossplane-aks-cluster", {
-        vnetName: "crossplane-aks-cluster-vnet",
-        location: "eastus",
-        addressPrefixes: ["10.0.0.0/16"],
-        providerConfigRef: "azure-provider",
-        resourceGroupNameRef: "crossplane-aks-cluster-rg",
-        subnetName: "crossplane-aks-cluster-subnet",
-        availabilityZone: "3",
-        cidrBlock: "10.0.0.0/24",
-        mapPublicIpOnLaunch: true,
-        clusterName: "crossplane-aks-cluster",
-        disableRBAC: false,
-        dnsNamePrefix: "crossplane-aks-cluster",
-        nodeCount: 3,
-        nodeVMSize: "Standard_D2_v2",
-        version: "1.18.14",
-        vnetSubnetIDRef: "crossplane-aks-cluster-subnet",
-        writeConnectionSecretToRef: "crossplane-aks-cluster-connection-secret",
-        writeConnectionSecretToRefNamespace: "default",
+        aksVnetName: props.aksVnetName,
+        aksLocation: props.aksLocation,
+        aksAddressPrefixes: props.aksAddressPrefixes,
+        aksProviderConfigRef: props.aksProviderConfigRef,
+        aksResourceGroupNameRef: props.aksResourceGroupNameRef,
+        aksSubnetName: props.aksSubnetName,
+        aksAvailabilityZone: props.aksAvailabilityZone,
+        aksCidrBlock: props.aksCidrBlock,
+        aksMapPublicIpOnLaunch: props.aksMapPublicIpOnLaunch,
+        aksClusterName: props.aksClusterName,
+        aksDisableRBAC: props.aksDisableRBAC,
+        aksDnsNamePrefix: props.aksDnsNamePrefix,
+        aksNodeCount: props.aksNodeCount,
+        aksNodeVMSize: props.aksNodeVMSize,
+        aksVersion: props.aksVersion,
+        aksVnetSubnetIDRef: props.aksVnetSubnetIDRef,
+        aksWriteConnectionSecretToRef: props.aksWriteConnectionSecretToRef,
+        aksWriteConnectionSecretToRefNamespace:
+          props.aksWriteConnectionSecretToRefNamespace,
       });
     }
   }

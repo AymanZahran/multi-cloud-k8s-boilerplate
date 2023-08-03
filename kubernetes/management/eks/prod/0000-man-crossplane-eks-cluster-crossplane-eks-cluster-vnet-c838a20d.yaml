@@ -1,7 +1,7 @@
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: VPC
 metadata:
-  name: crossplane-eks-cluster-vnet
+  name: prod-eks-vpc
 spec:
   enableDnsHostNames: true
   enableDnsSupport: true
@@ -15,41 +15,41 @@ spec:
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Subnet
 metadata:
-  name: crossplane-eks-cluster-subnet-0
+  name: prod-eks-subnet-0
 spec:
   forProvider:
     availabilityZone: us-east-1a
     cidrBlock: 10.0.0.0/24
     mapPublicIPOnLaunch: true
     vpcIdRef:
-      name: crossplane-eks-cluster-vnet
+      name: prod-eks-vpc
   providerConfigRef:
     name: aws-provider
 ---
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Subnet
 metadata:
-  name: crossplane-eks-cluster-subnet-1
+  name: prod-eks-subnet-1
 spec:
   forProvider:
     availabilityZone: us-east-1b
     cidrBlock: 10.0.1.0/24
     mapPublicIPOnLaunch: true
     vpcIdRef:
-      name: crossplane-eks-cluster-vnet
+      name: prod-eks-vpc
   providerConfigRef:
     name: aws-provider
 ---
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Subnet
 metadata:
-  name: crossplane-eks-cluster-subnet-2
+  name: prod-eks-subnet-2
 spec:
   forProvider:
     availabilityZone: us-east-1c
     cidrBlock: 10.0.2.0/24
     mapPublicIPOnLaunch: true
     vpcIdRef:
-      name: crossplane-eks-cluster-vnet
+      name: prod-eks-vpc
   providerConfigRef:
     name: aws-provider

@@ -1,22 +1,22 @@
 apiVersion: compute.azure.crossplane.io/v1alpha3
 kind: AKSCluster
 metadata:
-  name: crossplane-aks-cluster
+  name: aks-cluster-dev
 spec:
   disableRBAC: false
-  dnsNamePrefix: crossplane-aks-cluster
+  dnsNamePrefix: aks-cluster-dev
   location: eastus
   nodeCount: 3
-  nodeVMSize: Standard_D2_v2
+  nodeVMSize: Standard_D2s_v3
   providerConfigRef:
-    name: azure-provider
+    name: azure-provider-config-dev
   resourceGroupNameRef:
-    name: crossplane-aks-cluster-rg
-  version: 1.18.14
+    name: aks-rg-dev
+  version: 1.19.11
   vnetSubnetID:
-    name: crossplane-aks-cluster-subnet
+    name: aks-vnet-subnet-id-dev
   vnetSubnetIDRef:
-    name: crossplane-aks-cluster-subnet
+    name: aks-vnet-subnet-id-dev
   writeConnectionSecretToRef:
-    name: crossplane-aks-cluster-connection-secret
-    namespace: default
+    name: aks-connection-secret-dev
+    namespace: aks-connection-secret-namespace-dev
