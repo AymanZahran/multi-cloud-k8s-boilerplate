@@ -5,7 +5,7 @@ import { Aks } from "../../../.gen/modules/aks";
 import { Vnet } from "../../../.gen/modules/vnet";
 import { AzureRegion } from "../../properties/const";
 
-export interface AksClusterProps {
+export interface AksClusterTerraformProps {
   readonly aksLocation: AzureRegion | undefined;
   readonly aksPrefix: string;
   readonly aksVnetName: string;
@@ -41,11 +41,11 @@ export interface AksClusterProps {
   readonly aksInstallArgoCdPath: string;
 }
 
-export class AksCluster extends Construct {
+export class AksClusterTerraform extends Construct {
   private readonly vnet?: Vnet;
   private readonly aks?: Aks;
 
-  constructor(scope: Construct, name: string, props: AksClusterProps) {
+  constructor(scope: Construct, name: string, props: AksClusterTerraformProps) {
     super(scope, name);
 
     // Create Vnet

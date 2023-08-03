@@ -1,7 +1,7 @@
 import { Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
-import { AksCrossPlane } from "./managedResources/aks";
-import { VnetCrossPlane } from "./managedResources/vnet";
+import { AksCrossPlane } from "./managedResources/aksCrossPlane";
+import { VnetCrossPlane } from "./managedResources/vnetCrossPlane";
 
 export interface AksClusterCrossPlaneProps extends ChartProps {
   readonly aksVnetName?: string;
