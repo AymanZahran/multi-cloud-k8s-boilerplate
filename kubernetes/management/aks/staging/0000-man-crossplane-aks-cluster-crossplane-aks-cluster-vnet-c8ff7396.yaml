@@ -1,0 +1,28 @@
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: VirtualNetwork
+metadata:
+  name: crossplane-aks-cluster-vnet
+spec:
+  location: eastus
+  properties:
+    addressSpace:
+      addressPrefixes:
+        - 10.0.0.0/16
+  providerConfigRef:
+    name: azure-provider
+  resourceGroupNameRef:
+    name: crossplane-aks-cluster-rg
+---
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: Subnet
+metadata:
+  name: crossplane-aks-cluster-subnet
+spec:
+  forProvider:
+    availabilityZone: "3"
+    cidrBlock: 10.0.0.0/24
+    mapPublicIpOnLaunch: true
+    vpcIdRef:
+      name: crossplane-aks-cluster-vnet
+  providerConfigRef:
+    name: azure-provider
