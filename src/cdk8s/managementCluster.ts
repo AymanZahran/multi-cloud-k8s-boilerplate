@@ -1,6 +1,8 @@
 import { Construct } from "constructs";
 import { ArgoCd } from "./charts/argoCd";
 import { CrossPlane } from "./charts/crossPlane";
+import { EksClusterCrossPlane } from "./crosslane/eks/eksClusterCrossPlane";
+import { AksClusterCrossPlane } from "./crosslane/aks/aksClusterCrossPlane";
 
 export interface ManagementClusterProps {
   readonly app: any;
@@ -48,5 +50,16 @@ export class ManagementCluster extends Construct {
       clientId: props.clientId,
       crossPlaneServiceAccountName: props.crossPlaneServiceAccountName,
     });
+
+    if (props.provider === "eks") {
+      new EksClusterCrossPlane(this, "crossplane-eks-cluster", {
+
+      });
+    }
+    else {
+      new AksClusterCrossPlane(this, "crossplane-aks-cluster", {
+
+      });
+    }
   }
 }
