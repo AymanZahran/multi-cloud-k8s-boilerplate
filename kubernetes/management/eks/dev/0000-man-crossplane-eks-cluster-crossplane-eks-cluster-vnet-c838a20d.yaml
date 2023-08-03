@@ -1,0 +1,55 @@
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: VPC
+metadata:
+  name: dev-eks-vpc
+spec:
+  enableDnsHostNames: true
+  enableDnsSupport: true
+  forProvider:
+    cidrBlock: 10.0.0.0/16
+  instanceTenancy: default
+  providerConfigRef:
+    name: aws-provider
+  region: us-east-1
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: dev-eks-subnet-0
+spec:
+  forProvider:
+    availabilityZone: us-east-1a
+    cidrBlock: 10.0.0.0/24
+    mapPublicIPOnLaunch: true
+    vpcIdRef:
+      name: dev-eks-vpc
+  providerConfigRef:
+    name: aws-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: dev-eks-subnet-1
+spec:
+  forProvider:
+    availabilityZone: us-east-1b
+    cidrBlock: 10.0.1.0/24
+    mapPublicIPOnLaunch: true
+    vpcIdRef:
+      name: dev-eks-vpc
+  providerConfigRef:
+    name: aws-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: dev-eks-subnet-2
+spec:
+  forProvider:
+    availabilityZone: us-east-1c
+    cidrBlock: 10.0.2.0/24
+    mapPublicIPOnLaunch: true
+    vpcIdRef:
+      name: dev-eks-vpc
+  providerConfigRef:
+    name: aws-provider

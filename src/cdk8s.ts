@@ -5,11 +5,13 @@ import { AksHelmChartFlags } from "./cdk8s/properties/aks/flags";
 import { AksHelmChartLabels } from "./cdk8s/properties/aks/labels";
 import { AksHelmChartValues } from "./cdk8s/properties/aks/values";
 import { AksHelmChartVersions } from "./cdk8s/properties/aks/versions";
+import { AksWorkloadClusterVars } from "./cdk8s/properties/aks/workload";
 import { EksHelmChartFeatures } from "./cdk8s/properties/eks/feature";
 import { EksHelmChartFlags } from "./cdk8s/properties/eks/flags";
 import { EksHelmChartLabels } from "./cdk8s/properties/eks/labels";
 import { EksHelmChartValues } from "./cdk8s/properties/eks/values";
 import { EksHelmChartVersions } from "./cdk8s/properties/eks/versions";
+import { EksWorkloadClusterVars } from "./cdk8s/properties/eks/workload";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
 import { EksTerraformVariables } from "./cdktf/eks/default";
 import {
@@ -45,6 +47,29 @@ for (const env of Object.values(Environment)) {
       EksTerraformVariables.eksCrossPlaneIamRoleName[env],
     crossPlaneServiceAccountName:
       EksTerraformVariables.eksCrossPlaneServiceAccountName[env],
+    eksVpcName: EksWorkloadClusterVars.eksVpcName[env],
+    eksRegion: EksWorkloadClusterVars.eksRegion[env],
+    eksCidrBlock: EksWorkloadClusterVars.eksCidrBlock[env],
+    eksEnableDnsHostNames: EksWorkloadClusterVars.eksEnableDnsHostNames[env],
+    eksEnableDnsSupport: EksWorkloadClusterVars.eksEnableDnsSupport[env],
+    eksInstanceTenancy: EksWorkloadClusterVars.eksInstanceTenancy[env],
+    eksProviderConfigRef: EksWorkloadClusterVars.eksProviderConfigRef[env],
+    eksSubnetName: EksWorkloadClusterVars.eksSubnetName[env],
+    eksAvailabilityZone: EksWorkloadClusterVars.eksAvailabilityZone[env],
+    eksSubnetCidrBlock: EksWorkloadClusterVars.eksSubnetCidrBlock[env],
+    eksClusterName: EksWorkloadClusterVars.eksClusterName[env],
+    eksEndpointPrivateAccess:
+      EksWorkloadClusterVars.eksEndpointPrivateAccess[env],
+    eksEndpointPublicAccess:
+      EksWorkloadClusterVars.eksEndpointPublicAccess[env],
+    eksSecurityGroupIdRefs: EksWorkloadClusterVars.eksSecurityGroupIdRefs[env],
+    eksSubnetIdRefs: EksWorkloadClusterVars.eksSubnetIdRefs[env],
+    eksRoleArnRef: EksWorkloadClusterVars.eksRoleArnRef[env],
+    eksVersion: EksWorkloadClusterVars.eksVersion[env],
+    eksWriteConnectionSecretToRef:
+      EksWorkloadClusterVars.eksWriteConnectionSecretToRef[env],
+    eksWriteConnectionSecretToRefNamespace:
+      EksWorkloadClusterVars.eksWriteConnectionSecretToRefNamespace[env],
   });
   eksManagementApp.synth();
 
@@ -68,6 +93,27 @@ for (const env of Object.values(Environment)) {
     tenantId: AzureTenantId[env],
     subscriptionId: AzureSubscriptionId[env],
     clientId: AzureCrossPlaneClientId[env],
+    aksVnetName: AksWorkloadClusterVars.aksVnetName[env],
+    aksLocation: AksWorkloadClusterVars.aksLocation[env],
+    aksAddressPrefixes: AksWorkloadClusterVars.aksAddressPrefixes[env],
+    aksProviderConfigRef: AksWorkloadClusterVars.aksProviderConfigRef[env],
+    aksResourceGroupNameRef:
+      AksWorkloadClusterVars.aksResourceGroupNameRef[env],
+    aksSubnetName: AksWorkloadClusterVars.aksSubnetName[env],
+    aksAvailabilityZone: AksWorkloadClusterVars.aksAvailabilityZone[env],
+    aksCidrBlock: AksWorkloadClusterVars.aksCidrBlock[env],
+    aksMapPublicIpOnLaunch: AksWorkloadClusterVars.aksMapPublicIpOnLaunch[env],
+    aksClusterName: AksWorkloadClusterVars.aksClusterName[env],
+    aksDisableRBAC: AksWorkloadClusterVars.aksDisableRBAC[env],
+    aksDnsNamePrefix: AksWorkloadClusterVars.aksDnsNamePrefix[env],
+    aksNodeCount: AksWorkloadClusterVars.aksNodeCount[env],
+    aksNodeVMSize: AksWorkloadClusterVars.aksNodeVMSize[env],
+    aksVersion: AksWorkloadClusterVars.aksVersion[env],
+    aksVnetSubnetIDRef: AksWorkloadClusterVars.aksVnetSubnetIDRef[env],
+    aksWriteConnectionSecretToRef:
+      AksWorkloadClusterVars.aksWriteConnectionSecretToRef[env],
+    aksWriteConnectionSecretToRefNamespace:
+      AksWorkloadClusterVars.aksWriteConnectionSecretToRefNamespace[env],
   });
   aksManagementApp.synth();
 

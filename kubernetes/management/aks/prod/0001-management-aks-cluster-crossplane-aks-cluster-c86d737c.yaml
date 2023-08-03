@@ -1,0 +1,22 @@
+apiVersion: compute.azure.crossplane.io/v1alpha3
+kind: AKSCluster
+metadata:
+  name: aks-cluster-prod
+spec:
+  disableRBAC: false
+  dnsNamePrefix: aks-cluster-prod
+  location: eastus
+  nodeCount: 3
+  nodeVMSize: Standard_D2s_v3
+  providerConfigRef:
+    name: azure-provider-config-prod
+  resourceGroupNameRef:
+    name: aks-rg-prod
+  version: 1.19.11
+  vnetSubnetID:
+    name: aks-vnet-subnet-id-prod
+  vnetSubnetIDRef:
+    name: aks-vnet-subnet-id-prod
+  writeConnectionSecretToRef:
+    name: aks-connection-secret-prod
+    namespace: aks-connection-secret-namespace-prod
