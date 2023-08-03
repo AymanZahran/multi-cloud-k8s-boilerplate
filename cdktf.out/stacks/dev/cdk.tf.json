@@ -196,10 +196,10 @@
             "local-exec": {
               "command": "./scripts/InstallConfigureArgoCD.sh",
               "environment": {
-                "AKS_CLUSTER_NAME": "${var.aks_cluster_name}",
-                "AKS_RESOURCE_GROUP_NAME": "${var.aks_resource_group_name}",
+                "CLUSTER_NAME": "${var.aks_cluster_name}",
                 "CLUSTER_PROVIDER": "aks",
-                "MANIFEST_PATH": "${var.aks_install_argo_cd_path}"
+                "MANIFEST_PATH": "${var.aks_install_argo_cd_path}",
+                "RESOURCE_GROUP": "${var.aks_resource_group_name}"
               },
               "interpreter": [
                 "bash",

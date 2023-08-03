@@ -122,8 +122,8 @@ export class AksCluster extends Construct {
             workingDir: "./",
             environment: {
               CLUSTER_PROVIDER: "aks",
-              AKS_CLUSTER_NAME: props.aksClusterName,
-              AKS_RESOURCE_GROUP_NAME: props.aksResourceGroupName,
+              CLUSTER_NAME: props.aksClusterName,
+              RESOURCE_GROUP: props.aksResourceGroupName,
               MANIFEST_PATH: props.aksInstallArgoCdPath,
             },
             command: "./scripts/InstallConfigureArgoCD.sh",
