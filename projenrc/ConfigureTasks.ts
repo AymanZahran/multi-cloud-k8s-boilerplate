@@ -1,5 +1,5 @@
 import { typescript } from "projen";
-import { Scripts } from "../src/const";
+import { Scripts } from "../src/properties/const";
 
 export function ConfigureTasks(project: typescript.TypeScriptAppProject) {
   const scripts = {

@@ -9,7 +9,7 @@ import {
   AzureTenantId,
   AwsAccessKey,
   FreezeFlag,
-} from "../../src/const";
+} from "../../src/properties/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {

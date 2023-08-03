@@ -1,6 +1,6 @@
 import { Helm, Chart, ChartProps, ApiObject } from "cdk8s";
 import { Construct } from "constructs";
-import { KubernetesDir, RepoURL } from "../../const";
+import { KubernetesDir, RepoURL } from "../../properties/const";
 
 export interface ArgoCdProps extends ChartProps {
   readonly clusterType: string;
