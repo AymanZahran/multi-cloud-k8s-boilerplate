@@ -7,7 +7,8 @@ import {
   AzureTerraformClientId,
   AzureSubscriptionId,
   AzureTenantId,
-  AwsAccessKey, FreezeFlag,
+  AwsAccessKey,
+  FreezeFlag,
 } from "../../src/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
@@ -111,14 +112,15 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           {
             if: "env.context == 'build'",
             name: "Terraform Plan",
-            run: 'cdktf plan ${{ env.stack }};'
+            run: "cdktf plan ${{ env.stack }};",
           },
           {
             if: "env.context == 'deploy'",
             name: "Terraform Apply",
-            run: 'if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; \n' +
-                 // 'else cdktf deploy ${{ env.stack }} --auto-approve; fi',
-                 'else echo "cdktf deploy will be applied here"; fi',
+            run:
+              'if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; \n' +
+              // 'else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+              'else echo "cdktf deploy will be applied here"; fi',
           },
           {
             name: "Comment on the PR",
