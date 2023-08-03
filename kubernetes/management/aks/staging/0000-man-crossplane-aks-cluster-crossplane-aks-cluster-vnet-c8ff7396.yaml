@@ -1,0 +1,28 @@
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: VirtualNetwork
+metadata:
+  name: aks-vnet-staging
+spec:
+  location: eastus
+  properties:
+    addressSpace:
+      addressPrefixes:
+        - 10.0.0.0/16
+  providerConfigRef:
+    name: azure-provider-config-staging
+  resourceGroupNameRef:
+    name: aks-rg-staging
+---
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: Subnet
+metadata:
+  name: aks-subnet-staging
+spec:
+  forProvider:
+    availabilityZone: "3"
+    cidrBlock: 10.0.0.0/24
+    mapPublicIpOnLaunch: true
+    vpcIdRef:
+      name: aks-vnet-staging
+  providerConfigRef:
+    name: azure-provider-config-staging

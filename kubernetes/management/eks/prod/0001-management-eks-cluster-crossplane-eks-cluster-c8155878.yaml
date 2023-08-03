@@ -1,0 +1,22 @@
+apiVersion: eks.aws.crossplane.io/v1beta1
+kind: Cluster
+metadata:
+  name: prod-eks-cluster
+spec:
+  forProvider:
+    region: us-east-1
+    resourceVpcConfig:
+      endpointPrivateAccess: true
+      endpointPublicAccess: true
+      providerConfigRef:
+        name: aws-provider
+      roleArnRef: {}
+      securityGroupIdRefs:
+        - name:
+            - prod-eks-security-group
+      subnetIdRefs:
+        - {}
+      version: "1.21"
+      writeConnectionSecretToRef:
+        name: prod-eks-connection-secret
+        namespace: prod
