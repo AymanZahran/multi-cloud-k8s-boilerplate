@@ -3,10 +3,10 @@ import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { App, RemoteBackend, TerraformStack } from "cdktf";
 import { Construct } from "constructs";
 import { config } from "dotenv";
-import { AksCluster } from "./cdktf/aks/aksCluster";
-import { DefineAksVariables } from "./cdktf/aks/vars";
-import { EksCluster } from "./cdktf/eks/eksCluster";
-import { DefineEksVariables } from "./cdktf/eks/vars";
+import { AksClusterTerraform } from "./cdktf/aks/aksClusterTerraform";
+import { AksClusterTerraformVars } from "./cdktf/aks/aksClusterTerraformVars";
+import { EksClusterTerraform } from "./cdktf/eks/eksClusterTerraform";
+import { EksClusterTerraformVars } from "./cdktf/eks/eksClusterTerraformVars";
 import {
   AwsAccessKey,
   AwsAccountId,
@@ -18,7 +18,7 @@ import {
   Environment,
   TerraformRemoteBackendHostName,
   TerraformRemoteBackendOrganization,
-} from "./const";
+} from "./properties/const";
 
 config(); // Load the values from the .env file into process.env
 
@@ -51,8 +51,8 @@ class MultiCloudBoilerPlate extends TerraformStack {
     });
 
     // Create EKS Cluster
-    const EksVariables = DefineEksVariables(this, props.environment);
-    new EksCluster(this, "eks", {
+    const EksVariables = EksClusterTerraformVars(this, props.environment);
+    new EksClusterTerraform(this, "eks", {
       AccountId: AwsAccountId[props.environment],
       eksRegion: props.region.aws,
       eksCreateVpc: EksVariables.eksCreateVpc.value,
@@ -94,8 +94,8 @@ class MultiCloudBoilerPlate extends TerraformStack {
     });
 
     // Create AKS Cluster
-    const AksVariables = DefineAksVariables(this, props.environment);
-    new AksCluster(this, "aks", {
+    const AksVariables = AksClusterTerraformVars(this, props.environment);
+    new AksClusterTerraform(this, "aks", {
       aksLocation: props.region.azure,
       aksPrefix: AksVariables.aksPrefix.value,
       aksVnetName: AksVariables.aksVnetName.value,

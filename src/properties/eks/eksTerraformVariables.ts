@@ -1,4 +1,4 @@
-import { KubernetesManagementDir } from "../../const";
+import { KubernetesManagementDir } from "../const";
 
 export const EksTerraformVariables: any = {
   eksCreateVpc: {

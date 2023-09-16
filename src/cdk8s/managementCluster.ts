@@ -63,12 +63,9 @@ export interface ManagementClusterProps {
 }
 
 export class ManagementCluster extends Construct {
-  readonly crossPlane: CrossPlane;
-  readonly argocd: ArgoCd;
-
   constructor(scope: Construct, name: string, props: ManagementClusterProps) {
     super(scope, name);
-    this.argocd = new ArgoCd(props.app, "argo-cd", {
+    new ArgoCd(props.app, "argo-cd", {
       clusterType: "management",
       provider: props.provider,
       environment: props.environment,
@@ -77,7 +74,7 @@ export class ManagementCluster extends Construct {
       values: props.ArgoCdHelmChartValues,
       labels: props.ArgoCdHelmChartLabels,
     });
-    this.crossPlane = new CrossPlane(props.app, "crossplane", {
+    new CrossPlane(props.app, "crossplane", {
       provider: props.provider,
       labels: props.CrossPlaneHelmChartLabels,
       helmFlags: props.CrossPlaneHelmChartsFlags,

@@ -8,7 +8,8 @@ import {
   AzureSubscriptionId,
   AzureTenantId,
   AwsAccessKey,
-} from "../../src/const";
+  FreezeFlag,
+} from "../../src/properties/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
@@ -30,7 +31,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           },
         });
       }
-      cdktf_workflow.addJob("build", {
+      cdktf_workflow.addJob(context, {
         name: "cdktf-" + env + "-" + context,
         runsOn: ["ubuntu-latest"],
         permissions: {
@@ -47,6 +48,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           ARM_SUBSCRIPTION_ID: AzureSubscriptionId[env],
           stack: env,
           context: context,
+          FREEZE: FreezeFlag,
         },
         steps: [
           {
@@ -108,10 +110,17 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
               AzureSubscriptionId[env],
           },
           {
+            if: "env.context == 'build'",
             name: "Terraform Plan",
-            run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi',
-            // Uncomment this line to deploy after merge to master
-            // run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+            run: "cdktf plan ${{ env.stack }};",
+          },
+          {
+            if: "env.context == 'deploy'",
+            name: "Terraform Apply",
+            run:
+              'if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; \n' +
+              // 'else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+              'else echo "cdktf deploy will be applied here"; fi',
           },
           {
             name: "Comment on the PR",

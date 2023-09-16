@@ -1,26 +1,26 @@
 import { App, YamlOutputType } from "cdk8s";
 import { ManagementCluster } from "./cdk8s/managementCluster";
-import { AksHelmChartFeatures } from "./cdk8s/properties/aks/feature";
-import { AksHelmChartFlags } from "./cdk8s/properties/aks/flags";
-import { AksHelmChartLabels } from "./cdk8s/properties/aks/labels";
-import { AksHelmChartValues } from "./cdk8s/properties/aks/values";
-import { AksHelmChartVersions } from "./cdk8s/properties/aks/versions";
-import { AksWorkloadClusterVars } from "./cdk8s/properties/aks/workload";
-import { EksHelmChartFeatures } from "./cdk8s/properties/eks/feature";
-import { EksHelmChartFlags } from "./cdk8s/properties/eks/flags";
-import { EksHelmChartLabels } from "./cdk8s/properties/eks/labels";
-import { EksHelmChartValues } from "./cdk8s/properties/eks/values";
-import { EksHelmChartVersions } from "./cdk8s/properties/eks/versions";
-import { EksWorkloadClusterVars } from "./cdk8s/properties/eks/workload";
 import { WorkloadCluster } from "./cdk8s/workloadCluster";
-import { EksTerraformVariables } from "./cdktf/eks/default";
+import { AksCrossPlaneVariables } from "./properties/aks/aksCrossPlaneVariables";
+import { AksHelmChartFeatures } from "./properties/aks/aksHelmChartFeatures";
+import { AksHelmChartFlags } from "./properties/aks/aksHelmChartFlags";
+import { AksHelmChartLabels } from "./properties/aks/aksHelmChartLabels";
+import { AksHelmChartValues } from "./properties/aks/aksHelmChartValues";
+import { AksHelmChartVersions } from "./properties/aks/aksHelmChartVersions";
 import {
   Environment,
   AwsAccountId,
   AzureSubscriptionId,
   AzureCrossPlaneClientId,
   AzureTenantId,
-} from "./const";
+} from "./properties/const";
+import { EksCrossPlaneVariables } from "./properties/eks/eksCrossPlaneVariables";
+import { EksHelmChartFeatures } from "./properties/eks/eksHelmChartFeatures";
+import { EksHelmChartFlags } from "./properties/eks/eksHelmChartFlags";
+import { EksHelmChartLabels } from "./properties/eks/eksHelmChartLabels";
+import { EksHelmChartValues } from "./properties/eks/eksHelmChartValues";
+import { EksHelmChartVersions } from "./properties/eks/eksHelmChartVersions";
+import { EksTerraformVariables } from "./properties/eks/eksTerraformVariables";
 
 for (const env of Object.values(Environment)) {
   const eksManagementApp = new App({
@@ -47,29 +47,29 @@ for (const env of Object.values(Environment)) {
       EksTerraformVariables.eksCrossPlaneIamRoleName[env],
     crossPlaneServiceAccountName:
       EksTerraformVariables.eksCrossPlaneServiceAccountName[env],
-    eksVpcName: EksWorkloadClusterVars.eksVpcName[env],
-    eksRegion: EksWorkloadClusterVars.eksRegion[env],
-    eksCidrBlock: EksWorkloadClusterVars.eksCidrBlock[env],
-    eksEnableDnsHostNames: EksWorkloadClusterVars.eksEnableDnsHostNames[env],
-    eksEnableDnsSupport: EksWorkloadClusterVars.eksEnableDnsSupport[env],
-    eksInstanceTenancy: EksWorkloadClusterVars.eksInstanceTenancy[env],
-    eksProviderConfigRef: EksWorkloadClusterVars.eksProviderConfigRef[env],
-    eksSubnetName: EksWorkloadClusterVars.eksSubnetName[env],
-    eksAvailabilityZone: EksWorkloadClusterVars.eksAvailabilityZone[env],
-    eksSubnetCidrBlock: EksWorkloadClusterVars.eksSubnetCidrBlock[env],
-    eksClusterName: EksWorkloadClusterVars.eksClusterName[env],
+    eksVpcName: EksCrossPlaneVariables.eksVpcName[env],
+    eksRegion: EksCrossPlaneVariables.eksRegion[env],
+    eksCidrBlock: EksCrossPlaneVariables.eksCidrBlock[env],
+    eksEnableDnsHostNames: EksCrossPlaneVariables.eksEnableDnsHostNames[env],
+    eksEnableDnsSupport: EksCrossPlaneVariables.eksEnableDnsSupport[env],
+    eksInstanceTenancy: EksCrossPlaneVariables.eksInstanceTenancy[env],
+    eksProviderConfigRef: EksCrossPlaneVariables.eksProviderConfigRef[env],
+    eksSubnetName: EksCrossPlaneVariables.eksSubnetName[env],
+    eksAvailabilityZone: EksCrossPlaneVariables.eksAvailabilityZone[env],
+    eksSubnetCidrBlock: EksCrossPlaneVariables.eksSubnetCidrBlock[env],
+    eksClusterName: EksCrossPlaneVariables.eksClusterName[env],
     eksEndpointPrivateAccess:
-      EksWorkloadClusterVars.eksEndpointPrivateAccess[env],
+      EksCrossPlaneVariables.eksEndpointPrivateAccess[env],
     eksEndpointPublicAccess:
-      EksWorkloadClusterVars.eksEndpointPublicAccess[env],
-    eksSecurityGroupIdRefs: EksWorkloadClusterVars.eksSecurityGroupIdRefs[env],
-    eksSubnetIdRefs: EksWorkloadClusterVars.eksSubnetIdRefs[env],
-    eksRoleArnRef: EksWorkloadClusterVars.eksRoleArnRef[env],
-    eksVersion: EksWorkloadClusterVars.eksVersion[env],
+      EksCrossPlaneVariables.eksEndpointPublicAccess[env],
+    eksSecurityGroupIdRefs: EksCrossPlaneVariables.eksSecurityGroupIdRefs[env],
+    eksSubnetIdRefs: EksCrossPlaneVariables.eksSubnetIdRefs[env],
+    eksRoleArnRef: EksCrossPlaneVariables.eksRoleArnRef[env],
+    eksVersion: EksCrossPlaneVariables.eksVersion[env],
     eksWriteConnectionSecretToRef:
-      EksWorkloadClusterVars.eksWriteConnectionSecretToRef[env],
+      EksCrossPlaneVariables.eksWriteConnectionSecretToRef[env],
     eksWriteConnectionSecretToRefNamespace:
-      EksWorkloadClusterVars.eksWriteConnectionSecretToRefNamespace[env],
+      EksCrossPlaneVariables.eksWriteConnectionSecretToRefNamespace[env],
   });
   eksManagementApp.synth();
 
@@ -93,27 +93,27 @@ for (const env of Object.values(Environment)) {
     tenantId: AzureTenantId[env],
     subscriptionId: AzureSubscriptionId[env],
     clientId: AzureCrossPlaneClientId[env],
-    aksVnetName: AksWorkloadClusterVars.aksVnetName[env],
-    aksLocation: AksWorkloadClusterVars.aksLocation[env],
-    aksAddressPrefixes: AksWorkloadClusterVars.aksAddressPrefixes[env],
-    aksProviderConfigRef: AksWorkloadClusterVars.aksProviderConfigRef[env],
+    aksVnetName: AksCrossPlaneVariables.aksVnetName[env],
+    aksLocation: AksCrossPlaneVariables.aksLocation[env],
+    aksAddressPrefixes: AksCrossPlaneVariables.aksAddressPrefixes[env],
+    aksProviderConfigRef: AksCrossPlaneVariables.aksProviderConfigRef[env],
     aksResourceGroupNameRef:
-      AksWorkloadClusterVars.aksResourceGroupNameRef[env],
-    aksSubnetName: AksWorkloadClusterVars.aksSubnetName[env],
-    aksAvailabilityZone: AksWorkloadClusterVars.aksAvailabilityZone[env],
-    aksCidrBlock: AksWorkloadClusterVars.aksCidrBlock[env],
-    aksMapPublicIpOnLaunch: AksWorkloadClusterVars.aksMapPublicIpOnLaunch[env],
-    aksClusterName: AksWorkloadClusterVars.aksClusterName[env],
-    aksDisableRBAC: AksWorkloadClusterVars.aksDisableRBAC[env],
-    aksDnsNamePrefix: AksWorkloadClusterVars.aksDnsNamePrefix[env],
-    aksNodeCount: AksWorkloadClusterVars.aksNodeCount[env],
-    aksNodeVMSize: AksWorkloadClusterVars.aksNodeVMSize[env],
-    aksVersion: AksWorkloadClusterVars.aksVersion[env],
-    aksVnetSubnetIDRef: AksWorkloadClusterVars.aksVnetSubnetIDRef[env],
+      AksCrossPlaneVariables.aksResourceGroupNameRef[env],
+    aksSubnetName: AksCrossPlaneVariables.aksSubnetName[env],
+    aksAvailabilityZone: AksCrossPlaneVariables.aksAvailabilityZone[env],
+    aksCidrBlock: AksCrossPlaneVariables.aksCidrBlock[env],
+    aksMapPublicIpOnLaunch: AksCrossPlaneVariables.aksMapPublicIpOnLaunch[env],
+    aksClusterName: AksCrossPlaneVariables.aksClusterName[env],
+    aksDisableRBAC: AksCrossPlaneVariables.aksDisableRBAC[env],
+    aksDnsNamePrefix: AksCrossPlaneVariables.aksDnsNamePrefix[env],
+    aksNodeCount: AksCrossPlaneVariables.aksNodeCount[env],
+    aksNodeVMSize: AksCrossPlaneVariables.aksNodeVMSize[env],
+    aksVersion: AksCrossPlaneVariables.aksVersion[env],
+    aksVnetSubnetIDRef: AksCrossPlaneVariables.aksVnetSubnetIDRef[env],
     aksWriteConnectionSecretToRef:
-      AksWorkloadClusterVars.aksWriteConnectionSecretToRef[env],
+      AksCrossPlaneVariables.aksWriteConnectionSecretToRef[env],
     aksWriteConnectionSecretToRefNamespace:
-      AksWorkloadClusterVars.aksWriteConnectionSecretToRefNamespace[env],
+      AksCrossPlaneVariables.aksWriteConnectionSecretToRefNamespace[env],
   });
   aksManagementApp.synth();
 
