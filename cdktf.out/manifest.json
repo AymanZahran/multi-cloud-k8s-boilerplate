@@ -1,6 +1,14 @@
 {
   "version": "0.17.3",
   "stacks": {
+    "playground": {
+      "name": "playground",
+      "constructPath": "playground",
+      "workingDirectory": "stacks/playground",
+      "synthesizedStackPath": "stacks/playground/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    },
     "dev": {
       "name": "dev",
       "constructPath": "dev",

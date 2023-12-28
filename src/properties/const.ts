@@ -76,6 +76,7 @@ export const AzureCrossPlaneClientId: any = {
 };
 
 export enum Environment {
+  playground = "playground",
   dev = "dev",
   staging = "staging",
   prod = "prod",
