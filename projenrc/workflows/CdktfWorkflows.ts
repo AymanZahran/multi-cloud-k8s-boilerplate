@@ -1,7 +1,15 @@
 import { typescript } from "projen";
 import { GithubWorkflow } from "projen/lib/github";
 import { JobPermission } from "projen/lib/github/workflows-model";
-import { CI_Versions, Environment } from "../../src/const";
+import {
+  CI_Versions,
+  Environment,
+  AzureTerraformClientId,
+  AzureSubscriptionId,
+  AzureTenantId,
+  AwsAccessKey,
+  FreezeFlag,
+} from "../../src/properties/const";
 
 export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
   for (const context of ["build", "deploy"]) {
@@ -23,7 +31,7 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
           },
         });
       }
-      cdktf_workflow.addJob("build", {
+      cdktf_workflow.addJob(context, {
         name: "cdktf-" + env + "-" + context,
         runsOn: ["ubuntu-latest"],
         permissions: {
@@ -31,16 +39,16 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
         },
         env: {
           TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}",
-          AWS_ACCESS_KEY_ID: "${{ secrets." + env + "_AWS_ACCESS_KEY_ID }}",
+          AWS_ACCESS_KEY_ID: AwsAccessKey[env],
           AWS_SECRET_ACCESS_KEY:
             "${{ secrets." + env + "_AWS_SECRET_ACCESS_KEY }}",
-          ARM_CLIENT_ID: "${{ secrets." + env + "_AZURE_CLIENT_ID }}",
+          ARM_CLIENT_ID: AzureTerraformClientId[env],
           ARM_CLIENT_SECRET: "${{ secrets." + env + "_AZURE_CLIENT_SECRET }}",
-          ARM_TENANT_ID: "${{ secrets." + env + "_AZURE_TENANT_ID }}",
-          ARM_SUBSCRIPTION_ID:
-            "${{ secrets." + env + "_AZURE_SUBSCRIPTION_ID }}",
+          ARM_TENANT_ID: AzureTenantId[env],
+          ARM_SUBSCRIPTION_ID: AzureSubscriptionId[env],
           stack: env,
           context: context,
+          FREEZE: FreezeFlag,
         },
         steps: [
           {
@@ -90,27 +98,29 @@ export function CdktfWorkflows(project: typescript.TypeScriptAppProject) {
             name: "AZ Login",
             run:
               "az login --service-principal -u " +
-              "${{ secrets." +
-              env +
-              "_AZURE_CLIENT_ID }}" +
+              AzureTerraformClientId[env] +
               " -p " +
               "${{ secrets." +
               env +
               "_AZURE_CLIENT_SECRET }}" +
               " --tenant " +
-              "${{ secrets." +
-              env +
-              "_AZURE_TENANT_ID }}\n" +
+              AzureTenantId[env] +
+              "\n" +
               "az account set --subscription " +
-              "${{ secrets." +
-              env +
-              "_AZURE_SUBSCRIPTION_ID }}",
+              AzureSubscriptionId[env],
           },
           {
+            if: "env.context == 'build'",
             name: "Terraform Plan",
-            run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi',
-            // Uncomment this line to deploy after merge to master
-            // run: 'if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+            run: "cdktf plan ${{ env.stack }};",
+          },
+          {
+            if: "env.context == 'deploy'",
+            name: "Terraform Apply",
+            run:
+              'if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; \n' +
+              // 'else cdktf deploy ${{ env.stack }} --auto-approve; fi',
+              'else echo "cdktf deploy will be applied here"; fi',
           },
           {
             name: "Comment on the PR",

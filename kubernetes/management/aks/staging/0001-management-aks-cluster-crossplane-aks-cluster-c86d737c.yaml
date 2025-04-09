@@ -1,0 +1,22 @@
+apiVersion: compute.azure.crossplane.io/v1alpha3
+kind: AKSCluster
+metadata:
+  name: aks-cluster-staging
+spec:
+  disableRBAC: false
+  dnsNamePrefix: aks-cluster-staging
+  location: eastus
+  nodeCount: 3
+  nodeVMSize: Standard_D2s_v3
+  providerConfigRef:
+    name: azure-provider-config-staging
+  resourceGroupNameRef:
+    name: aks-rg-staging
+  version: 1.19.11
+  vnetSubnetID:
+    name: aks-vnet-subnet-id-staging
+  vnetSubnetIDRef:
+    name: aks-vnet-subnet-id-staging
+  writeConnectionSecretToRef:
+    name: aks-connection-secret-staging
+    namespace: aks-connection-secret-namespace-staging

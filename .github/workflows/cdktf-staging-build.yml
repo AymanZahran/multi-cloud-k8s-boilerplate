@@ -13,14 +13,15 @@ jobs:
       contents: read
     env:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.staging_AWS_ACCESS_KEY_ID }}
+      AWS_ACCESS_KEY_ID: AKIA5EZUTDHMR45HQYKA
       AWS_SECRET_ACCESS_KEY: ${{ secrets.staging_AWS_SECRET_ACCESS_KEY }}
-      ARM_CLIENT_ID: ${{ secrets.staging_AZURE_CLIENT_ID }}
+      ARM_CLIENT_ID: ff9f2cd0-a91d-4f34-97ac-6670bb08cc05
       ARM_CLIENT_SECRET: ${{ secrets.staging_AZURE_CLIENT_SECRET }}
-      ARM_TENANT_ID: ${{ secrets.staging_AZURE_TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.staging_AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
+      ARM_SUBSCRIPTION_ID: de40a960-a7dd-4c03-ad60-9a6c07c93ed2
       stack: staging
       context: build
+      FREEZE: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,10 +52,16 @@ jobs:
           }' > ~/.terraform.d/credentials.tfrc.json
       - name: AZ Login
         run: |-
-          az login --service-principal -u ${{ secrets.staging_AZURE_CLIENT_ID }} -p ${{ secrets.staging_AZURE_CLIENT_SECRET }} --tenant ${{ secrets.staging_AZURE_TENANT_ID }}
-          az account set --subscription ${{ secrets.staging_AZURE_SUBSCRIPTION_ID }}
+          az login --service-principal -u ff9f2cd0-a91d-4f34-97ac-6670bb08cc05 -p ${{ secrets.staging_AZURE_CLIENT_SECRET }} --tenant 3e5e67ad-2e8c-4a0a-b170-8fe996eebec0
+          az account set --subscription de40a960-a7dd-4c03-ad60-9a6c07c93ed2
       - name: Terraform Plan
-        run: if [ "${{ env.context }}" == "build" ]; then cdktf plan ${{ env.stack }}; fi
+        if: env.context == 'build'
+        run: cdktf plan ${{ env.stack }};
+      - name: Terraform Apply
+        if: env.context == 'deploy'
+        run: |-
+          if [ "${{ env.FREEZE }}" == "true" ]; then echo "Freeze Period.. Deployment will be cancelled" && exit 1; 
+          else echo "cdktf deploy will be applied here"; fi
       - name: Comment on the PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@0.9.0

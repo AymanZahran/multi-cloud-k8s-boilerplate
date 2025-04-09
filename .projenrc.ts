@@ -4,7 +4,7 @@ import { CdktfWorkflows } from "./projenrc/workflows/CdktfWorkflows";
 import { K8sValidateWorkflows } from "./projenrc/workflows/K8sValidate";
 import { UpgradeCharts } from "./projenrc/workflows/UpgradeCharts";
 import { Upgradepackages } from "./projenrc/workflows/UpgradePackages";
-import { PackageVersions, CI_Versions } from "./src/const";
+import { PackageVersions, CI_Versions } from "./src/properties/const";
 
 const project = new typescript.TypeScriptAppProject({
   defaultReleaseBranch: "master",
